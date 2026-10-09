@@ -20,7 +20,7 @@ async (page) => {
     const translated = text === '東京' ? target === 'zh' ? '东京' : 'Tokyo' : languages[target];
     return route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify([{ detectedLanguage: { language: source }, translations: [{ text: translated }] }]) });
   });
-  await page.evaluate(() => chrome.storage.local.clear());
+  await page.evaluate(async () => { sessionStorage.clear(); await chrome.storage.local.clear(); });
   await page.reload();
   const input = page.getByRole('textbox', { name: '输入要翻译的文本' });
   const target = page.getByRole('combobox', { name: '译文语言', exact: true });

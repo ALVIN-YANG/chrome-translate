@@ -24,9 +24,9 @@ async (page) => {
       return route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ choices: [{ finish_reason: 'stop', message: { content } }] }) });
     });
   }
-  await page.evaluate(() => chrome.storage.local.set({ 'translation-settings-v1': {
+  await page.evaluate(() => { sessionStorage.clear(); return chrome.storage.local.set({ 'translation-settings-v1': {
     provider: 'microsoft', providers: { deepseek: { key: 'fixture-existing-deepseek', model: 'custom-existing-model' }, kimi: { key: 'fixture-existing-kimi', model: 'kimi-for-coding' } },
-  } }));
+  } }); });
   await page.reload();
   const input = page.getByRole('textbox', { name: '输入要翻译的文本' });
   const result = page.getByRole('region', { name: '翻译结果', exact: true });
@@ -48,7 +48,7 @@ async (page) => {
     await result.filter({ hasText: '你好' }).waitFor();
     await input.fill('回溯');
     await result.filter({ hasText: 'backtracking' }).waitFor();
-    if (id === 'siliconflow') assert(await page.locator('.alternative-entry').count() === 0, '混元翻译不展示伪造词义');
+    if (id === 'siliconflow') assert(await page.locator('.alternative-entry').count() === 1, '混元翻译仅展示一份主译法');
     else {
       await page.getByText('例：Backtrack when the path fails.', { exact: true }).waitFor();
       assert(await page.getByRole('button', { name: '朗读例句 backtrack', exact: true }).count() === 1, '新模型例句应可朗读');
@@ -74,7 +74,7 @@ async (page) => {
     for (const id of Object.keys(services)) assert(await page.locator(`[data-provider="${id}"]`).isVisible(), '新增服务不可见');
   }
   await page.setViewportSize({ width: 1100, height: 900 });
-  await page.evaluate(() => chrome.storage.local.clear());
+  await page.evaluate(async () => { sessionStorage.clear(); await chrome.storage.local.clear(); });
   await page.reload();
   await page.getByRole('button', { name: '智谱', exact: true }).click();
   await page.getByRole('button', { name: '设置', exact: true }).click();

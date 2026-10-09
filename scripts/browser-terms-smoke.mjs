@@ -17,7 +17,7 @@ async (page) => {
       : query === 'bank' ? '<li><span class="pos">n.</span><span class="def">银行；河岸</span></li>' : '';
     await route.fulfill({ status: 200, contentType: 'text/html', body: `<div class="qdef"><div id="headword">${query}</div><ul>${meanings}</ul></div>` }).catch(() => {});
   });
-  await page.evaluate(() => chrome.storage.local.clear());
+  await page.evaluate(async () => { sessionStorage.clear(); await chrome.storage.local.clear(); });
   await page.reload();
   const input = page.getByRole('textbox', { name: '输入要翻译的文本' });
   const result = page.getByRole('region', { name: '翻译结果', exact: true });
@@ -27,13 +27,13 @@ async (page) => {
   await page.context().grantPermissions(['clipboard-read', 'clipboard-write']);
   await input.fill('回溯');
   await candidate('backtrack').waitFor();
-  assert(await result.textContent() === 'Retrospective', '应立即显示主译文');
+  assert(await page.locator('#result-text').textContent() === 'Retrospective', '应立即显示主译文');
   await candidate('backtrack').dblclick();
   await candidate('recall').waitFor();
   assert(await page.evaluate(() => getSelection().toString()) === 'backtrack', '晚到词典不得打断已有文本选区');
   await page.keyboard.press('ControlOrMeta+C');
   assert(await page.evaluate(() => navigator.clipboard.readText()) === 'backtrack', '候选文本允许系统快捷键复制');
-  assert(await result.textContent() === 'Retrospective', '点击候选文字不应替换主译文');
+  assert(await page.locator('#result-text').textContent() === 'Retrospective', '点击候选文字不应替换主译文');
   assert(await page.getByRole('button', { name: /^使用译法 / }).count() === 0, '候选不再是点选按钮');
   assert(await page.evaluate(() => getComputedStyle(document.querySelector('.result-panel')).borderTopWidth) === '0px', '只读译文不应有外框');
   assert(await page.evaluate(() => getComputedStyle(document.querySelector('.alternative-entry')).borderLeftWidth) === '0px', '词义不应有卡片外框');
@@ -41,8 +41,8 @@ async (page) => {
   assert(await candidate('recall').count() === 1, '应有来自词典的其他词义');
   await page.getByRole('button', { name: '复制 backtrack', exact: true }).click();
   assert(await page.evaluate(() => navigator.clipboard.readText()) === 'backtrack', '候选可以直接一键复制');
-  await page.getByRole('button', { name: '复制译文', exact: true }).click();
-  assert(await page.evaluate(() => navigator.clipboard.readText()) === 'Retrospective', '主译文复制保持独立');
+  await page.getByRole('button', { name: '复制全部译法', exact: true }).click();
+  assert((await page.evaluate(() => navigator.clipboard.readText())).toLowerCase().includes('retrospective'), '全部译法复制保留服务返回的含义');
   await page.screenshot({ path: 'output/playwright/terms-static-0.2.1.png', fullPage: true });
   const beforeSentence = dictionaryCalls.length;
   await input.fill('请使用回溯算法解决问题。');
@@ -52,7 +52,7 @@ async (page) => {
   await page.screenshot({ path: 'output/playwright/sentence-0.2.1.png', fullPage: true });
   await input.fill('请翻译以下回溯算法说明。');
   await result.filter({ hasText: 'End of explanation.' }).waitFor();
-  assert(await result.textContent() === paragraph, '长段落译文必须完整保留');
+  assert(await page.locator('#result-text').textContent() === paragraph, '长段落译文必须完整保留');
   const textBounds = await result.boundingBox();
   const inputBounds = await page.locator('.source-panel').boundingBox();
   assert(textBounds.height > inputBounds.height, '长译文应自然超过输入框高度');
@@ -64,16 +64,16 @@ async (page) => {
   assert(await page.evaluate(() => navigator.clipboard.readText()) === paragraph, '长段落一键复制仍须完整');
   await input.fill('bank');
   await candidate('河岸').waitFor();
-  assert(await result.textContent() === '银行', '英文多义词也应保留主译文');
+  assert(await page.locator('#result-text').textContent() === '银行', '英文多义词也应保留主译文');
   await page.getByRole('button', { name: '复制 河岸', exact: true }).click();
   assert(await page.evaluate(() => navigator.clipboard.readText()) === '河岸', '英文多义词候选独立复制');
-  assert(await result.textContent() === '银行', '复制候选不应替换主译文');
+  assert(await page.locator('#result-text').textContent() === '银行', '复制候选不应替换主译文');
   await input.fill('请说明银行和河岸的区别。');
   await result.filter({ hasText: 'Translation: 请说明银行和河岸的区别。' }).waitFor();
   assert(await page.getByRole('region', { name: '候选译法', exact: true }).isVisible() === false, '自动判断句段并隐藏候选');
   await input.fill('no-dictionary');
   await page.getByText('词典暂时不可用，已保留当前译文和可用的术语补充。', { exact: true }).waitFor();
-  assert(await result.textContent() === 'Translation: no-dictionary', '词典失败仍可使用主译文');
+  assert(await page.locator('#result-text').textContent() === 'Translation: no-dictionary', '词典失败仍可使用主译文');
   await input.fill('回溯');
   await candidate('backtrack').waitFor();
   for (const width of [390, 320]) {

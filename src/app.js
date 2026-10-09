@@ -1,8 +1,9 @@
 import { TranslationController } from './controller.js';
 import { PROVIDERS, isConfigured, translate } from './providers.js';
-import { LANGUAGES, normalizeLanguage, resolveDirection } from './language.js';
+import { LANGUAGES, detectLanguage, normalizeLanguage, resolveDirection } from './language.js';
 import { defaultSettings, isExtension, loadSettings, normalizeSettings, saveSettings } from './settings.js';
-import { resolveInputMode } from './terms.js';
+import { buildTermEntries, resolveInputMode } from './terms.js';
+import { loadWorkspace, matchesWorkspace, saveWorkspace } from './workspace.js';
 import { SystemSpeech } from './speech.js';
 
 const $ = id => document.getElementById(id);
@@ -32,6 +33,10 @@ let toastTimer;
 let copyVersion = 0;
 let currentMode = 'text';
 let persistQueue = Promise.resolve();
+let displayed = null;
+let undoWorkspace;
+let undoTimer;
+let leaving = false;
 const verified = new Map();
 const speech = new SystemSpeech(renderSpeech);
 
@@ -76,48 +81,86 @@ function updateDirection() {
   $('clear-text').disabled = !input.value;
 }
 
-function renderTranslation(state) {
-  if (state.phase === 'alternatives') { renderAlternatives(state.result); return; }
-  speech.stop();
-  copyVersion++;
-  for (const id of ['empty-state', 'loading-state', 'error-state', 'result-text']) $(id).hidden = true;
-  result.textContent = '';
+function snapshotWorkspace() { return { text: input.value, target: $('target-language').value, provider: settings.provider, displayed }; }
+function rememberWorkspace() { saveWorkspace(snapshotWorkspace()); }
+function isTermDisplay() {
+  return displayed?.mode === 'term' && Array.from(displayed.result.text).length <= 120
+    && (normalizeLanguage(displayed.result.detected) || detectLanguage(displayed.sourceText)) !== displayed.result.target;
+}
+function outputText() {
+  if (!displayed) return '';
+  return isTermDisplay() ? buildTermEntries(displayed.result).map(entry => entry.text).join('\n') : displayed.result.text;
+}
+function showPrevious(message) {
+  $('previous-result-status').textContent = displayed ? `上次结果（${LANGUAGES[displayed.result.target].name}） · ${message}` : '';
+  $('previous-result-status').hidden = !displayed;
+}
+function clearDisplayed() {
+  displayed = null;
+  $('translation-output').hidden = true;
+  result.textContent = ''; result.hidden = true;
   $('alternatives-panel').hidden = true;
   $('alternatives-list').replaceChildren();
   $('copy-result').disabled = true;
+  $('copy-result').querySelector('span').textContent = '复制译文';
   $('read-result').disabled = true;
   $('result-detail').textContent = '';
+  showPrevious('');
+  renderSpeech(speech.state);
+}
+
+function renderTranslation(state) {
+  if (leaving) return;
+  if (state.phase === 'alternatives') {
+    displayed.result = state.result;
+    renderAlternatives(state.result); rememberWorkspace(); return;
+  }
+  speech.stop();
+  copyVersion++;
+  for (const id of ['empty-state', 'loading-state', 'error-state']) $(id).hidden = true;
   $('translation-status').dataset.status = state.status;
   document.querySelector('.result-body').setAttribute('aria-busy', String(state.status === 'loading'));
   if (state.status === 'idle') {
-    $('empty-state').hidden = false;
+    if (!state.preserveResult) clearDisplayed();
+    $('empty-state').hidden = Boolean(displayed);
+    if (displayed) showPrevious('正在输入');
     $('translation-status').textContent = composing ? '正在输入' : '等待输入';
   } else if (state.status === 'loading') {
-    $('loading-state').hidden = false;
-    $('translation-status').textContent = '正在翻译';
+    $('loading-state').hidden = Boolean(displayed);
+    if (displayed) showPrevious('更新中');
+    $('translation-status').textContent = displayed ? '更新中' : '正在翻译';
   } else if (state.status === 'success') {
+    const request = state.request;
+    displayed = {
+      sourceText: request.text, mode: request.mode, provider: request.provider,
+      targetPreference: request.targetPreference || $('target-language').value, result: state.result,
+    };
     currentDirection.to = state.result.target || currentDirection.to;
     const detected = normalizeLanguage(state.result.detected);
     if (detected) currentDirection.detected = detected;
     $('source-language').textContent = detected ? `自动识别 · ${LANGUAGES[detected].name}` : '自动识别';
     if ($('target-language').value === 'auto') $('target-language').options[0].textContent = `${LANGUAGES[currentDirection.to].label}（自动）`;
-    result.hidden = false;
+    $('translation-output').hidden = false;
     // 译文始终按纯文本显示，包括来自模型的 HTML 或脚本。
     result.textContent = state.result.text;
     result.lang = currentDirection.to;
     result.dir = currentDirection.to === 'ar' ? 'rtl' : 'auto';
+    $('translation-output').lang = currentDirection.to;
+    $('translation-output').dir = result.dir;
     $('copy-result').disabled = false;
     $('read-result').disabled = !speech.supported;
-    $('translation-status').textContent = '翻译完成';
-    $('result-detail').textContent = PROVIDERS[settings.provider].name;
+    $('previous-result-status').hidden = true;
+    $('translation-status').textContent = state.restored ? '结果已恢复' : '翻译完成';
+    $('result-detail').textContent = PROVIDERS[displayed.provider].name;
     renderAlternatives(state.result);
-    if (currentDirection.from !== currentDirection.to) {
+    if (!state.restored && currentDirection.from !== currentDirection.to) {
       verified.set(settings.provider, signature(settings.providers[settings.provider]));
       renderProvider();
     }
   } else {
     $('error-state').hidden = false;
-    $('translation-status').textContent = '未完成';
+    $('translation-status').textContent = displayed ? '更新失败' : '未完成';
+    if (displayed) showPrevious('更新失败，仍可阅读和复制');
     const isConfigError = state.error.code === 'configuration';
     $('error-title').textContent = isConfigError ? '配置后即可翻译' : '翻译未完成';
     $('error-message').textContent = state.error.message;
@@ -125,41 +168,48 @@ function renderTranslation(state) {
     $('error-settings').textContent = isConfigError ? `配置${PROVIDERS[settings.provider].name}` : '服务设置';
     $('retry').hidden = ['configuration', 'too_long', 'empty', 'truncated'].includes(state.error.code);
   }
+  document.querySelector('.result-body').classList.toggle('has-result', Boolean(displayed));
+  rememberWorkspace();
 }
 
 function renderAlternatives(translation) {
-  if (currentMode !== 'term' || currentDirection.detected === currentDirection.to) return;
-  const candidates = (translation.candidates || []).filter(candidate => candidate.text.trim().toLocaleLowerCase('en-US') !== translation.text.trim().toLocaleLowerCase('en-US'));
-  $('alternatives-panel').hidden = false;
+  const terms = isTermDisplay();
+  result.hidden = terms;
+  $('alternatives-panel').hidden = !terms;
+  const candidates = terms ? buildTermEntries(translation) : [];
+  $('copy-result').querySelector('span').textContent = candidates.length > 1 ? '复制全部译法' : '复制译文';
+  if (!terms) { $('alternatives-list').replaceChildren(); $('alternatives-status').textContent = ''; $('dictionary-link').hidden = true; renderSpeech(speech.state); return; }
+  const target = translation.target;
   const list = $('alternatives-list');
   const existing = new Map([...list.children].map(row => [row.dataset.candidate, row]));
   const retained = new Set();
   $('dictionary-link').hidden = !translation.dictionaryUrl;
   if (translation.dictionaryUrl) $('dictionary-link').href = translation.dictionaryUrl;
   for (const candidate of candidates) {
-    const candidateKey = JSON.stringify([candidate.text, candidate.context || '', candidate.example || '', candidate.exampleLanguage || currentDirection.to, candidate.exampleTranslation || '', candidate.source || '', candidate.sourceUrl || '']);
+    const candidateKey = JSON.stringify([target, candidate.text, candidate.context || '', candidate.example || '', candidate.exampleLanguage || target, candidate.exampleTranslation || '', candidate.source || '', candidate.sourceUrl || '']);
     if (existing.has(candidateKey)) { retained.add(existing.get(candidateKey)); continue; }
     const row = document.createElement('article');
     row.className = 'alternative-entry';
     row.dataset.candidate = candidateKey;
     const heading = document.createElement('div'); heading.className = 'alternative-heading';
     const title = document.createElement('span'); title.className = 'alternative-text'; title.textContent = candidate.text;
-    title.lang = currentDirection.to; title.dir = currentDirection.to === 'ar' ? 'rtl' : 'auto';
+    title.lang = target; title.dir = target === 'ar' ? 'rtl' : 'auto';
     const actions = document.createElement('div'); actions.className = 'alternative-actions';
     const read = document.createElement('button');
     read.type = 'button'; read.className = 'icon-button speech-button'; read.disabled = !speech.supported;
     read.dataset.speechKey = `candidate:${candidate.text}`; read.dataset.speechLabel = candidate.text;
     read.title = '用系统声音朗读'; read.append(createIcon('speaker'));
-    read.addEventListener('click', () => toggleSpeech(candidate.text, read.dataset.speechKey));
+    read.addEventListener('click', () => toggleSpeech(candidate.text, read.dataset.speechKey, target));
     const copy = document.createElement('button');
     copy.type = 'button'; copy.className = 'icon-button'; copy.title = '复制此译法';
     copy.setAttribute('aria-label', `复制 ${candidate.text}`); copy.append(createIcon('copy'));
     copy.addEventListener('click', () => copyText(candidate.text));
     actions.append(read, copy); heading.append(title, actions);
     const context = document.createElement('span'); context.className = 'alternative-context'; context.textContent = candidate.context || '可选译法';
+    context.lang = 'zh-CN'; context.dir = 'auto';
     row.append(heading, context);
     if (candidate.example) {
-      const exampleLanguage = candidate.exampleLanguage || currentDirection.to;
+      const exampleLanguage = candidate.exampleLanguage || target;
       const exampleRow = document.createElement('div'); exampleRow.className = 'alternative-example-row';
       const example = document.createElement('span'); example.className = 'alternative-example'; example.textContent = `例：${candidate.example}`;
       example.lang = exampleLanguage; example.dir = exampleLanguage === 'ar' ? 'rtl' : 'auto';
@@ -172,10 +222,12 @@ function renderAlternatives(translation) {
       exampleRow.append(example, readExample); row.append(exampleRow);
       if (candidate.exampleTranslation) {
         const explanation = document.createElement('span'); explanation.className = 'alternative-example-translation'; explanation.textContent = candidate.exampleTranslation; row.append(explanation);
+        explanation.lang = target === 'zh' ? 'en' : 'zh-CN'; explanation.dir = 'auto';
       }
     }
     if (candidate.source) {
       const source = document.createElement('span'); source.className = 'alternative-source'; source.textContent = candidate.source; row.append(source);
+      source.lang = 'zh-CN'; source.dir = 'auto';
     }
     list.append(row); retained.add(row);
   }
@@ -197,6 +249,7 @@ const controller = new TranslationController(renderTranslation);
 function translateInput(force = false) {
   updateDirection();
   currentMode = resolveInputMode(input.value);
+  rememberWorkspace();
   if (!ready || composing) return;
   if (!input.value.trim() || !currentDirection.detected) {
     controller.reset();
@@ -206,22 +259,45 @@ function translateInput(force = false) {
   controller.run({
     provider: settings.provider, config: settings.providers[settings.provider], text: input.value,
     from: currentDirection.from, to: currentDirection.to,
-    mode: currentMode, automaticTarget: $('target-language').value === 'auto',
+    mode: currentMode, targetPreference: $('target-language').value, automaticTarget: $('target-language').value === 'auto',
     ...(!isExtension && ['127.0.0.1', 'localhost'].includes(location.hostname) ? { dictionaryEndpoint: `${location.origin}/api/dictionary?text=${encodeURIComponent(input.value.trim())}` } : {}),
   }, { force });
 }
 
 input.addEventListener('input', event => {
-  if (composing || event.isComposing) { updateDirection(); return; }
+  forgetUndo();
+  if (composing || event.isComposing) { updateDirection(); rememberWorkspace(); return; }
   translateInput();
 });
-input.addEventListener('compositionstart', () => { composing = true; controller.reset(); });
+input.addEventListener('compositionstart', () => { composing = true; controller.reset({ preserveResult: true }); });
 input.addEventListener('compositionend', () => { composing = false; translateInput(); });
 $('target-language').addEventListener('change', () => translateInput());
 $('retry').addEventListener('click', () => translateInput(true));
 $('clear-text').addEventListener('click', () => {
+  undoWorkspace = snapshotWorkspace();
+  clearTimeout(undoTimer); $('undo-clear').hidden = false;
+  undoTimer = setTimeout(forgetUndo, 8000);
   input.value = ''; composing = false; controller.reset(); updateDirection(); input.focus();
 });
+$('undo-clear').addEventListener('click', () => {
+  const saved = undoWorkspace; forgetUndo();
+  if (saved) restoreWorkspace(saved);
+  input.focus();
+});
+function forgetUndo() { clearTimeout(undoTimer); undoWorkspace = null; $('undo-clear').hidden = true; }
+function restoreWorkspace(saved) {
+  if (saved.provider && Object.hasOwn(PROVIDERS, saved.provider)) settings.provider = saved.provider;
+  renderProvider();
+  input.value = saved.text; $('target-language').value = saved.target;
+  updateDirection();
+  if (saved.displayed) {
+    const previous = saved.displayed;
+    renderTranslation({ status: 'success', restored: true, result: previous.result, request: { text: previous.sourceText, provider: previous.provider, mode: previous.mode, targetPreference: previous.targetPreference } });
+  }
+  if (!saved.text.trim()) controller.reset();
+  else if (!matchesWorkspace(saved.displayed, saved.text, saved.target, settings.provider)) translateInput();
+  rememberWorkspace();
+}
 for (const button of document.querySelectorAll('[data-provider]')) {
   button.addEventListener('click', async () => {
     if (!ready || settings.provider === button.dataset.provider) return;
@@ -231,8 +307,8 @@ for (const button of document.querySelectorAll('[data-provider]')) {
     catch { notice('服务选择未能保存。当前仍可使用，重新打开页面后需再次选择。'); }
   });
 }
-$('copy-result').addEventListener('click', () => copyText(result.textContent));
-$('read-result').addEventListener('click', () => toggleSpeech(result.textContent, 'result'));
+$('copy-result').addEventListener('click', () => copyText(outputText()));
+$('read-result').addEventListener('click', () => toggleSpeech(outputText(), 'result'));
 
 async function copyText(text) {
   const version = copyVersion;
@@ -243,7 +319,7 @@ async function copyText(text) {
   } catch { notice('未能写入剪贴板，请选中译文后手动复制。'); }
 }
 
-function toggleSpeech(text, key, language = currentDirection.to) {
+function toggleSpeech(text, key, language = displayed?.result.target || currentDirection.to) {
   if (speech.state.key === key) speech.stop();
   else speech.speak(text, language, key);
 }
@@ -252,11 +328,12 @@ function renderSpeech(state) {
   for (const button of document.querySelectorAll('[data-speech-key]')) {
     const active = state.key === button.dataset.speechKey;
     const suffix = button.dataset.speechKind === 'example' ? `例句 ${button.dataset.speechLabel}` : ` ${button.dataset.speechLabel}`;
-    button.setAttribute('aria-label', active ? `停止朗读${button.dataset.speechKey === 'result' ? '' : suffix}` : `朗读${button.dataset.speechKey === 'result' ? '译文' : suffix}`);
+    const all = button.dataset.speechKey === 'result' && isTermDisplay() && buildTermEntries(displayed.result).length > 1;
+    button.setAttribute('aria-label', active ? `停止朗读${button.dataset.speechKey === 'result' ? '' : suffix}` : `朗读${button.dataset.speechKey === 'result' ? all ? '全部译法' : '译文' : suffix}`);
     button.setAttribute('aria-pressed', String(active));
     button.querySelector('use').setAttribute('href', active ? '#i-stop' : '#i-speaker');
     const label = button.querySelector('span');
-    if (label) label.textContent = active ? '停止' : '朗读';
+    if (label) label.textContent = active ? '停止' : all ? '朗读全部' : '朗读';
   }
   $('speech-status').textContent = state.message || '';
   $('speech-status').dataset.status = state.status;
@@ -392,7 +469,14 @@ $('settings-form').addEventListener('submit', async event => {
   finally { $('save-settings').disabled = false; }
 });
 
-window.addEventListener('pagehide', () => { controller.reset(); stopConnectionTest(); });
+window.addEventListener('pagehide', () => { leaving = true; speech.stop(); controller.reset(); stopConnectionTest(); });
+window.addEventListener('pageshow', event => {
+  leaving = false;
+  if (event.persisted && ready) {
+    const saved = loadWorkspace();
+    if (saved) restoreWorkspace(saved);
+  }
+});
 window.addEventListener('hashchange', () => { if (location.hash === '#settings') openSettings(); });
 
 async function init() {
@@ -405,7 +489,10 @@ async function init() {
   try { settings = await loadSettings(); }
   catch { notice('暂时无法读取已保存的配置，请重新打开扩展页面后重试。'); }
   ready = true; input.disabled = false;
-  renderProvider(); updateDirection();
+  renderProvider();
+  const saved = loadWorkspace();
+  if (saved) restoreWorkspace(saved);
+  else updateDirection();
   renderSpeech(speech.state);
   $('read-result').title = speech.supported ? '用系统声音朗读' : '当前浏览器不支持系统朗读';
   if (location.hash === '#settings') openSettings();

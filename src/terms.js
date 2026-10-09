@@ -65,11 +65,29 @@ export function parseModelTerm(content, target) {
   catch { return /^[\[{]|^```/u.test(trimmed) ? null : { text: trimmed, candidates: [] }; }
   if (typeof data?.translation !== 'string' || !data.translation.trim()) return null;
   const alternatives = Array.isArray(data.alternatives) ? data.alternatives : [];
-  return { text: data.translation.trim(), candidates: mergeCandidates(alternatives.map(item => {
+  const normalizeEntry = item => {
     let example = typeof item?.example === 'string' ? item.example.trim().slice(0, 160) : '';
     // 非合规例句不影响有效词义，但不能把纯中文当作英文用法展示。
     const script = { zh: /\p{Script=Han}/u, ja: /[\p{Script=Han}\p{Script=Hiragana}\p{Script=Katakana}]/u, ko: /\p{Script=Hangul}/u, ar: /\p{Script=Arabic}/u, hi: /\p{Script=Devanagari}/u, th: /\p{Script=Thai}/u, ru: /\p{Script=Cyrillic}/u }[target] || /\p{Script=Latin}/u;
     if (target && !script.test(example)) example = '';
     return { text: item?.text, context: item?.context, example, exampleLanguage: target, exampleTranslation: item?.exampleTranslation, source: '模型候选' };
-  })) };
+  };
+  return { text: data.translation.trim(), primary: mergeCandidates([normalizeEntry({ ...data, text: data.translation })])[0], candidates: mergeCandidates(alternatives.map(normalizeEntry)) };
+}
+
+// 词义以同一层级呈现；有语境的候选优先，未经解释的服务译法不占据大标题。
+export function buildTermEntries(translation) {
+  const candidates = mergeCandidates(translation.candidates || []);
+  const key = text => text.trim().toLocaleLowerCase('en-US').replace(/\s+/gu, ' ');
+  const match = candidates.find(candidate => key(candidate.text) === key(translation.text));
+  if (match) {
+    if (translation.primary) for (const field of ['context', 'example', 'exampleLanguage', 'exampleTranslation']) {
+      if (!match[field] && translation.primary[field]) match[field] = translation.primary[field];
+    }
+    return candidates;
+  }
+  const primary = { ...translation.primary, text: translation.text };
+  if (!primary.context) primary.context = candidates.length ? '服务返回的译法，需结合上下文确认' : '可补充上下文确认用法';
+  if (translation.primary?.context || translation.primary?.example) return mergeCandidates([primary], candidates);
+  return mergeCandidates(candidates.slice(0, 9), [primary]);
 }

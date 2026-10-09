@@ -1,0 +1,181 @@
+{
+  "version": "0.5.0",
+  "date": "2026-10-09",
+  "nodeTests": 54,
+  "workspace": {
+    "status": "passed",
+    "requests": 9,
+    "checks": [
+      "词义同一层级和语境优先",
+      "词典晚到保留选区",
+      "单项及全部复制",
+      "更新和失败保留结果",
+      "旧结果按原语言朗读",
+      "句段完整替换",
+      "刷新恢复不重复请求",
+      "目标语言恢复",
+      "撤销清空",
+      "IME去重",
+      "自动语言修正恢复",
+      "真实扩展API复用标签页",
+      "仅storage权限",
+      "390px和320px布局"
+    ],
+    "responseMode": "controlled-fixtures",
+    "speech": "controlled-events"
+  },
+  "regressions": {
+    "browser-smoke.mjs": {
+      "status": "passed",
+      "mockedRequests": 11,
+      "checked": [
+        "真实扩展加载",
+        "微软免配置",
+        "其他服务未配置拦截",
+        "设置持久化",
+        "连接测试",
+        "自动方向",
+        "即时输入",
+        "IME 去重",
+        "旧请求取消",
+        "错误处理",
+        "长度校验",
+        "HTML 纯文本",
+        "复制",
+        "Coding Plan 端点",
+        "键盘关闭",
+        "响应式布局"
+      ],
+      "note": "本轮供应商响应为受控测试数据，真实接口另行验证"
+    },
+    "browser-free-providers-smoke.mjs": {
+      "status": "passed",
+      "providers": [
+        "zhipu",
+        "siliconflow",
+        "gemini"
+      ],
+      "requests": 10,
+      "checks": [
+        "七项服务入口",
+        "未配置不发请求",
+        "固定免费模型",
+        "各自 Key 和端点",
+        "连接测试",
+        "词义和英文例句",
+        "例句朗读和候选复制入口",
+        "混元单译文",
+        "配置升级保留",
+        "刷新持久化",
+        "限流无自动转发",
+        "窄屏布局"
+      ],
+      "responseMode": "controlled-fixtures"
+    },
+    "browser-languages-smoke.mjs": {
+      "status": "passed",
+      "targets": [
+        "zh",
+        "en",
+        "ja",
+        "ko",
+        "fr",
+        "de",
+        "es",
+        "pt",
+        "ru",
+        "it",
+        "ar",
+        "hi",
+        "th",
+        "vi",
+        "id"
+      ],
+      "calls": 24,
+      "checks": [
+        "模式及源语言选项移除",
+        "15种目标语言",
+        "原文自动识别",
+        "外语默认译中文",
+        "日语汉字自动修正",
+        "非中英词典隔离",
+        "阿拉伯语方向",
+        "窄屏"
+      ],
+      "responseMode": "controlled-fixtures"
+    },
+    "browser-terms-smoke.mjs": {
+      "status": "passed",
+      "translations": 7,
+      "dictionaries": 3,
+      "checks": [
+        "无框连续阅读",
+        "长译文自然展开与完整复制",
+        "静态候选",
+        "原生选中复制",
+        "候选独立复制",
+        "主译文复制",
+        "先显示主译文",
+        "晚到词典保留选区",
+        "完整句子单译文",
+        "英文多义词",
+        "自动模式无选项",
+        "词典失败降级",
+        "窄屏",
+        "清空"
+      ],
+      "responseMode": "controlled-fixtures"
+    },
+    "browser-speech-smoke.mjs": {
+      "status": "passed",
+      "checks": [
+        "例句小喇叭",
+        "英文例句独立语音方向",
+        "正常朗读无状态行",
+        "朗读按钮位置稳定",
+        "候选独立朗读",
+        "本地中英声音",
+        "停止按钮",
+        "新输入取消",
+        "语音错误反馈",
+        "复制不受影响",
+        "异步声音取消"
+      ],
+      "speech": "controlled-events"
+    }
+  },
+  "preview": {
+    "status": "passed",
+    "responseMode": "controlled-fixtures",
+    "modelCalls": 1,
+    "microsoftCalls": 0,
+    "checks": [
+      "主词义语境和英文例句",
+      "刷新保留服务选择",
+      "已有结果不重发",
+      "预览Key丢失不切换服务",
+      "会话不保存Key"
+    ]
+  },
+  "microsoftLive": {
+    "responseMode": "real-network",
+    "responses": [
+      {
+        "host": "edge.microsoft.com",
+        "status": 200
+      },
+      {
+        "host": "cn.bing.com",
+        "status": 200
+      }
+    ],
+    "firstMeaning": "backtracking",
+    "meanings": 9,
+    "reloadRequests": 0
+  },
+  "limitations": [
+    "新增模型词义字段未用真实Key验证",
+    "语音事件为受控验证",
+    "未自动重新加载用户Chrome中已安装的扩展"
+  ]
+}

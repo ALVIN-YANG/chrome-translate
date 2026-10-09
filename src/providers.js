@@ -114,13 +114,16 @@ function termPrompt(target) {
   const language = LANGUAGES[target].english;
   const schema = {
     translation: 'the most common translation',
+    context: 'brief usage context and part of speech of the primary translation in Chinese',
+    example: `a short natural ${language} phrase or sentence using the primary translation`,
+    exampleTranslation: target === 'zh' ? 'English translation of the Chinese example' : `Simplified Chinese translation of the ${language} example`,
     alternatives: [{
       text: 'another reasonable translation', context: 'brief usage context and part of speech in Chinese',
       example: `a short natural ${language} phrase or sentence using this ${language} translation`,
       exampleTranslation: target === 'zh' ? 'English translation of the Chinese example' : `Simplified Chinese translation of the ${language} example`,
     }],
   };
-  return `The input is a word or short phrase without full context. Return valid JSON only with this schema: ${JSON.stringify(schema)}. ${english ? 'For every alternative, example MUST be in English and demonstrate that English alternative in use; never put a Chinese-only explanation in example. Put its Chinese translation in the separate exampleTranslation field.' : `For every alternative, example MUST be in ${language} and demonstrate that ${language} alternative in use. Its ${target === 'zh' ? 'English' : 'Simplified Chinese'} translation belongs in the separate exampleTranslation field.`} Keep context in Chinese. Include up to 5 distinct plausible alternatives across different meanings and domains, including computing or algorithms when applicable. If there is only one valid translation, use an empty alternatives array. Do not invent meanings to fill a quota.`;
+  return `The input is a word or short phrase without full context. Return valid JSON only with this schema: ${JSON.stringify(schema)}. Include context and an example for both the primary translation and every alternative. ${english ? 'For every alternative, example MUST be in English and demonstrate that English alternative in use; never put a Chinese-only explanation in example. Put its Chinese translation in the separate exampleTranslation field.' : `For every alternative, example MUST be in ${language} and demonstrate that ${language} alternative in use. Its ${target === 'zh' ? 'English' : 'Simplified Chinese'} translation belongs in the separate exampleTranslation field.`} The primary example follows the same language rules. Keep context in Chinese. Include up to 5 distinct plausible alternatives across different meanings and domains, including computing or algorithms when applicable. If there is only one valid translation, use an empty alternatives array. Do not invent meanings to fill a quota.`;
 }
 
 export function buildBaiduBody({ text, from, to, config, salt = crypto.randomUUID() }) {

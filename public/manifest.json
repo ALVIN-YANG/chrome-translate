@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "翻译 · 多语言",
-  "version": "0.4.0",
+  "version": "0.5.0",
   "description": "在独立标签页中即时翻译 15 种常用语言，支持微软、百度、智谱、硅基流动、Gemini、DeepSeek 和 Kimi Coding Plan，译文和例句可用系统声音朗读。",
   "minimum_chrome_version": "120",
   "permissions": [
@@ -31,7 +31,8 @@
     "128": "icons/128.png"
   },
   "background": {
-    "service_worker": "background.js"
+    "service_worker": "background.js",
+    "type": "module"
   },
   "options_page": "index.html#settings",
   "content_security_policy": {

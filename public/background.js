@@ -1,7 +1,8 @@
+import { createTranslationTabOpener } from './tabs.js';
+
 chrome.runtime.onInstalled.addListener(() => {
   chrome.storage.local.setAccessLevel({ accessLevel: 'TRUSTED_CONTEXTS' });
 });
 
-chrome.action.onClicked.addListener(() => {
-  chrome.tabs.create({ url: chrome.runtime.getURL('index.html') });
-});
+const openTranslationPage = createTranslationTabOpener(chrome, chrome.runtime.getURL('index.html'));
+chrome.action.onClicked.addListener(tab => { openTranslationPage(tab).catch(() => {}); });

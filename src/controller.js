@@ -13,11 +13,11 @@ export class TranslationController {
     this.status = 'idle';
   }
 
-  reset() {
+  reset({ preserveResult = false } = {}) {
     this.version++;
     this.abort?.abort();
     this.fingerprint = null;
-    this.emit({ status: 'idle' });
+    this.emit({ status: 'idle', preserveResult });
   }
 
   emit(state) { this.status = state.status; this.onChange(state); }
@@ -29,7 +29,7 @@ export class TranslationController {
     this.abort = new AbortController();
     const version = ++this.version;
     this.fingerprint = fingerprint;
-    this.emit({ status: 'loading' });
+    this.emit({ status: 'loading', request });
     this.pending = this.execute(request, this.abort.signal, version);
     return this.pending;
   }
@@ -49,17 +49,17 @@ export class TranslationController {
       const source = normalizeLanguage(result.detected) || (request.from === 'auto' ? detectLanguage(request.text) : request.from);
       const needsLookup = request.mode === 'term' && request.provider === 'microsoft' && isDictionaryPair(source, request.to);
       const notes = needsLookup ? termNotes(request.text, source, request.to) : [];
-      this.emit({ status: 'success', result: { ...result, candidates: result.candidates || notes, candidateStatus: needsLookup ? 'loading' : result.candidateStatus || 'empty' } });
+      this.emit({ status: 'success', request, result: { ...result, candidates: result.candidates || notes, candidateStatus: needsLookup ? 'loading' : result.candidateStatus || 'empty' } });
       if (!needsLookup) return;
       let alternatives;
       try { alternatives = await this.alternativeLookup({ ...request, from: source, endpoint: request.dictionaryEndpoint, signal }); }
       catch { alternatives = { candidates: notes, status: 'unavailable' }; }
       if (version === this.version && !signal.aborted) {
-        this.emit({ status: 'success', phase: 'alternatives', result: { ...result, candidates: alternatives.candidates, candidateStatus: alternatives.status, dictionaryUrl: alternatives.sourceUrl } });
+        this.emit({ status: 'success', phase: 'alternatives', request, result: { ...result, candidates: alternatives.candidates, candidateStatus: alternatives.status, dictionaryUrl: alternatives.sourceUrl } });
       }
     } catch (error) {
       if (version !== this.version || signal.aborted) return;
-      this.emit({ status: 'error', error: error instanceof TranslationError ? error : new TranslationError('unknown', '翻译未完成，请重试。') });
+      this.emit({ status: 'error', request, error: error instanceof TranslationError ? error : new TranslationError('unknown', '翻译未完成，请重试。') });
     }
   }
 }

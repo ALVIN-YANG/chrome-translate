@@ -1,7 +1,7 @@
 // 通过 playwright-cli run-code 调用此函数；仅使用测试凭据和受控网络响应。
 async (page) => {
   const assert = (condition, message) => { if (!condition) throw new Error(message); };
-  const waitText = async text => page.getByRole('region', { name: '翻译结果', exact: true }).filter({ hasText: text }).waitFor();
+  const waitText = async text => { await page.waitForFunction(() => document.getElementById('translation-status').dataset.status === 'success'); await page.getByRole('region', { name: '翻译结果', exact: true }).filter({ hasText: text }).waitFor(); };
   const calls = [];
   const errors = [];
   await page.unrouteAll({ behavior: 'ignoreErrors' });
@@ -27,7 +27,7 @@ async (page) => {
     });
   }
   const current = page.url();
-  await page.evaluate(() => chrome.storage.local.clear());
+  await page.evaluate(async () => { sessionStorage.clear(); await chrome.storage.local.clear(); });
   await page.goto(current.replace(/#.*$/, ''));
   const input = page.getByRole('textbox', { name: '输入要翻译的文本' });
   await input.fill('Hello');
@@ -57,14 +57,14 @@ async (page) => {
   assert(calls.at(-1).url.includes('to=en'), '中文必须自动翻成英文');
   assert(await page.getByRole('combobox', { name: '译文语言' }).inputValue() === 'auto', '译文方向仍应自动');
   await input.fill('slow');
-  await page.waitForFunction(() => document.getElementById('translation-status').textContent === '正在翻译');
+  await page.waitForFunction(() => document.getElementById('translation-status').dataset.status === 'loading');
   await input.fill('fast');
   await waitText('测试译文：fast');
   await page.waitForTimeout(500);
-  assert(await page.getByRole('region', { name: '翻译结果', exact: true }).textContent() === '测试译文：fast', '迟到的旧译文覆盖了新译文');
+  assert(await page.locator('#result-text').textContent() === '测试译文：fast', '迟到的旧译文覆盖了新译文');
   await input.fill('rate-limit');
   await page.getByText('微软免费翻译请求过于频繁，请稍后重试或切换服务。', { exact: true }).waitFor();
-  assert(await page.getByRole('button', { name: '复制译文', exact: true }).isDisabled(), '错误时禁止复制旧译文');
+  assert(await page.getByRole('button', { name: '复制译文', exact: true }).isEnabled(), '失败时允许复制明确标记的上次结果');
   assert(!(await page.locator('body').innerText()).includes('DO_NOT_DISPLAY'), '不得暴露服务原始响应');
   await page.getByRole('button', { name: '清空', exact: true }).click();
   const beforeComposition = calls.length;
@@ -113,7 +113,7 @@ async (page) => {
   }
   assert(errors.length === 0, `页面异常：${errors.join('; ')}`);
   await page.setViewportSize({ width: 1440, height: 980 });
-  await page.evaluate(() => chrome.storage.local.clear());
+  await page.evaluate(async () => { sessionStorage.clear(); await chrome.storage.local.clear(); });
   await page.reload();
   await page.screenshot({ path: 'output/playwright/translation-page.png' });
   return { status: 'passed', mockedRequests: calls.length, checked: ['真实扩展加载', '微软免配置', '其他服务未配置拦截', '设置持久化', '连接测试', '自动方向', '即时输入', 'IME 去重', '旧请求取消', '错误处理', '长度校验', 'HTML 纯文本', '复制', 'Coding Plan 端点', '键盘关闭', '响应式布局'], note: '本轮供应商响应为受控测试数据，真实接口另行验证' };

@@ -46,7 +46,7 @@
           <div class="editor-header"><span id="source-language" class="source-language">自动识别</span><span class="panel-label">原文</span></div>
           <label for="source-text" class="sr-only">输入要翻译的文本</label>
           <textarea id="source-text" placeholder="在此输入或粘贴文本…" dir="auto" spellcheck="false" autocomplete="off" autocapitalize="off" aria-describedby="input-hint" disabled></textarea>
-          <div class="editor-footer"><button type="button" id="clear-text" class="text-button" disabled><svg aria-hidden="true"><use href="#i-clear"/></svg>清空</button><span id="character-count" class="character-count">0 / 10,000</span></div>
+          <div class="editor-footer"><div class="source-actions"><button type="button" id="clear-text" class="text-button" disabled><svg aria-hidden="true"><use href="#i-clear"/></svg>清空</button><button type="button" id="undo-clear" class="text-button" hidden>撤销清空</button></div><span id="character-count" class="character-count">0 / 10,000</span></div>
         </div>
         <div class="between-arrow" aria-hidden="true"><svg><use href="#i-arrow"/></svg></div>
         <div class="editor-panel result-panel">
@@ -56,12 +56,15 @@
             <div id="empty-state" class="empty-state"><span class="empty-icon"><svg aria-hidden="true"><use href="#i-text"/></svg></span><p id="empty-title">译文会显示在这里</p><span id="empty-description">自动识别原文，即贴即译</span></div>
             <div id="loading-state" class="loading-state" hidden><span class="spinner" aria-hidden="true"></span><p>正在翻译…</p><span>正在等待服务返回译文</span></div>
             <div id="error-state" class="error-state" hidden><span class="error-icon"><svg aria-hidden="true"><use href="#i-info"/></svg></span><p id="error-title">翻译未完成</p><span id="error-message"></span><div class="error-actions"><button type="button" id="error-settings" class="button button-primary">服务设置</button><button type="button" id="retry" class="button button-secondary">重试</button></div></div>
-            <div id="result-text" class="result-text" role="region" aria-label="翻译结果" hidden></div>
+            <p id="previous-result-status" class="previous-result-status" role="status" aria-live="polite" hidden></p>
+            <div id="translation-output" role="region" aria-label="翻译结果" hidden>
+            <div id="result-text" class="result-text" hidden></div>
             <section id="alternatives-panel" class="alternatives-panel" aria-label="候选译法" hidden>
               <div id="alternatives-list" class="alternatives-list"></div>
               <p id="alternatives-status" class="alternatives-status" role="status" aria-live="polite"></p>
               <a id="dictionary-link" class="dictionary-link" target="_blank" rel="noreferrer noopener" hidden>必应词典 ↗</a>
             </section>
+            </div>
           </div>
           <p id="speech-status" class="speech-status" role="status" aria-live="polite" hidden></p>
         </div>
