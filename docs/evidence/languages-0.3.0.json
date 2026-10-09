@@ -1,0 +1,107 @@
+[
+  {
+    "target": "zh",
+    "language": "中文",
+    "status": 200,
+    "text": "你好，很高兴认识你。",
+    "detected": "zh-Hans"
+  },
+  {
+    "target": "en",
+    "language": "英语",
+    "status": 200,
+    "text": "Hello, nice to meet you.",
+    "detected": "zh-Hans"
+  },
+  {
+    "target": "ja",
+    "language": "日语",
+    "status": 200,
+    "text": "こんにちは、はじめまして。",
+    "detected": "zh-Hans"
+  },
+  {
+    "target": "ko",
+    "language": "韩语",
+    "status": 200,
+    "text": "안녕하세요, 만나서 반가워요.",
+    "detected": "zh-Hans"
+  },
+  {
+    "target": "fr",
+    "language": "法语",
+    "status": 200,
+    "text": "Bonjour, enchanté.",
+    "detected": "zh-Hans"
+  },
+  {
+    "target": "de",
+    "language": "德语",
+    "status": 200,
+    "text": "Hallo, freut mich, Sie kennenzulernen.",
+    "detected": "zh-Hans"
+  },
+  {
+    "target": "es",
+    "language": "西班牙语",
+    "status": 200,
+    "text": "Hola, encantado.",
+    "detected": "zh-Hans"
+  },
+  {
+    "target": "pt",
+    "language": "葡萄牙语",
+    "status": 200,
+    "text": "Olá, prazer em conhecê-lo.",
+    "detected": "zh-Hans"
+  },
+  {
+    "target": "ru",
+    "language": "俄语",
+    "status": 200,
+    "text": "Здравствуйте, приятно познакомиться.",
+    "detected": "zh-Hans"
+  },
+  {
+    "target": "it",
+    "language": "意大利语",
+    "status": 200,
+    "text": "Ciao, piacere di conoscerti.",
+    "detected": "zh-Hans"
+  },
+  {
+    "target": "ar",
+    "language": "阿拉伯语",
+    "status": 200,
+    "text": "مرحبا، تشرفت بمعرفتك.",
+    "detected": "zh-Hans"
+  },
+  {
+    "target": "hi",
+    "language": "印地语",
+    "status": 200,
+    "text": "हैलो, आपसे मिलकर अच्छा लगा।",
+    "detected": "zh-Hans"
+  },
+  {
+    "target": "th",
+    "language": "泰语",
+    "status": 200,
+    "text": "สวัสดีค่ะ ยินดีที่ได้รู้จักค่ะ",
+    "detected": "zh-Hans"
+  },
+  {
+    "target": "vi",
+    "language": "越南语",
+    "status": 200,
+    "text": "Xin chào, rất vui được gặp bạn.",
+    "detected": "zh-Hans"
+  },
+  {
+    "target": "id",
+    "language": "印尼语",
+    "status": 200,
+    "text": "Halo, senang bertemu denganmu.",
+    "detected": "zh-Hans"
+  }
+]

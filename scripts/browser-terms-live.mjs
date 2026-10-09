@@ -1,0 +1,32 @@
+async (page) => {
+  await page.unrouteAll({ behavior: 'ignoreErrors' });
+  await page.reload();
+  const input = page.getByRole('textbox', { name: '输入要翻译的文本' });
+  const result = page.getByRole('region', { name: '翻译结果', exact: true });
+  const candidate = text => page.locator('#alternatives-list').getByText(text, { exact: true });
+  const dictionaryResponses = [];
+  page.on('response', response => { if (response.url().startsWith('https://cn.bing.com/dict/search')) dictionaryResponses.push({ url: response.url(), status: response.status() }); });
+  await input.fill('回溯');
+  await candidate('backtracking').waitFor();
+  await candidate('recall').waitFor();
+  if (!dictionaryResponses.some(item => item.status === 200)) throw new Error('词典未返回真实成功响应');
+  const backtrackingCandidates = await page.locator('#alternatives-list .alternative-text').allTextContents();
+  const main = await result.textContent();
+  await candidate('backtrack').click();
+  if (await result.textContent() !== main) throw new Error('点击候选不应改变主译文');
+  await page.screenshot({ path: 'output/playwright/terms-live-0.2.1.png', fullPage: true });
+  await input.fill('bank');
+  await candidate('河岸').waitFor();
+  const bankCandidates = await page.locator('#alternatives-list .alternative-text').allTextContents();
+  const beforeSentence = dictionaryResponses.length;
+  await input.fill('请使用回溯算法解决这个问题。');
+  await page.waitForFunction(() => document.getElementById('translation-status').dataset.status === 'success', { timeout: 30000 });
+  if (await page.getByRole('region', { name: '候选译法', exact: true }).isVisible()) throw new Error('句子不应显示候选词义');
+  if (dictionaryResponses.length !== beforeSentence) throw new Error('句子不应发词典请求');
+  const sentenceTranslation = await result.textContent();
+  if (!/backtrack/i.test(sentenceTranslation)) throw new Error('算法句子未返回匹配译文');
+  await page.screenshot({ path: 'output/playwright/sentence-live-0.2.1.png', fullPage: true });
+  await input.fill('回溯');
+  await candidate('backtrack').waitFor();
+  return { status: 'passed', network: 'real-no-mocks', backtrackingCandidates, bankCandidates, sentenceTranslation, dictionaryResponses };
+}

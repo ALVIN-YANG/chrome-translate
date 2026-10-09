@@ -1,0 +1,154 @@
+{
+  "terms": {
+    "status": "passed",
+    "translations": 7,
+    "dictionaries": 3,
+    "checks": [
+      "无框连续阅读",
+      "长译文自然展开与完整复制",
+      "静态候选",
+      "原生选中复制",
+      "候选独立复制",
+      "主译文复制",
+      "先显示主译文",
+      "晚到词典保留选区",
+      "完整句子单译文",
+      "英文多义词",
+      "自动模式无选项",
+      "词典失败降级",
+      "窄屏",
+      "清空"
+    ],
+    "responseMode": "controlled-fixtures"
+  },
+  "examples": {
+    "status": "passed",
+    "providers": [
+      "api.deepseek.com",
+      "api.kimi.com"
+    ],
+    "checks": [
+      "模型英文例句指令",
+      "英文例句及独立中文释义",
+      "过滤纯中文例句",
+      "保留主译文和候选",
+      "单次模型请求",
+      "窄屏"
+    ],
+    "responseMode": "controlled-fixtures"
+  },
+  "languages": {
+    "status": "passed",
+    "targets": [
+      "zh",
+      "en",
+      "ja",
+      "ko",
+      "fr",
+      "de",
+      "es",
+      "pt",
+      "ru",
+      "it",
+      "ar",
+      "hi",
+      "th",
+      "vi",
+      "id"
+    ],
+    "calls": 24,
+    "checks": [
+      "模式及源语言选项移除",
+      "15种目标语言",
+      "原文自动识别",
+      "外语默认译中文",
+      "日语汉字自动修正",
+      "非中英词典隔离",
+      "阿拉伯语方向",
+      "窄屏"
+    ],
+    "responseMode": "controlled-fixtures"
+  },
+  "regression": {
+    "status": "passed",
+    "mockedRequests": 11,
+    "checked": [
+      "真实扩展加载",
+      "微软免配置",
+      "其他服务未配置拦截",
+      "设置持久化",
+      "连接测试",
+      "自动方向",
+      "即时输入",
+      "IME 去重",
+      "旧请求取消",
+      "错误处理",
+      "长度校验",
+      "HTML 纯文本",
+      "复制",
+      "Coding Plan 端点",
+      "键盘关闭",
+      "响应式布局"
+    ],
+    "note": "本轮供应商响应为受控测试数据，真实接口另行验证"
+  },
+  "live": {
+    "status": "passed",
+    "translation": "real-microsoft",
+    "results": [
+      {
+        "source": "日语",
+        "target": "zh",
+        "text": "你好。 提前感谢大家。"
+      },
+      {
+        "source": "法语",
+        "target": "zh",
+        "text": "你好，你好吗？"
+      },
+      {
+        "source": "中文",
+        "target": "ja",
+        "text": "こんにちは、はじめまして。"
+      }
+    ],
+    "speech": "real-system-engine",
+    "japaneseSpeech": {
+      "text": "こんにちは、はじめまして。",
+      "lang": "ja-JP",
+      "name": "Eddy (日语（日本）)",
+      "local": true,
+      "events": [
+        "start",
+        "end"
+      ]
+    },
+    "exampleSpeech": {
+      "text": "backtrack to the previous choice",
+      "lang": "en-US",
+      "name": "Samantha",
+      "local": true,
+      "events": [
+        "start",
+        "end"
+      ]
+    }
+  },
+  "speech": {
+    "status": "passed",
+    "checks": [
+      "例句小喇叭",
+      "英文例句独立语音方向",
+      "正常朗读无状态行",
+      "朗读按钮位置稳定",
+      "候选独立朗读",
+      "本地中英声音",
+      "停止按钮",
+      "新输入取消",
+      "语音错误反馈",
+      "复制不受影响",
+      "异步声音取消"
+    ],
+    "speech": "controlled-events"
+  }
+}

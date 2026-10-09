@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <title>翻译 · 多语言</title>
+  <link rel="icon" href="icons/32.png">
+  <link rel="stylesheet" href="styles.css">
+  <script type="module" src="app.js"></script>
+</head>
+<body>
+  <svg class="icon-definitions" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><defs>
+    <symbol id="i-settings" viewBox="0 0 24 24"><path d="m9.5 3-.6 2.3-2 .9-2.1-.7-2.5 4.3 1.7 1.6v2.3l-1.7 1.6 2.5 4.3 2.1-.7 2 .9.6 2.2h5l.6-2.2 2-.9 2.1.7 2.5-4.3-1.7-1.6v-2.3l1.7-1.6-2.5-4.3-2.1.7-2-.9-.6-2.3z"/><circle cx="12" cy="12.5" r="3.2"/></symbol>
+    <symbol id="i-switch" viewBox="0 0 24 24"><path d="M4 7h16m-4-4 4 4-4 4M20 17H4m4-4-4 4 4 4"/></symbol>
+    <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M4 12h16m-6-6 6 6-6 6"/></symbol>
+    <symbol id="i-copy" viewBox="0 0 24 24"><rect x="8" y="4" width="12" height="14" rx="2"/><path d="M15 21H5a2 2 0 0 1-2-2V9"/></symbol>
+    <symbol id="i-speaker" viewBox="0 0 24 24"><path d="m11 5-5 4H3v6h3l5 4zM15 8a6 6 0 0 1 0 8M18 5a10 10 0 0 1 0 14"/></symbol>
+    <symbol id="i-stop" viewBox="0 0 24 24"><rect x="6" y="6" width="12" height="12" rx="1"/></symbol>
+    <symbol id="i-clear" viewBox="0 0 24 24"><path d="m4 12 8-9 9 8-8 10H8l-5-5a2 2 0 0 1 1-4Zm4-4 9 8M13 21h8"/></symbol>
+    <symbol id="i-close" viewBox="0 0 24 24"><path d="m6 6 12 12M6 18 18 6"/></symbol>
+    <symbol id="i-eye" viewBox="0 0 24 24"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7S2 12 2 12Z"/><circle cx="12" cy="12" r="3"/></symbol>
+    <symbol id="i-check" viewBox="0 0 24 24"><path d="m5 12 4 4L19 6"/></symbol>
+    <symbol id="i-info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 11v6M12 7v.2"/></symbol>
+    <symbol id="i-text" viewBox="0 0 24 24"><path d="M5 4h14v16H5zM8 8h8M8 12h8M8 16h5"/></symbol>
+    <symbol id="i-link" viewBox="0 0 24 24"><path d="M14 4h6v6M20 4 10 14M10 4H5a1 1 0 0 0-1 1v14a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-5"/></symbol>
+  </defs></svg>
+
+  <div id="preview-note" class="preview-note" hidden>网页预览模式 · Key 仅保留在当前页面；安装扩展后可保存配置。</div>
+  <div class="app-shell">
+    <header class="app-header">
+      <div class="brand"><span class="brand-icon" aria-hidden="true"><svg><use href="#i-switch"/></svg></span><h1>翻译</h1><span class="brand-caption">多语言</span></div>
+      <button type="button" id="open-settings" class="button button-quiet"><svg aria-hidden="true"><use href="#i-settings"/></svg>设置</button>
+    </header>
+
+    <main>
+      <section class="toolbar" aria-label="翻译服务">
+        <div class="provider-tabs" role="group" aria-label="选择翻译服务">
+          <button type="button" data-provider="microsoft" aria-pressed="true">微软翻译</button>
+          <button type="button" data-provider="baidu" aria-pressed="false">百度翻译</button>
+          <button type="button" data-provider="deepseek" aria-pressed="false">DeepSeek</button>
+          <button type="button" data-provider="kimi" aria-pressed="false">Kimi Coding Plan</button>
+        </div>
+        <div class="provider-meta"><span id="provider-badge">免费 · 免 Key</span><span class="meta-divider"></span><button type="button" id="config-shortcut" class="config-shortcut"><span class="status-dot"></span><span id="config-label">无需配置</span><svg aria-hidden="true"><use href="#i-info"/></svg></button></div>
+      </section>
+
+      <div class="direction-banner"><svg aria-hidden="true"><use href="#i-switch"/></svg><strong id="direction-title">自动翻译</strong><span class="banner-divider"></span><span id="direction-description">中文默认译为英文，其他语言默认译为中文</span></div>
+
+      <section class="translation-workspace" aria-label="多语言文本翻译">
+        <div class="editor-panel source-panel">
+          <div class="editor-header"><span id="source-language" class="source-language">自动识别</span><span class="panel-label">原文</span></div>
+          <label for="source-text" class="sr-only">输入要翻译的文本</label>
+          <textarea id="source-text" placeholder="在此输入或粘贴文本…" dir="auto" spellcheck="false" autocomplete="off" autocapitalize="off" aria-describedby="input-hint" disabled></textarea>
+          <div class="editor-footer"><button type="button" id="clear-text" class="text-button" disabled><svg aria-hidden="true"><use href="#i-clear"/></svg>清空</button><span id="character-count" class="character-count">0 / 10,000</span></div>
+        </div>
+        <div class="between-arrow" aria-hidden="true"><svg><use href="#i-arrow"/></svg></div>
+        <div class="editor-panel result-panel">
+          <div class="editor-header"><label class="sr-only" for="target-language">译文语言</label><select id="target-language"><option value="auto">简体中文（自动）</option></select><span id="translation-status" class="translation-status" role="status" aria-live="polite">等待输入</span></div>
+          <div class="result-toolbar"><span id="result-detail" class="result-detail"></span><div class="result-actions"><button type="button" id="read-result" class="text-button speech-button" data-speech-key="result" aria-label="朗读译文" disabled><svg aria-hidden="true"><use href="#i-speaker"/></svg><span>朗读</span></button><button type="button" id="copy-result" class="text-button" disabled><svg aria-hidden="true"><use href="#i-copy"/></svg><span>复制译文</span></button></div></div>
+          <div class="result-body" aria-busy="false">
+            <div id="empty-state" class="empty-state"><span class="empty-icon"><svg aria-hidden="true"><use href="#i-text"/></svg></span><p id="empty-title">译文会显示在这里</p><span id="empty-description">自动识别原文，即贴即译</span></div>
+            <div id="loading-state" class="loading-state" hidden><span class="spinner" aria-hidden="true"></span><p>正在翻译…</p><span>正在等待服务返回译文</span></div>
+            <div id="error-state" class="error-state" hidden><span class="error-icon"><svg aria-hidden="true"><use href="#i-info"/></svg></span><p id="error-title">翻译未完成</p><span id="error-message"></span><div class="error-actions"><button type="button" id="error-settings" class="button button-primary">服务设置</button><button type="button" id="retry" class="button button-secondary">重试</button></div></div>
+            <div id="result-text" class="result-text" role="region" aria-label="翻译结果" hidden></div>
+            <section id="alternatives-panel" class="alternatives-panel" aria-label="候选译法" hidden>
+              <div id="alternatives-list" class="alternatives-list"></div>
+              <p id="alternatives-status" class="alternatives-status" role="status" aria-live="polite"></p>
+              <a id="dictionary-link" class="dictionary-link" target="_blank" rel="noreferrer noopener" hidden>必应词典 ↗</a>
+            </section>
+          </div>
+          <p id="speech-status" class="speech-status" role="status" aria-live="polite" hidden></p>
+        </div>
+      </section>
+      <footer class="workspace-footer"><p id="input-hint"><span class="hint-dot"></span>粘贴或修改文本后，立即翻译</p><span>仅发送给当前选择的翻译服务</span></footer>
+      <div id="page-notice" class="page-notice" role="alert" hidden></div>
+    </main>
+  </div>
+
+  <dialog id="settings-dialog" class="settings-dialog" aria-labelledby="settings-title">
+    <form id="settings-form" novalidate>
+      <header class="settings-header"><div><h2 id="settings-title">服务设置</h2><p>连接你习惯的翻译服务</p></div><button type="button" id="close-settings" class="icon-button" aria-label="关闭服务设置"><svg aria-hidden="true"><use href="#i-close"/></svg></button></header>
+      <div class="settings-body">
+        <label class="field-label" for="settings-provider">当前配置服务</label>
+        <select id="settings-provider" class="field-select"><option value="microsoft">微软翻译</option><option value="baidu">百度翻译</option><option value="deepseek">DeepSeek</option><option value="kimi">Kimi Coding Plan</option></select>
+        <p id="service-description" class="service-description"></p>
+        <div id="service-fields" class="service-fields"></div>
+        <p class="privacy-note"><svg aria-hidden="true"><use href="#i-info"/></svg><span>Key 仅保存在当前浏览器，不会同步到云端。</span></p>
+        <a id="service-link" class="service-link" target="_blank" rel="noreferrer noopener"><span></span><svg aria-hidden="true"><use href="#i-link"/></svg></a>
+        <div id="connection-status" class="connection-status" role="status" aria-live="polite"><span id="connection-badge" class="connection-badge">待验证</span><span id="connection-message">尚未验证此服务的翻译调用</span></div>
+      </div>
+      <footer class="settings-footer"><p id="connection-hint">测试连接会发送一次“Hello”翻译请求，并使用对应服务额度。</p><div><button type="button" id="test-connection" class="button button-secondary">测试连接</button><button type="submit" id="save-settings" class="button button-primary">保存配置</button></div></footer>
+    </form>
+  </dialog>
+  <div id="toast" class="toast" role="status" aria-live="polite" hidden><svg aria-hidden="true"><use href="#i-check"/></svg><span></span></div>
+</body>
+</html>
