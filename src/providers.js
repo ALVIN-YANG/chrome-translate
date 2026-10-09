@@ -109,6 +109,28 @@ function checkedText(text) {
   return text;
 }
 
+// 网页按视口收集段落；微软支持数组，合并请求可减少长页面的调用频率。
+export async function translateMicrosoftBatch({ texts, to, signal, timeoutMs = 25000 }, fetcher = fetch) {
+  if (!isLanguage(to) || !Array.isArray(texts) || !texts.length || texts.length > 8
+    || texts.some(text => typeof text !== 'string' || !text.trim() || Array.from(text).length > 1600)) throw new TranslationError('invalid', '网页翻译参数无效。');
+  const requestSignal = signal ? AbortSignal.any([signal, AbortSignal.timeout(timeoutMs)]) : AbortSignal.timeout(timeoutMs);
+  try {
+    const query = new URLSearchParams({ to: LANGUAGES[to].microsoft, isEnterpriseClient: 'false' });
+    const response = await fetcher(`https://edge.microsoft.com/translate/translatetext?${query}`, {
+      method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(texts),
+      signal: requestSignal, credentials: 'omit', cache: 'no-store', redirect: 'error', referrerPolicy: 'no-referrer',
+    });
+    if (!response.ok) throw httpError(response.status, 'microsoft');
+    const data = await response.json();
+    if (!Array.isArray(data) || data.length !== texts.length) throw new TranslationError('invalid_response', '网页译文不完整，请重试。');
+    return data.map(item => ({ text: checkedText(item?.translations?.[0]?.text), detected: item?.detectedLanguage?.language }));
+  } catch (error) {
+    signal?.throwIfAborted();
+    if (error instanceof TranslationError) throw error;
+    throw new TranslationError(requestSignal.aborted ? 'timeout' : 'network', requestSignal.aborted ? '网页翻译请求超时，请重试。' : '网页翻译网络请求失败，请重试。');
+  }
+}
+
 function termPrompt(target) {
   const english = target === 'en';
   const language = LANGUAGES[target].english;

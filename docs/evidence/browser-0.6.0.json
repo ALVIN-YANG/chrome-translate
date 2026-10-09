@@ -1,0 +1,256 @@
+{
+  "date": "2026-10-09",
+  "version": "0.6.0",
+  "nodeTests": {
+    "passed": 64,
+    "failed": 0
+  },
+  "page": {
+    "smoke": {
+      "status": "passed",
+      "requests": 13,
+      "responseMode": "controlled-fixtures",
+      "checks": [
+        "主动启用前无文本请求",
+        "原文下方双语",
+        "代码块表单隐私排除",
+        "技术段落内联标识符完整",
+        "导航侧栏智能过滤",
+        "目标语言去重",
+        "视口按需加载",
+        "动态段落与修改",
+        "关闭精确恢复源DOM",
+        "当前页内存缓存",
+        "原链接事件",
+        "划词按钮再发送",
+        "算法多义词与例句喇叭",
+        "原生复制",
+        "Escape关闭",
+        "整页模式",
+        "取消隔离迟到结果",
+        "限流暂停与主动重试",
+        "安全设置不含Key",
+        "开关广播",
+        "390px320px浮层",
+        "工具栏服务语言偏好和双语原文切换",
+        "工具栏整页范围"
+      ]
+    },
+    "live": {
+      "status": "passed",
+      "mode": "real-network-no-mocks",
+      "version": "0.6.0",
+      "paragraph": "好的翻译能保持原文可见。你可以边读边比较两种语言。",
+      "terms": [
+        "backtracking",
+        "backtrack",
+        "trace back",
+        "look back",
+        "retrospective",
+        "Looking back"
+      ],
+      "responses": [
+        {
+          "service": "microsoft",
+          "status": 200,
+          "credentialHeaders": []
+        },
+        {
+          "service": "microsoft",
+          "status": 200,
+          "credentialHeaders": []
+        },
+        {
+          "service": "bing",
+          "status": 200,
+          "credentialHeaders": []
+        }
+      ],
+      "commands": [
+        {
+          "description": "",
+          "name": "_execute_action",
+          "shortcut": ""
+        },
+        {
+          "description": "翻译当前网页 / 显示原文",
+          "name": "toggle-page",
+          "shortcut": "⌥A"
+        },
+        {
+          "description": "翻译整个页面",
+          "name": "translate-all",
+          "shortcut": "⌥W"
+        }
+      ],
+      "shortcutActivated": false,
+      "note": "系统朗读按钮已显示，未新增人工听感验收；其他服务无真实Key调用"
+    },
+    "site-live": {
+      "status": "passed",
+      "mode": "real-public-page-and-provider",
+      "url": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array",
+      "paragraph": "数组对象与其他编程语言中的数组一样，支持将多个项目集合存储在单一变量名下，并拥有用于执行常见数组操作的成员。",
+      "translated": 8,
+      "sourceParagraphsPreserved": 143
+    }
+  },
+  "strictCSP": {
+    "status": "passed",
+    "mode": "controlled-response-strict-site-CSP",
+    "checks": [
+      "样式隔离",
+      "后台翻译不受网页connect-src限制",
+      "双语段落",
+      "关闭恢复"
+    ]
+  },
+  "standaloneRegressions": {
+    "workspace": {
+      "status": "passed",
+      "requests": 9,
+      "checks": [
+        "词义同一层级和语境优先",
+        "词典晚到保留选区",
+        "单项及全部复制",
+        "更新和失败保留结果",
+        "旧结果按原语言朗读",
+        "句段完整替换",
+        "刷新恢复不重复请求",
+        "目标语言恢复",
+        "撤销清空",
+        "IME去重",
+        "自动语言修正恢复",
+        "真实扩展API复用标签页",
+        "storage和contextMenus权限，无tabs权限",
+        "390px和320px布局"
+      ],
+      "responseMode": "controlled-fixtures",
+      "speech": "controlled-events"
+    },
+    "smoke": {
+      "status": "passed",
+      "mockedRequests": 11,
+      "checked": [
+        "真实扩展加载",
+        "微软免配置",
+        "其他服务未配置拦截",
+        "设置持久化",
+        "连接测试",
+        "自动方向",
+        "即时输入",
+        "IME 去重",
+        "旧请求取消",
+        "错误处理",
+        "长度校验",
+        "HTML 纯文本",
+        "复制",
+        "Coding Plan 端点",
+        "键盘关闭",
+        "响应式布局"
+      ],
+      "note": "本轮供应商响应为受控测试数据，真实接口另行验证"
+    },
+    "free-providers": {
+      "status": "passed",
+      "providers": [
+        "zhipu",
+        "siliconflow",
+        "gemini"
+      ],
+      "requests": 10,
+      "checks": [
+        "七项服务入口",
+        "未配置不发请求",
+        "固定免费模型",
+        "各自 Key 和端点",
+        "连接测试",
+        "词义和英文例句",
+        "例句朗读和候选复制入口",
+        "混元单译文",
+        "配置升级保留",
+        "刷新持久化",
+        "限流无自动转发",
+        "窄屏布局"
+      ],
+      "responseMode": "controlled-fixtures"
+    },
+    "languages": {
+      "status": "passed",
+      "targets": [
+        "zh",
+        "en",
+        "ja",
+        "ko",
+        "fr",
+        "de",
+        "es",
+        "pt",
+        "ru",
+        "it",
+        "ar",
+        "hi",
+        "th",
+        "vi",
+        "id"
+      ],
+      "calls": 24,
+      "checks": [
+        "模式及源语言选项移除",
+        "15种目标语言",
+        "原文自动识别",
+        "外语默认译中文",
+        "日语汉字自动修正",
+        "非中英词典隔离",
+        "阿拉伯语方向",
+        "窄屏"
+      ],
+      "responseMode": "controlled-fixtures"
+    },
+    "terms": {
+      "status": "passed",
+      "translations": 7,
+      "dictionaries": 3,
+      "checks": [
+        "无框连续阅读",
+        "长译文自然展开与完整复制",
+        "静态候选",
+        "原生选中复制",
+        "候选独立复制",
+        "主译文复制",
+        "先显示主译文",
+        "晚到词典保留选区",
+        "完整句子单译文",
+        "英文多义词",
+        "自动模式无选项",
+        "词典失败降级",
+        "窄屏",
+        "清空"
+      ],
+      "responseMode": "controlled-fixtures"
+    },
+    "speech": {
+      "status": "passed",
+      "checks": [
+        "例句小喇叭",
+        "英文例句独立语音方向",
+        "正常朗读无状态行",
+        "朗读按钮位置稳定",
+        "候选独立朗读",
+        "本地中英声音",
+        "停止按钮",
+        "新输入取消",
+        "语音错误反馈",
+        "复制不受影响",
+        "异步声音取消"
+      ],
+      "speech": "controlled-events"
+    }
+  },
+  "limits": [
+    "其他服务未新增真实账号Key验证",
+    "语音复用现有实现，浏览器回归含受控语音事件，没有新增人工听感验收",
+    "快捷键在Chrome中已注册；Playwright按键未触发浏览器原生命令，未完成人工桌面按键验收",
+    "使用专用Chromium配置加载扩展，不代表已更新用户Chrome中的安装"
+  ]
+}

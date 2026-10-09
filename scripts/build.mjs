@@ -4,13 +4,18 @@ import { fileURLToPath } from 'node:url';
 
 const root = fileURLToPath(new URL('../', import.meta.url));
 await mkdir(`${root}dist`, { recursive: true });
+await cp(`${root}public`, `${root}dist`, { recursive: true });
 await build({
-  entryPoints: [`${root}src/app.js`], bundle: true, format: 'esm',
-  platform: 'browser', target: 'chrome120', outfile: `${root}dist/app.js`,
+  entryPoints: ['app', 'background', 'popup'].map(name => `${root}src/${name}.js`), bundle: true, format: 'esm',
+  platform: 'browser', target: 'chrome120', outdir: `${root}dist`,
   legalComments: 'eof', minify: true,
 });
-await cp(`${root}public`, `${root}dist`, { recursive: true });
-for (const name of ['index.html', 'styles.css']) {
+await build({
+  entryPoints: [`${root}src/content.js`], bundle: true, format: 'iife',
+  platform: 'browser', target: 'chrome120', outfile: `${root}dist/content.js`,
+  loader: { '.css': 'text' }, legalComments: 'eof', minify: true,
+});
+for (const name of ['index.html', 'styles.css', 'popup.html', 'popup.css']) {
   await cp(`${root}src/${name}`, `${root}dist/${name}`);
 }
 const license = await readFile(`${root}node_modules/js-md5/LICENSE.txt`, 'utf8');

@@ -101,7 +101,7 @@ async (page) => {
     return { current: current.id, ids, contexts: (await chrome.runtime.getContexts({ contextTypes: ['TAB'] })).filter(context => context.documentUrl.split('#')[0] === chrome.runtime.getURL('index.html')).length, permissions: chrome.runtime.getManifest().permissions };
   });
   assert(reused.ids.every(id => id === reused.current) && reused.contexts === 1, '连续打开应激活已有页面');
-  assert(JSON.stringify(reused.permissions) === '["storage"]', '不得为标签页复用增加网页读取权限');
+  assert(JSON.stringify(reused.permissions) === '["storage","contextMenus"]', '网页翻译只增加必要的右键权限，不添加tabs权限');
   for (const width of [390, 320]) {
     await page.setViewportSize({ width, height: 980 });
     assert(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), `${width}px 横向溢出`);
@@ -109,5 +109,5 @@ async (page) => {
   await page.setViewportSize({ width: 1100, height: 900 });
   await page.screenshot({ path: 'output/playwright/workspace-0.5.0.png' });
   assert(errors.length === 0, errors.join('; '));
-  return { status: 'passed', requests: calls.length, checks: ['词义同一层级和语境优先', '词典晚到保留选区', '单项及全部复制', '更新和失败保留结果', '旧结果按原语言朗读', '句段完整替换', '刷新恢复不重复请求', '目标语言恢复', '撤销清空', 'IME去重', '自动语言修正恢复', '真实扩展API复用标签页', '仅storage权限', '390px和320px布局'], responseMode: 'controlled-fixtures', speech: 'controlled-events' };
+  return { status: 'passed', requests: calls.length, checks: ['词义同一层级和语境优先', '词典晚到保留选区', '单项及全部复制', '更新和失败保留结果', '旧结果按原语言朗读', '句段完整替换', '刷新恢复不重复请求', '目标语言恢复', '撤销清空', 'IME去重', '自动语言修正恢复', '真实扩展API复用标签页', 'storage和contextMenus权限，无tabs权限', '390px和320px布局'], responseMode: 'controlled-fixtures', speech: 'controlled-events' };
 }

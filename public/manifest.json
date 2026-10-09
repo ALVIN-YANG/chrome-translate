@@ -1,13 +1,16 @@
 {
   "manifest_version": 3,
   "name": "翻译 · 多语言",
-  "version": "0.5.0",
-  "description": "在独立标签页中即时翻译 15 种常用语言，支持微软、百度、智谱、硅基流动、Gemini、DeepSeek 和 Kimi Coding Plan，译文和例句可用系统声音朗读。",
+  "version": "0.6.0",
+  "description": "划词翻译、网页双语翻译及独立文本翻译。支持 15 种语言、七个服务，译文和例句可复制或用系统声音朗读。",
   "minimum_chrome_version": "120",
   "permissions": [
-    "storage"
+    "storage",
+    "contextMenus"
   ],
   "host_permissions": [
+    "http://*/*",
+    "https://*/*",
     "https://edge.microsoft.com/*",
     "https://cn.bing.com/*",
     "https://fanyi-api.baidu.com/*",
@@ -18,11 +21,12 @@
     "https://generativelanguage.googleapis.com/*"
   ],
   "action": {
-    "default_title": "打开翻译",
+    "default_title": "翻译当前网页",
     "default_icon": {
       "16": "icons/16.png",
       "32": "icons/32.png"
-    }
+    },
+    "default_popup": "popup.html"
   },
   "icons": {
     "16": "icons/16.png",
@@ -37,5 +41,33 @@
   "options_page": "index.html#settings",
   "content_security_policy": {
     "extension_pages": "script-src 'self'; object-src 'none'; base-uri 'none'; connect-src https://edge.microsoft.com https://cn.bing.com https://fanyi-api.baidu.com https://api.deepseek.com https://api.kimi.com https://open.bigmodel.cn https://api.siliconflow.cn https://generativelanguage.googleapis.com"
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "http://*/*",
+        "https://*/*"
+      ],
+      "js": [
+        "content.js"
+      ],
+      "run_at": "document_idle"
+    }
+  ],
+  "commands": {
+    "toggle-page": {
+      "suggested_key": {
+        "default": "Alt+A",
+        "mac": "Alt+A"
+      },
+      "description": "翻译当前网页 / 显示原文"
+    },
+    "translate-all": {
+      "suggested_key": {
+        "default": "Alt+W",
+        "mac": "Alt+W"
+      },
+      "description": "翻译整个页面"
+    }
   }
 }

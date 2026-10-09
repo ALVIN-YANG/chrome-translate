@@ -1,0 +1,14 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>网页翻译</title><link rel="stylesheet" href="popup.css"></head>
+<body>
+<header><img src="icons/32.png" alt="" width="28" height="28"><div><h1>翻译</h1><p>保留原文，顺着读</p></div><button id="settings" aria-label="服务设置" title="服务设置">设置</button></header>
+<main>
+<label for="provider">翻译服务</label><select id="provider" aria-label="翻译服务"></select>
+<label for="target">网页译成</label><select id="target" aria-label="网页目标语言"></select>
+<button id="translate" class="primary" disabled>翻译当前网页</button>
+<p id="status" role="status">正在连接当前网页…</p>
+<button id="all" class="text-button" hidden>翻译整个页面（含导航和侧栏）</button>
+<div class="preferences"><label><span>划词翻译<small>选中文字后，点击“译”</small></span><input id="selection" type="checkbox" role="switch"></label><label><span>网页右侧按钮</span><input id="floating" type="checkbox" role="switch"></label></div>
+<button id="open" class="secondary">打开独立翻译页 <span aria-hidden="true">↗</span></button>
+<p class="hint">Alt+A 翻译 / 原文 · Alt+W 整个页面<br>开启后，仅发送待翻译文字给所选服务</p>
+</main><script type="module" src="popup.js"></script></body></html>
