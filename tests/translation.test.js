@@ -49,7 +49,7 @@ test('全新安装和旧设置升级均可免 Key 使用微软，其他服务仍
   assert.equal(defaultSettings().provider, 'microsoft');
   assert.equal(isConfigured('microsoft'), true);
   assert.deepEqual(normalizeSettings({ providers: { microsoft: { key: 'old-key', region: 'eastasia' } } }).providers.microsoft, {});
-  for (const provider of ['baidu', 'deepseek', 'kimi', 'unknown']) assert.equal(isConfigured(provider, {}), false);
+  for (const provider of ['baidu', 'zhipu', 'siliconflow', 'gemini', 'deepseek', 'kimi', 'unknown']) assert.equal(isConfigured(provider, {}), false);
 });
 
 test('微软免 Key 接口被拒绝时不引导填写或修改 Key', async () => {
@@ -101,7 +101,7 @@ test('模型服务使用已确认的各自端点，Kimi 不冒充其他客户端
 test('缺少凭据、输入过长时不发送请求；百度按字节检查', async () => {
   let sent = false;
   const fetcher = async () => { sent = true; };
-  for (const provider of ['baidu', 'deepseek', 'kimi']) {
+  for (const provider of ['baidu', 'zhipu', 'siliconflow', 'gemini', 'deepseek', 'kimi']) {
     await assert.rejects(translate({ ...request, provider, config: {} }, fetcher), { code: 'configuration' });
   }
   await assert.rejects(translate({ ...request, provider: 'baidu', text: '中'.repeat(2001) }, fetcher), { code: 'too_long' });

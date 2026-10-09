@@ -6,6 +6,9 @@ export function defaultSettings() {
     providers: {
       microsoft: {},
       baidu: { appid: '', key: '' },
+      zhipu: { key: '' },
+      siliconflow: { key: '' },
+      gemini: { key: '' },
       deepseek: { key: '', model: 'deepseek-flash' },
       kimi: { key: '', model: 'kimi-for-coding' },
     },

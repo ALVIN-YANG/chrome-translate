@@ -1,0 +1,60 @@
+{
+  "version": "0.4.0",
+  "date": "2026-10-09",
+  "nodeTests": 45,
+  "newProviders": {
+    "status": "passed",
+    "providers": [
+      "zhipu",
+      "siliconflow",
+      "gemini"
+    ],
+    "requests": 10,
+    "responseMode": "controlled-fixtures",
+    "checks": [
+      "七项服务入口",
+      "固定免费模型",
+      "分别配置和保存Key",
+      "连接测试",
+      "英文例句及候选",
+      "混元单译文",
+      "旧配置保留",
+      "限流无自动转发",
+      "320px和390px窄屏"
+    ]
+  },
+  "existingProviders": {
+    "status": "passed",
+    "requests": 11,
+    "responseMode": "controlled-fixtures",
+    "checks": [
+      "即时输入",
+      "IME去重",
+      "旧请求隔离",
+      "原生复制",
+      "HTML纯文本",
+      "Kimi Coding Plan端点",
+      "配置保存"
+    ]
+  },
+  "limitations": [
+    "新增模型没有有效Key，未实测权限、免费配额或翻译质量",
+    "未更改用户Chrome中已安装的扩展"
+  ],
+  "microsoftLive": {
+    "responseMode": "real-network",
+    "responses": [
+      {
+        "host": "edge.microsoft.com",
+        "status": 200
+      },
+      {
+        "host": "cn.bing.com",
+        "status": 200
+      }
+    ],
+    "text": "回溯",
+    "translation": "Looking back",
+    "candidates": 8
+  }
+}

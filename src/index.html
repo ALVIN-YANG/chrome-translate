@@ -35,12 +35,7 @@
 
     <main>
       <section class="toolbar" aria-label="翻译服务">
-        <div class="provider-tabs" role="group" aria-label="选择翻译服务">
-          <button type="button" data-provider="microsoft" aria-pressed="true">微软翻译</button>
-          <button type="button" data-provider="baidu" aria-pressed="false">百度翻译</button>
-          <button type="button" data-provider="deepseek" aria-pressed="false">DeepSeek</button>
-          <button type="button" data-provider="kimi" aria-pressed="false">Kimi Coding Plan</button>
-        </div>
+        <div class="provider-tabs" role="group" aria-label="选择翻译服务"></div>
         <div class="provider-meta"><span id="provider-badge">免费 · 免 Key</span><span class="meta-divider"></span><button type="button" id="config-shortcut" class="config-shortcut"><span class="status-dot"></span><span id="config-label">无需配置</span><svg aria-hidden="true"><use href="#i-info"/></svg></button></div>
       </section>
 
@@ -81,7 +76,7 @@
       <header class="settings-header"><div><h2 id="settings-title">服务设置</h2><p>连接你习惯的翻译服务</p></div><button type="button" id="close-settings" class="icon-button" aria-label="关闭服务设置"><svg aria-hidden="true"><use href="#i-close"/></svg></button></header>
       <div class="settings-body">
         <label class="field-label" for="settings-provider">当前配置服务</label>
-        <select id="settings-provider" class="field-select"><option value="microsoft">微软翻译</option><option value="baidu">百度翻译</option><option value="deepseek">DeepSeek</option><option value="kimi">Kimi Coding Plan</option></select>
+        <select id="settings-provider" class="field-select"></select>
         <p id="service-description" class="service-description"></p>
         <div id="service-fields" class="service-fields"></div>
         <p class="privacy-note"><svg aria-hidden="true"><use href="#i-info"/></svg><span>Key 仅保存在当前浏览器，不会同步到云端。</span></p>

@@ -9,6 +9,17 @@ const $ = id => document.getElementById(id);
 const input = $('source-text');
 const result = $('result-text');
 const dialog = $('settings-dialog');
+// 主界面和设置使用同一服务列表，新增服务时不会遗漏其中一个入口。
+for (const [id, provider] of Object.entries(PROVIDERS)) {
+  const button = document.createElement('button');
+  button.type = 'button'; button.dataset.provider = id;
+  button.textContent = provider.name;
+  button.setAttribute('aria-pressed', String(id === 'microsoft'));
+  document.querySelector('.provider-tabs').append(button);
+  const option = document.createElement('option');
+  option.value = id; option.textContent = provider.name;
+  $('settings-provider').append(option);
+}
 let settings = defaultSettings();
 let ready = false;
 let composing = false;

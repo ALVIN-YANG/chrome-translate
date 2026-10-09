@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
   "name": "翻译 · 多语言",
-  "version": "0.3.0",
-  "description": "在独立标签页中即时翻译 15 种常用语言，支持微软、百度、DeepSeek 和 Kimi Coding Plan，词义和例句可用系统声音朗读。",
+  "version": "0.4.0",
+  "description": "在独立标签页中即时翻译 15 种常用语言，支持微软、百度、智谱、硅基流动、Gemini、DeepSeek 和 Kimi Coding Plan，译文和例句可用系统声音朗读。",
   "minimum_chrome_version": "120",
   "permissions": [
     "storage"
@@ -12,7 +12,10 @@
     "https://cn.bing.com/*",
     "https://fanyi-api.baidu.com/*",
     "https://api.deepseek.com/*",
-    "https://api.kimi.com/*"
+    "https://api.kimi.com/*",
+    "https://open.bigmodel.cn/*",
+    "https://api.siliconflow.cn/*",
+    "https://generativelanguage.googleapis.com/*"
   ],
   "action": {
     "default_title": "打开翻译",
@@ -32,6 +35,6 @@
   },
   "options_page": "index.html#settings",
   "content_security_policy": {
-    "extension_pages": "script-src 'self'; object-src 'none'; base-uri 'none'; connect-src https://edge.microsoft.com https://cn.bing.com https://fanyi-api.baidu.com https://api.deepseek.com https://api.kimi.com"
+    "extension_pages": "script-src 'self'; object-src 'none'; base-uri 'none'; connect-src https://edge.microsoft.com https://cn.bing.com https://fanyi-api.baidu.com https://api.deepseek.com https://api.kimi.com https://open.bigmodel.cn https://api.siliconflow.cn https://generativelanguage.googleapis.com"
   }
 }
