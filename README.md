@@ -1,5 +1,8 @@
 # Chrome Translate · 翻译
 
+[![自动检查](https://img.shields.io/github/actions/workflow/status/ALVIN-YANG/chrome-translate/check.yml?branch=main&label=check)](https://github.com/ALVIN-YANG/chrome-translate/actions/workflows/check.yml)
+[![最新版本](https://img.shields.io/github/v/release/ALVIN-YANG/chrome-translate)](https://github.com/ALVIN-YANG/chrome-translate/releases/latest)
+
 划词后直接 **翻译、朗读原文或问问 AI** 的 Chrome 扩展。保留网页双语和独立文本翻译，支持 **15 种翻译语言**；模型、语音、Key 和接口可以自己选择。
 
 **[下载最新插件包](https://github.com/ALVIN-YANG/chrome-translate/releases/latest)** · [安装](#安装) · [翻译服务](#翻译服务) · [反馈问题](https://github.com/ALVIN-YANG/chrome-translate/issues)
@@ -129,6 +132,8 @@ npm run check
 ```
 
 检查通过后，将生成的 `dist/` 文件夹加载到 Chrome。
+
+主分支更新和 Pull Request 会在 [GitHub Actions](https://github.com/ALVIN-YANG/chrome-translate/actions/workflows/check.yml) 自动运行同一套测试与构建，分别检查 Node.js 22 和 24。成功后保留 7 天的 `translate-chrome-ci` 构建产物，供开发者核对；日常安装仍使用上方的 Release 插件包。自动检查覆盖测试和打包，真实浏览器及翻译服务验证见下方记录。
 
 ```sh
 npm run dev
