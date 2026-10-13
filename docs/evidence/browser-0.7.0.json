@@ -330,5 +330,28 @@
     "DeepSeek及其他非MiniMax平台未使用真实账号Key，本轮验证SDK请求与受控响应",
     "记录了真实HTMLAudio播放/暂停/结束，没有人工听感评分",
     "使用隔离Chromium配置，未更新用户Chrome中的安装"
-  ]
+  ],
+  "settingsActions": {
+    "status": "passed",
+    "mode": "controlled-llm-local-tts-real-extension",
+    "checks": [
+      "设置页模型连接测试",
+      "设置页未保存的语音配置可试听",
+      "关闭设置停止试听"
+    ]
+  },
+  "release": {
+    "url": "https://github.com/ALVIN-YANG/chrome-translate/releases/tag/v0.7.0",
+    "httpStatus": 200,
+    "bytes": 568182,
+    "sha256": "3c1518882dc18cf6b6e34c23b2350d11c84e90fa32793cf9842306f5e991570b"
+  },
+  "ci": {
+    "nodeVersions": [
+      22,
+      24
+    ],
+    "status": "success",
+    "run": "https://github.com/ALVIN-YANG/chrome-translate/actions/runs/38355916067"
+  }
 }
