@@ -68,7 +68,7 @@ export class SystemSpeech {
         this.utterance = utterance;
         utterance.voice = voice;
         utterance.lang = voice.lang;
-        utterance.rate = 1;
+        utterance.rate = this.rate || 1;
         utterance.onstart = () => { if (version === this.version) this.update('speaking', key); };
         utterance.onend = next;
         utterance.onerror = event => {

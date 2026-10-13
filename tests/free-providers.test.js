@@ -97,7 +97,7 @@ test('扩展权限和 CSP 允许新服务地址，避免网页可用而安装后
   for (const [endpoint] of Object.values(services)) {
     const origin = new URL(endpoint).origin;
     assert(manifest.host_permissions.includes(`${origin}/*`), origin);
-    assert(connect.includes(origin), origin);
+    assert(connect.includes(origin) || connect.includes('https:'), origin);
   }
   assert(!manifest.host_permissions.includes('<all_urls>'));
 });

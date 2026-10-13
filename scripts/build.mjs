@@ -5,19 +5,42 @@ import { fileURLToPath } from 'node:url';
 const root = fileURLToPath(new URL('../', import.meta.url));
 await mkdir(`${root}dist`, { recursive: true });
 await cp(`${root}public`, `${root}dist`, { recursive: true });
-await build({
-  entryPoints: ['app', 'background', 'popup'].map(name => `${root}src/${name}.js`), bundle: true, format: 'esm',
+const extensionBuild = await build({
+  entryPoints: ['app', 'background', 'popup', 'services', 'offscreen'].map(name => `${root}src/${name}.js`), bundle: true, format: 'esm',
   platform: 'browser', target: 'chrome120', outdir: `${root}dist`,
-  legalComments: 'eof', minify: true,
+  legalComments: 'eof', minify: true, metafile: true,
 });
-await build({
+const contentBuild = await build({
   entryPoints: [`${root}src/content.js`], bundle: true, format: 'iife',
   platform: 'browser', target: 'chrome120', outfile: `${root}dist/content.js`,
-  loader: { '.css': 'text' }, legalComments: 'eof', minify: true,
+  loader: { '.css': 'text' }, legalComments: 'eof', minify: true, metafile: true,
 });
-for (const name of ['index.html', 'styles.css', 'popup.html', 'popup.css']) {
+for (const name of ['index.html', 'styles.css', 'popup.html', 'popup.css', 'services.html', 'services.css', 'offscreen.html']) {
   await cp(`${root}src/${name}`, `${root}dist/${name}`);
 }
-const license = await readFile(`${root}node_modules/js-md5/LICENSE.txt`, 'utf8');
-await writeFile(`${root}dist/THIRD_PARTY_LICENSES.txt`, `js-md5 0.9.2\n\n${license}`);
+const packages = new Map();
+for (const result of [extensionBuild, contentBuild]) {
+  for (const input of Object.keys(result.metafile.inputs)) {
+    const index = input.lastIndexOf('node_modules/');
+    if (index < 0) continue;
+    const relative = input.slice(index + 'node_modules/'.length).split('/');
+    const name = relative[0].startsWith('@') ? relative.slice(0, 2).join('/') : relative[0];
+    packages.set(name, `${root}node_modules/${name}`);
+  }
+}
+const licenses = [];
+for (const [name, directory] of [...packages].sort()) {
+  const pkg = JSON.parse(await readFile(`${directory}/package.json`, 'utf8'));
+  let license;
+  for (const file of ['LICENSE', 'LICENSE.md', 'LICENSE.txt', 'license', 'license.md', 'COPYING']) {
+    try { license = await readFile(`${directory}/${file}`, 'utf8'); break; } catch {}
+  }
+  if (!license && name.startsWith('@ai-sdk/')) {
+    const core = JSON.parse(await readFile(`${root}node_modules/ai/package.json`, 'utf8'));
+    if (pkg.license === core.license && pkg.repository?.url === core.repository?.url) license = await readFile(`${root}node_modules/ai/LICENSE`, 'utf8');
+  }
+  if (!license) throw new Error(`缺少 ${name} 的许可证文件，停止构建。`);
+  licenses.push(`${name} ${pkg.version}\n${license}`);
+}
+await writeFile(`${root}dist/THIRD_PARTY_LICENSES.txt`, licenses.join('\n\n---\n\n'));
 console.log('已构建 dist/，可在 Chrome 扩展程序页面加载。');

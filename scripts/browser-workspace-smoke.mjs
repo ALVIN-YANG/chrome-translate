@@ -101,7 +101,7 @@ async (page) => {
     return { current: current.id, ids, contexts: (await chrome.runtime.getContexts({ contextTypes: ['TAB'] })).filter(context => context.documentUrl.split('#')[0] === chrome.runtime.getURL('index.html')).length, permissions: chrome.runtime.getManifest().permissions };
   });
   assert(reused.ids.every(id => id === reused.current) && reused.contexts === 1, '连续打开应激活已有页面');
-  assert(JSON.stringify(reused.permissions) === '["storage","contextMenus"]', '网页翻译只增加必要的右键权限，不添加tabs权限');
+  assert(JSON.stringify(reused.permissions) === '["storage","contextMenus","offscreen"]', '网页翻译和音频只用storage、contextMenus、offscreen，不添加tabs权限');
   for (const width of [390, 320]) {
     await page.setViewportSize({ width, height: 980 });
     assert(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), `${width}px 横向溢出`);

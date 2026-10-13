@@ -4,7 +4,7 @@ import { LANGUAGES, detectLanguage, normalizeLanguage, resolveDirection } from '
 import { defaultSettings, isExtension, loadSettings, normalizeSettings, saveSettings } from './settings.js';
 import { buildTermEntries, resolveInputMode } from './terms.js';
 import { loadWorkspace, matchesWorkspace, saveWorkspace } from './workspace.js';
-import { SystemSpeech } from './speech.js';
+import { UnifiedSpeech } from './unified-speech.js';
 
 const $ = id => document.getElementById(id);
 const input = $('source-text');
@@ -38,7 +38,7 @@ let undoWorkspace;
 let undoTimer;
 let leaving = false;
 const verified = new Map();
-const speech = new SystemSpeech(renderSpeech);
+const speech = new UnifiedSpeech(renderSpeech);
 
 function signature(config) { return JSON.stringify(config); }
 function isVerified(provider, config) { return verified.get(provider) === signature(config); }
@@ -198,7 +198,7 @@ function renderAlternatives(translation) {
     const read = document.createElement('button');
     read.type = 'button'; read.className = 'icon-button speech-button'; read.disabled = !speech.supported;
     read.dataset.speechKey = `candidate:${candidate.text}`; read.dataset.speechLabel = candidate.text;
-    read.title = '用系统声音朗读'; read.append(createIcon('speaker'));
+    read.title = '按模型与声音设置朗读'; read.append(createIcon('speaker'));
     read.addEventListener('click', () => toggleSpeech(candidate.text, read.dataset.speechKey, target));
     const copy = document.createElement('button');
     copy.type = 'button'; copy.className = 'icon-button'; copy.title = '复制此译法';
@@ -494,7 +494,7 @@ async function init() {
   if (saved) restoreWorkspace(saved);
   else updateDirection();
   renderSpeech(speech.state);
-  $('read-result').title = speech.supported ? '用系统声音朗读' : '当前浏览器不支持系统朗读';
+  $('read-result').title = speech.supported ? '按模型与声音设置朗读' : '当前浏览器不支持系统朗读';
   if (location.hash === '#settings') openSettings();
   else input.focus();
 }

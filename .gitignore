@@ -6,3 +6,5 @@ output/
 *.zip
 .env*
 design/
+
+tests/fixtures/*.mp3

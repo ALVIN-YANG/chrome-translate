@@ -3,6 +3,9 @@ import { loadSettings, saveSettings, SETTINGS_KEY } from './settings.js';
 import { translate, translateMicrosoftBatch } from './providers.js';
 import { safeSettings, validateTranslationMessage, isPageSender } from './page-protocol.js';
 import { dictionaryUrl } from './dictionary.js';
+import { ASSISTANT_SETTINGS_KEY, loadAssistantSettings, saveAssistantSettings, publicAssistantSettings, normalizeAssistantSettings } from './assistant-config.js';
+import { askSelection } from './llm-service.js';
+import { speechMessage, stopSpeechForTab } from './cloud-speech-worker.js';
 
 const openTranslationPage = createTranslationTabOpener(chrome, chrome.runtime.getURL('index.html'));
 const requests = new Map();
@@ -16,7 +19,16 @@ async function handle(message, sender) {
   const pageSender = isPageSender(sender, chrome.runtime.id);
   const extensionSender = trusted(sender);
   if (!pageSender && !extensionSender) throw new Error('不支持当前页面。');
-  if (message.type === 'ct:settings-get') return safeSettings(await loadSettings());
+  if (/^ct:(speech-|audio-)/.test(message.type)) return speechMessage(message, sender, { trusted: extensionSender, pageSender });
+  if (message.type === 'ct:assistant-public') return publicAssistantSettings(await loadAssistantSettings(), await loadSettings());
+  if (message.type === 'ct:assistant-load' && extensionSender) return loadAssistantSettings();
+  if (message.type === 'ct:assistant-test' && extensionSender) {
+    const answer = await askSelection({ selection: 'Hello', messages: [{ role: 'user', content: '用中文回复一个简短的问候。' }], settings: normalizeAssistantSettings(message.settings), translationSettings: await loadSettings() });
+    return { answer };
+  }
+  if (message.type === 'ct:assistant-save' && extensionSender) { await saveAssistantSettings(message.settings); return publicAssistantSettings(await loadAssistantSettings(), await loadSettings()); }
+  if (message.type === 'ct:assistant-open') { await chrome.tabs.create({ url: chrome.runtime.getURL('services.html') }); return {}; }
+  if (message.type === 'ct:settings-get') return { ...safeSettings(await loadSettings()), assistant: publicAssistantSettings(await loadAssistantSettings(), await loadSettings()) };
   if (message.type === 'ct:open-page') {
     await openTranslationPage(sender.tab);
     return {};
@@ -68,9 +80,28 @@ async function handle(message, sender) {
 }
 
 chrome.runtime.onMessage.addListener((message, sender, respond) => {
+  if (message.target === 'offscreen' || ['ct:speech-state', 'ct:assistant-settings'].includes(message.type)) return;
   if (typeof message?.type !== 'string' || !message.type.startsWith('ct:')) return;
   handle(message, sender).then(data => respond({ ok: true, data }), error => respond({ ok: false, error: { code: error.code || 'unavailable', message: error.name === 'AbortError' ? '请求已取消。' : error.message || '操作未完成，请重试。' } }));
   return true; // 兼容 Chrome 120 的异步消息回应。
+});
+
+chrome.runtime.onConnect.addListener(port => {
+  if (port.name !== 'ct:ask-ai' || !isPageSender(port.sender, chrome.runtime.id)) return;
+  let abort, generation = 0;
+  const send = event => { try { port.postMessage(event); } catch { abort?.abort(); } };
+  port.onDisconnect.addListener(() => { generation++; abort?.abort(); });
+  port.onMessage.addListener(async message => {
+    if (message.type === 'cancel') { generation++; abort?.abort(); return; }
+    if (message.type !== 'ask') return;
+    abort?.abort(); abort = new AbortController();
+    const run = ++generation; const signal = abort.signal;
+    try {
+      const settings = await loadAssistantSettings();
+      await askSelection({ selection: message.selection, messages: message.messages, settings, translationSettings: await loadSettings(), signal,
+        onEvent: event => { if (run === generation && !signal.aborted) send(event); } });
+    } catch (error) { if (run === generation && !signal.aborted) send({ type: 'error', message: error.message || '回答未完成，请重试。' }); }
+  });
 });
 
 chrome.runtime.onInstalled.addListener(async () => {
@@ -91,11 +122,14 @@ chrome.commands.onCommand.addListener(async command => {
   if (tab?.id) sendPage(tab.id, command === 'translate-all' ? { type: 'ct:start', scope: 'all' } : { type: 'ct:toggle', scope: 'smart' }).catch(() => {});
 });
 chrome.tabs.onRemoved.addListener(tabId => {
+  stopSpeechForTab(tabId);
   for (const [key, abort] of requests) if (key.startsWith(`${tabId}:`)) abort.abort();
 });
 chrome.storage.onChanged.addListener(async (changes, area) => {
-  if (area !== 'local' || !changes[SETTINGS_KEY]) return;
+  if (area !== 'local' || !changes[SETTINGS_KEY] && !changes[ASSISTANT_SETTINGS_KEY]) return;
   const settings = safeSettings(await loadSettings());
+  settings.assistant = publicAssistantSettings(await loadAssistantSettings(), await loadSettings());
+  chrome.runtime.sendMessage({ type: 'ct:assistant-settings', settings: settings.assistant }).catch(() => {});
   const tabs = await chrome.tabs.query({ url: ['http://*/*', 'https://*/*'] });
   await Promise.allSettled(tabs.map(tab => chrome.tabs.sendMessage(tab.id, { type: 'ct:settings', settings }, { frameId: 0 })));
 });
