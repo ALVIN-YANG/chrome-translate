@@ -1,13 +1,14 @@
 # Chrome Translate · 翻译
 
+简体中文 · [English](README.en.md)
+
 [![自动检查](https://img.shields.io/github/actions/workflow/status/ALVIN-YANG/chrome-translate/check.yml?branch=main&label=check)](https://github.com/ALVIN-YANG/chrome-translate/actions/workflows/check.yml)
 [![最新版本](https://img.shields.io/github/v/release/ALVIN-YANG/chrome-translate)](https://github.com/ALVIN-YANG/chrome-translate/releases/latest)
+[![MIT 许可证](https://img.shields.io/github/license/ALVIN-YANG/chrome-translate)](LICENSE)
 
 划词后直接 **翻译、朗读原文或问问 AI** 的 Chrome 扩展。保留网页双语和独立文本翻译，支持 **15 种翻译语言**；模型、语音、Key 和接口可以自己选择。
 
-**[下载最新插件包](https://github.com/ALVIN-YANG/chrome-translate/releases/latest)** · [安装](#安装) · [翻译服务](#翻译服务) · [反馈问题](https://github.com/ALVIN-YANG/chrome-translate/issues)
-
-
+**[下载最新插件包](https://github.com/ALVIN-YANG/chrome-translate/releases/latest)** · [安装](#安装) · [翻译服务](#翻译服务) · [参与贡献](CONTRIBUTING.md) · [反馈问题](https://github.com/ALVIN-YANG/chrome-translate/issues/new/choose)
 
 ## 划词后的三个入口
 
@@ -112,6 +113,8 @@ DeepSeek 当前默认模型为 `deepseek-flash`，Kimi 当前默认模型为 `ki
 
 ## 数据与权限
 
+完整数据流、保存位置与权限用途见 [隐私说明](docs/隐私说明.md)。安全漏洞请通过 [私密报告流程](SECURITY.md) 提交，不在公开 Issue 中粘贴凭据或私人原文。
+
 - 原文发送给当前选择的翻译服务；微软中英短词查询还会访问必应词典。网页只有主动开启翻译后才发送待翻译段落，划词只有点击翻译按钮或右键翻译时才发送选中文字；不会把网页 URL、Cookie 或整份 HTML 发送给翻译服务。
 - Key 和服务偏好保存在 `chrome.storage.local`，不通过浏览器同步到云端。存储仅允许扩展可信上下文读取，网页内容脚本只收到服务是否已配置及非敏感偏好，不能读取 Key；LLM 请求由后台发送，TTS 合成与播放在可信 offscreen 文档中进行，避免网页 CSP 阻止音频。
 - 当前标签页的原文、服务选择、目标语言及结果暂存于 `sessionStorage`，不包含 Key，也不建立历史记录；会话由浏览器管理，浏览器的恢复标签页功能可能恢复该会话。
@@ -133,7 +136,15 @@ npm run check
 
 检查通过后，将生成的 `dist/` 文件夹加载到 Chrome。
 
-主分支更新和 Pull Request 会在 [GitHub Actions](https://github.com/ALVIN-YANG/chrome-translate/actions/workflows/check.yml) 自动运行同一套测试与构建，分别检查 Node.js 22 和 24。成功后保留 7 天的 `translate-chrome-ci` 构建产物，供开发者核对；日常安装仍使用上方的 Release 插件包。自动检查覆盖测试和打包，真实浏览器及翻译服务验证见下方记录。
+主分支更新和 Pull Request 会在 [GitHub Actions](https://github.com/ALVIN-YANG/chrome-translate/actions/workflows/check.yml) 检查 Node.js 22/24，以及隔离的真实 Chromium 扩展。浏览器检查使用受控供应商响应和本机测试音，无需真实 Key；失败保留截图和 trace。`translate-chrome-ci` 包含 ZIP 与 SHA-256，`browser-evidence` 保存浏览器证据，均保留 7 天；日常安装仍使用 Release。
+
+```sh
+npx playwright install chromium
+npm run test:browser
+npm run package
+```
+
+浏览器测试覆盖独立页、网页双语、划词 AI、音频与严格 CSP；每组配置独立创建并清理。Linux 首次安装 Chromium 可加 `--with-deps`。打包输出位于 `output/release/`，清理旧构建、核对版本、按白名单打包，并生成校验摘要。详见 [贡献指南](CONTRIBUTING.md)、[代码入口](docs/架构说明.md) 和 [发布说明](docs/发布说明.md)。
 
 ```sh
 npm run dev
@@ -153,7 +164,13 @@ v0.7.0 已通过 78 项 Node 测试及构建。MiniMax LLM 和 TTS 在真实 Chr
 
 单次上限为 10,000 个字符，百度另有 6,000 字节限制。即时调用可能计入服务额度，取消浏览器请求不保证服务端停止处理或计费。
 
-第三方运行时依赖 `js-md5` 的许可证保留在构建包中。该项目不建立翻译历史，也没有账号系统。网页范围识别采用通用规则，特殊布局可尝试整页模式；服务失败会暂停当前页，保留已完成的译文，由用户主动重试，不自动换服务。
+第三方运行时依赖的许可证保留在构建包中。该项目不建立翻译历史，也没有账号系统。网页范围识别采用通用规则，特殊布局可尝试整页模式；服务失败会暂停当前页，保留已完成的译文，由用户主动重试，不自动换服务。
+
+## 贡献与许可
+
+欢迎中文或英文 Issue 和 Pull Request，见 [贡献指南](CONTRIBUTING.md)。优先处理真实安装与使用问题，后续方向及验收依据见 [路线图](docs/路线图.md)。界面目前为中文，英文文档不代表已经完成界面本地化。
+
+项目源码与文档采用 [MIT 许可证](LICENSE)。第三方依赖保留各自许可，构建包同时包含 `LICENSE` 和 `THIRD_PARTY_LICENSES.txt`；服务商接口、账号和模型权限仍以对应条款为准。
 
 ## 参考
 

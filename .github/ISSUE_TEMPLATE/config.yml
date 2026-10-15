@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: 安装与使用 / Installation and usage
+    url: https://github.com/ALVIN-YANG/chrome-translate#安装
+    about: 先检查安装包、重新加载扩展及服务配置 / Check installation, reload, and provider configuration.
+  - name: 安全问题 / Security vulnerability
+    url: https://github.com/ALVIN-YANG/chrome-translate/security
+    about: 不要公开漏洞细节或凭据 / Do not disclose exploit details or credentials publicly.

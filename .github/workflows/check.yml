@@ -38,11 +38,42 @@ jobs:
       - name: Run tests and build extension
         run: npm run check
 
+      - name: Package extension and checksum
+        if: matrix.node-version == '24'
+        run: node scripts/package.mjs
+
       - name: Save extension build
         if: matrix.node-version == '24'
         uses: actions/upload-artifact@v7.0.2
         with:
           name: translate-chrome-ci
-          path: dist/
+          path: output/release/
           if-no-files-found: error
+          retention-days: 7
+
+  browser:
+    name: Chromium extension
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v7.0.1
+      - name: Set up Node.js
+        uses: actions/setup-node@v7.1.0
+        with:
+          node-version: '24'
+          cache: npm
+      - name: Install locked dependencies
+        run: npm ci
+      - name: Install Chromium and system libraries
+        run: npx playwright install --with-deps chromium
+      - name: Exercise built extension with controlled services
+        run: npm run test:browser
+      - name: Save browser evidence and failure traces
+        if: always()
+        uses: actions/upload-artifact@v7.0.2
+        with:
+          name: browser-evidence
+          path: output/playwright/
+          if-no-files-found: warn
           retention-days: 7

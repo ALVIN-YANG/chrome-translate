@@ -8,3 +8,4 @@ output/
 design/
 
 tests/fixtures/*.mp3
+!tests/fixtures/tone.mp3

@@ -1,4 +1,4 @@
-async (page) => {
+export default async (page) => {
   const assert = (condition, message) => { if (!condition) throw new Error(message); };
   const context = page.context();
   const worker = context.serviceWorkers()[0];
@@ -80,7 +80,7 @@ async (page) => {
   await page.screenshot({ path: 'output/playwright/page-selection-0.6.0.png' });
   await page.keyboard.press('Escape');
   assert(!await panel.isVisible(), 'Escape关闭浮层');
-  const tabId = await worker.evaluate(async () => (await chrome.tabs.query({ url: 'http://127.0.0.1:4174/*' }))[0].id);
+  const tabId = await worker.evaluate(async url => (await chrome.tabs.query({ url }))[0].id, `${new URL(page.url()).origin}/*`);
   await worker.evaluate(tabId => chrome.tabs.sendMessage(tabId, { type: 'ct:start', scope: 'all' }), tabId);
   await page.locator('nav [data-ct-owned="translation"]').waitFor();
   assert(await page.locator('aside [data-ct-owned]').count() === 0, '离屏侧栏仍按视口按需');

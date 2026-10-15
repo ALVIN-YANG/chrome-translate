@@ -1,0 +1,76 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import { mkdtemp, mkdir, rm, writeFile } from 'node:fs/promises';
+import { tmpdir } from 'node:os';
+import { resolve, join } from 'node:path';
+import { chromium } from 'playwright';
+import { startFixtureServer } from './fixture-server.js';
+import workspace from '../../scripts/browser-workspace-smoke.mjs';
+import webpage from '../../scripts/browser-page-smoke.mjs';
+import assistant from '../../scripts/browser-assistant-smoke.mjs';
+import pageCSP from '../../scripts/browser-page-csp-smoke.mjs';
+import audioCSP from '../../scripts/browser-assistant-csp-smoke.mjs';
+
+const extensionPath = resolve('dist');
+const artifactPath = resolve('output/playwright');
+await mkdir(artifactPath, { recursive: true });
+
+for (const [name, scenario, entry] of [
+  ['workspace', workspace, 'index.html'],
+  ['webpage', webpage, 'article.html'],
+  ['assistant', assistant, 'article.html'],
+  ['page-csp', pageCSP, 'article.html'],
+  ['audio-csp', audioCSP, 'article.html'],
+]) {
+  test(`Chromium MV3: ${name}`, { timeout: 90000 }, async t => {
+    const profile = await mkdtemp(join(tmpdir(), 'chrome-translate-test-'));
+    const fixture = await startFixtureServer();
+    let context;
+    try {
+      context = await chromium.launchPersistentContext(profile, {
+        channel: 'chromium', headless: !process.env.HEADED,
+        viewport: { width: 1440, height: 980 },
+        args: [`--disable-extensions-except=${extensionPath}`, `--load-extension=${extensionPath}`],
+      });
+      t.signal.addEventListener('abort', () => { context.close().catch(() => {}); }, { once: true });
+      context.setDefaultTimeout(10000);
+      await context.tracing.start({ screenshots: true, snapshots: true });
+      const unexpected = [];
+      // 每个场景再安装自己的供应商响应；其他网络请求必须显式处理。
+      await context.route('**/*', route => {
+        if (route.request().url().startsWith(`${fixture.origin}/`) || route.request().url().startsWith('chrome-extension://')) return route.continue();
+        unexpected.push(route.request().url()); return route.abort();
+      });
+      let [worker] = context.serviceWorkers();
+      worker ||= await context.waitForEvent('serviceworker');
+      assert.ok(worker.url().startsWith('chrome-extension://'), '测试必须使用真正的扩展后台');
+      const page = context.pages()[0] || await context.newPage();
+      await page.goto(entry === 'index.html' ? await worker.evaluate(() => chrome.runtime.getURL('index.html')) : `${fixture.origin}/${entry}`);
+      const result = await scenario(page);
+      assert.equal(result.status, 'passed');
+      assert.deepEqual(unexpected, [], '场景包含未经处理的外部请求');
+      const evidence = {
+        ...result, browserVersion: context.browser().version(), platform: process.platform,
+        extensionVersion: await worker.evaluate(() => chrome.runtime.getManifest().version),
+      };
+      await writeFile(join(artifactPath, `${name}-result.json`), JSON.stringify(evidence, null, 2) + '\n');
+      await context.tracing.stop();
+      t.diagnostic(`${result.checks.length} checks; controlled responses; isolated profile`);
+    } catch (error) {
+      if (context) {
+        for (const [index, page] of context.pages().entries()) await page.screenshot({ path: join(artifactPath, `${name}-failure-${index}.png`) }).catch(() => {});
+        await context.tracing.stop({ path: join(artifactPath, `${name}-trace.zip`) }).catch(() => {});
+      }
+      throw error;
+    } finally {
+      // 取消模拟响应后再关页，避免延迟中的 route 访问已经关闭的页面。
+      if (context) {
+        await Promise.all(context.pages().map(page => page.unrouteAll({ behavior: 'ignoreErrors' }).catch(() => {})));
+        await context.unrouteAll({ behavior: 'ignoreErrors' }).catch(() => {});
+      }
+      await context?.close();
+      await fixture.close();
+      await rm(profile, { recursive: true, force: true, maxRetries: 5, retryDelay: 100 });
+    }
+  });
+}

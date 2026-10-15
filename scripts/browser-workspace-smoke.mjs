@@ -1,5 +1,5 @@
 // 仅在专用测试扩展中执行；受控响应验证交互，真实服务另行检查。
-async (page) => {
+export default async (page) => {
   const assert = (condition, message) => { if (!condition) throw new Error(message); };
   assert(page.url().startsWith('chrome-extension://'), '请使用测试扩展');
   const calls = [], errors = [];

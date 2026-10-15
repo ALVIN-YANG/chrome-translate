@@ -1,0 +1,21 @@
+name: Feature / 功能建议
+description: 说明使用场景和预期行为 / Suggest a feature with a concrete use case
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: 你遇到了什么问题 / What problem are you solving?
+      description: 请描述实际任务和现在的操作方式。 / Describe the task and your current workflow.
+    validations:
+      required: true
+  - type: textarea
+    id: behavior
+    attributes:
+      label: 期望的行为 / Desired behavior
+    validations:
+      required: true
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: 替代方式和影响 / Alternatives and impact
+      description: 如涉及外部服务，说明官方协议、凭据要求和费用。不要提交真实 Key。 / For providers, link official protocols and describe costs; never include keys.

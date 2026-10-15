@@ -1,8 +1,8 @@
-async(page)=>{
+export default async(page)=>{
  const context=page.context(),worker=context.serviceWorkers()[0];
- await context.unrouteAll({behavior:'ignoreErrors'});
- await worker.evaluate(()=>chrome.storage.local.set({'selection-services-v1':{tts:{provider:'minimax',providers:{minimax:{key:'fixture-key',baseURL:'http://127.0.0.1:4175/v1'}}}}}));
- await page.goto('http://127.0.0.1:4174/strict.html');
+ const origin = new URL(page.url()).origin;
+ await worker.evaluate(origin=>chrome.storage.local.set({'selection-services-v1':{tts:{provider:'minimax',providers:{minimax:{key:'fixture-key',baseURL:`${origin}/v1`}}}}}), origin);
+ await page.goto(`${origin}/strict.html`);
  await page.getByRole('button',{name:'翻译当前网页',exact:true}).waitFor();
  const rect=await page.locator('main p').evaluate(el=>{const range=document.createRange();range.selectNodeContents(el);return range.getBoundingClientRect().toJSON()});
  await page.mouse.move(rect.left+1,rect.top+rect.height/2);await page.mouse.down();await page.mouse.move(rect.right-1,rect.top+rect.height/2,{steps:8});await page.mouse.up();

@@ -1,9 +1,8 @@
-async (page) => {
+export default async (page) => {
  const context=page.context();
- await context.unrouteAll({behavior:'ignoreErrors'});
  await context.route('https://edge.microsoft.com/translate/translatetext?*', route=>route.fulfill({contentType:'application/json',body:JSON.stringify(JSON.parse(route.request().postData()).map(text=>({detectedLanguage:{language:'en'},translations:[{text:'安全策略页面的中文译文。'}]})))}));
  const strict=await context.newPage();
- await strict.goto('http://127.0.0.1:4174/strict.html');
+ await strict.goto(new URL('/strict.html', page.url()).href);
  const button=strict.getByRole('button',{name:'翻译当前网页',exact:true});
  await button.waitFor();
  const position=await button.evaluate(el=>getComputedStyle(el).position);

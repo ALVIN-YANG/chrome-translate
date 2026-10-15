@@ -1,8 +1,13 @@
 import { build } from 'esbuild';
-import { cp, mkdir, readFile, writeFile } from 'node:fs/promises';
+import { cp, mkdir, readFile, writeFile, rm } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
 
 const root = fileURLToPath(new URL('../', import.meta.url));
+const pkg = JSON.parse(await readFile(`${root}package.json`, 'utf8'));
+const manifest = JSON.parse(await readFile(`${root}public/manifest.json`, 'utf8'));
+if (pkg.version !== manifest.version) throw new Error('package.json 与 manifest.json 的版本不一致，停止构建。');
+// dist 只保存生成文件，避免上次构建或手工调试的文件混入安装包。
+await rm(`${root}dist`, { recursive: true, force: true });
 await mkdir(`${root}dist`, { recursive: true });
 await cp(`${root}public`, `${root}dist`, { recursive: true });
 const extensionBuild = await build({
@@ -43,4 +48,5 @@ for (const [name, directory] of [...packages].sort()) {
   licenses.push(`${name} ${pkg.version}\n${license}`);
 }
 await writeFile(`${root}dist/THIRD_PARTY_LICENSES.txt`, licenses.join('\n\n---\n\n'));
+await cp(`${root}LICENSE`, `${root}dist/LICENSE`);
 console.log('已构建 dist/，可在 Chrome 扩展程序页面加载。');
