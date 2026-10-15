@@ -16,7 +16,7 @@ concurrency:
 jobs:
   check:
     name: Node ${{ matrix.node-version }}
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     timeout-minutes: 5
     strategy:
       fail-fast: false
@@ -53,7 +53,7 @@ jobs:
 
   browser:
     name: Chromium extension
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     timeout-minutes: 10
     steps:
       - name: Check out repository
@@ -66,7 +66,7 @@ jobs:
       - name: Install locked dependencies
         run: npm ci
       - name: Install Chromium and system libraries
-        run: npx playwright install --with-deps chromium
+        run: npx playwright install --with-deps --no-shell chromium
       - name: Exercise built extension with controlled services
         run: npm run test:browser
       - name: Save browser evidence and failure traces

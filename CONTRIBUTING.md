@@ -20,13 +20,13 @@ npm run check
 ## 浏览器回归
 
 ```sh
-npx playwright install chromium
+npx playwright install --no-shell chromium
 npm run test:browser
 ```
 
-Linux 首次运行可使用 `npx playwright install --with-deps chromium` 安装系统库。可用 `HEADED=1 npm run test:browser` 显示测试窗口（该环境变量写法适用于 macOS/Linux）。
+Linux 首次运行可使用 `npx playwright install --with-deps --no-shell chromium` 安装系统库。可用 `HEADED=1 npm run test:browser` 显示测试窗口（该环境变量写法适用于 macOS/Linux）。
 
-测试使用 Playwright 自带 Chromium、临时浏览器配置和本机随机端口，不读取日常 Chrome 配置，不需要真实 Key，不调用付费模型。每组测试都会独立加载真正的 MV3 扩展；验证独立页、网页双语、划词 AI、音频播放与严格 CSP。供应商响应受控，不能证明真实账号权限、翻译质量或真人听感。系统声音事件受控；云端播放链路使用生成的测试音。
+测试使用 Playwright 自带 Chromium、临时浏览器配置和本机随机端口，不读取日常 Chrome 配置，不需要真实 Key，不调用付费模型。先生成实际 ZIP 并解压，再用每组独立的浏览器配置加载，验证独立页、网页双语、划词 AI、音频播放与严格 CSP。供应商响应受控，不能证明真实账号权限、翻译质量或真人听感。系统声音事件受控；云端播放链路使用生成的测试音。
 
 结果 JSON、截图及失败时的 trace 放在 `output/playwright/`。这些文件只含测试数据；不要向公开 Issue 上传含真实 Key、私人网页、会话、原文或请求头的日志。真实服务验证脚本需额外授权凭据和费用，不属于默认 CI。
 
@@ -47,10 +47,10 @@ Linux 首次运行可使用 `npx playwright install --with-deps chromium` 安装
 
 描述触发问题的场景、改动后的行为，以及实际跑过的验证。UI 改动附真实截图；影响网页范围、权限、服务数据流或费用时写清楚原因。只补有意义的测试，不为纯样式或文案堆叠测试。
 
-提交前运行 `npm run check`。涉及 UI、消息、音频、网页提取或构建时再运行 `npm run test:browser`。CI 使用 Node 22/24 及 Linux Chromium；测试通过、真实服务验证和用户安装验收是三种不同证据。
+提交前运行 `npm run check`。涉及 UI、消息、音频、网页提取或构建时再运行 `npm run test:browser`。CI 固定 Ubuntu 24.04，使用 Node 22/24 及 Chromium；测试通过、真实服务验证和用户安装验收是三种不同证据。
 
 ## English quick start
 
-Use Node.js 22+ (24 recommended). Run `npm ci`, then `npm run check`. For the real MV3 browser suite, run `npx playwright install chromium` and `npm run test:browser`. Linux may need `--with-deps` during installation. Test profiles and local fixture servers are created and removed automatically; no real API key is required. Results and failure traces are saved under `output/playwright/`.
+Use Node.js 22+ (24 recommended). Run `npm ci`, then `npm run check`. For the real MV3 browser suite, run `npx playwright install --no-shell chromium` and `npm run test:browser`. Linux may need `--with-deps` during installation. Test profiles and local fixture servers are created and removed automatically; no real API key is required. Results and failure traces are saved under `output/playwright/`.
 
 Keep PRs focused. Explain the problem, resulting behavior, and checks actually run. Include actual screenshots for UI changes. Never submit credentials, private text, raw authorization headers, or personal browser profiles. Discuss substantial features in an Issue before implementing them. See the [English README](README.en.md) for installation and product limits.

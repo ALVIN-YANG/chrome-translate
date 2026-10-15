@@ -1,9 +1,11 @@
-import test from 'node:test';
+import test, { after } from 'node:test';
 import assert from 'node:assert/strict';
-import { mkdtemp, mkdir, rm, writeFile } from 'node:fs/promises';
+import { mkdtemp, mkdir, rm, writeFile, readFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
-import { resolve, join } from 'node:path';
+import { resolve, join, dirname } from 'node:path';
 import { chromium } from 'playwright';
+import { unzipSync } from 'fflate';
+import { packageExtension } from '../../scripts/package.mjs';
 import { startFixtureServer } from './fixture-server.js';
 import workspace from '../../scripts/browser-workspace-smoke.mjs';
 import webpage from '../../scripts/browser-page-smoke.mjs';
@@ -11,9 +13,20 @@ import assistant from '../../scripts/browser-assistant-smoke.mjs';
 import pageCSP from '../../scripts/browser-page-csp-smoke.mjs';
 import audioCSP from '../../scripts/browser-assistant-csp-smoke.mjs';
 
-const extensionPath = resolve('dist');
 const artifactPath = resolve('output/playwright');
 await mkdir(artifactPath, { recursive: true });
+const releaseRoot = await mkdtemp(join(tmpdir(), 'chrome-translate-release-test-'));
+after(() => rm(releaseRoot, { recursive: true, force: true, maxRetries: 5, retryDelay: 100 }));
+const { version } = JSON.parse(await readFile(new URL('../../package.json', import.meta.url), 'utf8'));
+const packaged = await packageExtension({ directory: resolve('dist'), outputDirectory: releaseRoot, version });
+const extensionPath = join(releaseRoot, 'extension');
+// 浏览器加载实际 ZIP 的解压结果，覆盖缺文件、错误层级及打包差异。
+for (const [name, bytes] of Object.entries(unzipSync(await readFile(join(releaseRoot, packaged.filename))))) {
+  const target = join(extensionPath, name);
+  await mkdir(dirname(target), { recursive: true });
+  await writeFile(target, bytes);
+}
+await writeFile(join(artifactPath, 'package-result.json'), JSON.stringify(packaged, null, 2) + '\n');
 
 for (const [name, scenario, entry] of [
   ['workspace', workspace, 'index.html'],

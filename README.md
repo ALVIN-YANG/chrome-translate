@@ -139,12 +139,12 @@ npm run check
 主分支更新和 Pull Request 会在 [GitHub Actions](https://github.com/ALVIN-YANG/chrome-translate/actions/workflows/check.yml) 检查 Node.js 22/24，以及隔离的真实 Chromium 扩展。浏览器检查使用受控供应商响应和本机测试音，无需真实 Key；失败保留截图和 trace。`translate-chrome-ci` 包含 ZIP 与 SHA-256，`browser-evidence` 保存浏览器证据，均保留 7 天；日常安装仍使用 Release。
 
 ```sh
-npx playwright install chromium
+npx playwright install --no-shell chromium
 npm run test:browser
 npm run package
 ```
 
-浏览器测试覆盖独立页、网页双语、划词 AI、音频与严格 CSP；每组配置独立创建并清理。Linux 首次安装 Chromium 可加 `--with-deps`。打包输出位于 `output/release/`，清理旧构建、核对版本、按白名单打包，并生成校验摘要。详见 [贡献指南](CONTRIBUTING.md)、[代码入口](docs/架构说明.md) 和 [发布说明](docs/发布说明.md)。
+浏览器测试加载实际 ZIP 解压后的扩展，覆盖独立页、网页双语、划词 AI、音频与严格 CSP；每组配置独立创建并清理。Linux 首次安装 Chromium 可加 `--with-deps`。打包输出位于 `output/release/`，清理旧构建、核对版本、按白名单打包，并生成校验摘要。详见 [贡献指南](CONTRIBUTING.md)、[代码入口](docs/架构说明.md) 和 [发布说明](docs/发布说明.md)。
 
 ```sh
 npm run dev

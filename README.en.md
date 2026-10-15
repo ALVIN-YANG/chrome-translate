@@ -71,13 +71,13 @@ git clone https://github.com/ALVIN-YANG/chrome-translate.git
 cd chrome-translate
 npm ci
 npm run check
-npx playwright install chromium
+npx playwright install --no-shell chromium
 npm run test:browser
 ```
 
-Use Node.js 22+; 24 is recommended. Linux may need `npx playwright install --with-deps chromium`. The browser suite loads the built MV3 extension in fresh profiles, serves local fixtures on random ports, and uses controlled provider responses plus a generated test tone. It requires no real API keys. Failure traces, screenshots, and result JSON go to `output/playwright/`.
+Use Node.js 22+; 24 is recommended. Linux may need `npx playwright install --with-deps --no-shell chromium`. The browser suite creates and extracts the actual release ZIP, loads that MV3 extension in fresh profiles, serves local fixtures on random ports, and uses controlled provider responses plus a generated test tone. It requires no real API keys. Failure traces, screenshots, and result JSON go to `output/playwright/`.
 
-CI checks Node 22/24 and Linux Chromium. `npm run package` runs Node checks and builds a ZIP plus SHA-256 in `output/release/`; browser checks remain a separate release gate. Only allowlisted extension files are packaged, and the build clears `dist/` first. See [CONTRIBUTING.md](CONTRIBUTING.md) for development boundaries and [release instructions](docs/发布说明.md) for packaging details.
+CI uses Ubuntu 24.04 with Node 22/24 and Chromium. `npm run package` runs Node checks and builds a ZIP plus SHA-256 in `output/release/`; browser checks remain a separate release gate. Only allowlisted extension files are packaged, and the build clears `dist/` first. See [CONTRIBUTING.md](CONTRIBUTING.md) for development boundaries and [release instructions](docs/发布说明.md) for packaging details.
 
 MiniMax chat/audio and Microsoft translation have prior live verification recorded in [validation notes](docs/验证记录.md). Controlled tests do not prove other providers' account permissions, translation quality, human listening quality, or installation in your own browser. Inputs are limited to 10,000 characters (Baidu also has a 6,000-byte limit). Cancelling a request does not guarantee that server computation or billing stops.
 
