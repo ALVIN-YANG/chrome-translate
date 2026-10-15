@@ -285,6 +285,121 @@
     "真实网页就绪与等待译文仍有波动，未确认或修复其根因",
     "没有新的付费供应商或账号权限实测",
     "没有操作用户日常Chrome的安装或配置",
-    "尚待最终CI与公开发布后下载核验"
-  ]
+    "本轮未完成键盘与读屏全面审查，也未取得真实用户留存或外部贡献证据"
+  ],
+  "ci": {
+    "url": "https://github.com/ALVIN-YANG/chrome-translate/actions/runs/38772350281",
+    "commit": "c3fc46c5165fa512fa2fd224caf127bcc3862e88",
+    "node22": "success",
+    "node24": "success",
+    "chromium": "success",
+    "linuxMatchesMac": true,
+    "package": {
+      "filename": "translate-chrome-0.7.2.zip",
+      "sha256": "376f08eb9b92ddb5a1392d09edf44432551281726357b9f5cb40201cd3aa8531",
+      "bytes": 593193,
+      "files": [
+        "LICENSE",
+        "THIRD_PARTY_LICENSES.txt",
+        "app.js",
+        "background.js",
+        "content.js",
+        "icons/128.png",
+        "icons/16.png",
+        "icons/32.png",
+        "icons/48.png",
+        "index.html",
+        "manifest.json",
+        "offscreen.html",
+        "offscreen.js",
+        "popup.css",
+        "popup.html",
+        "popup.js",
+        "services.css",
+        "services.html",
+        "services.js",
+        "styles.css",
+        "tabs.js"
+      ]
+    },
+    "scenarios": [
+      {
+        "name": "workspace",
+        "status": "passed",
+        "platform": "linux",
+        "browserVersion": "156.0.8078.4",
+        "extensionVersion": "0.7.2",
+        "checks": 14,
+        "requests": 9
+      },
+      {
+        "name": "webpage",
+        "status": "passed",
+        "platform": "linux",
+        "browserVersion": "156.0.8078.4",
+        "extensionVersion": "0.7.2",
+        "checks": 23,
+        "requests": 13
+      },
+      {
+        "name": "assistant",
+        "status": "passed",
+        "platform": "linux",
+        "browserVersion": "156.0.8078.4",
+        "extensionVersion": "0.7.2",
+        "checks": 18
+      },
+      {
+        "name": "page-csp",
+        "status": "passed",
+        "platform": "linux",
+        "browserVersion": "156.0.8078.4",
+        "extensionVersion": "0.7.2",
+        "checks": 4
+      },
+      {
+        "name": "audio-csp",
+        "status": "passed",
+        "platform": "linux",
+        "browserVersion": "156.0.8078.4",
+        "extensionVersion": "0.7.2",
+        "checks": 3
+      },
+      {
+        "name": "page-boundaries",
+        "status": "passed",
+        "platform": "linux",
+        "browserVersion": "156.0.8078.4",
+        "extensionVersion": "0.7.2",
+        "checks": 5
+      },
+      {
+        "name": "page-rerender",
+        "status": "passed",
+        "platform": "linux",
+        "browserVersion": "156.0.8078.4",
+        "extensionVersion": "0.7.2",
+        "checks": 11,
+        "requests": 2
+      }
+    ]
+  },
+  "release": {
+    "url": "https://github.com/ALVIN-YANG/chrome-translate/releases/tag/v0.7.2",
+    "targetCommit": "c3fc46c5165fa512fa2fd224caf127bcc3862e88",
+    "draft": false,
+    "zipHttpStatus": 200,
+    "checksumHttpStatus": 200,
+    "bytes": 593193,
+    "sha256": "376f08eb9b92ddb5a1392d09edf44432551281726357b9f5cb40201cd3aa8531",
+    "matchesLocalAndCI": true,
+    "manifest": "0.7.2",
+    "license": "MIT",
+    "zipIntegrity": "passed"
+  },
+  "cleanup": {
+    "temporaryTestProfiles": 0,
+    "temporaryReleaseDirectories": 0,
+    "runningTestBrowsers": 0
+  }
 }

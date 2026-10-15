@@ -4,7 +4,7 @@
 
 0.7.2 当前进展：已复现并修复网页换行拼词、同文重绘后译文不恢复；补上连续 DOM 冲突的恢复上限和主动重试。83 项 Node 测试及七组 ZIP 安装包回归通过；MDN 与 Python 官方文档分别完成真实微软、原段落/代码和关闭恢复验证。联网整组仍有就绪/等待超时波动，未宣称修复该问题；后续需继续定位。产品核心用户的偏好已向维护者询问，尚未收到回答，当前仍按已有技术阅读用例推进独立修复。
 
-本轮未完成的是最终 GitHub CI、公开发布与下载核验；检查完成后再记录相应结论。0.7.2 证据文件为 `docs/evidence/compatibility-0.7.2.json`。
+0.7.2 已完成交付：[GitHub CI](https://github.com/ALVIN-YANG/chrome-translate/actions/runs/38772350281) 的 Node 22/24 与七组 Chromium 回归通过；[Release](https://github.com/ALVIN-YANG/chrome-translate/releases/tag/v0.7.2) 指向 `c3fc46c5165fa512fa2fd224caf127bcc3862e88`。ZIP 和摘要的公开下载均 HTTP 200，ZIP 为 593,193 字节、SHA-256 `376f08eb9b92ddb5a1392d09edf44432551281726357b9f5cb40201cd3aa8531`，与 macOS、Linux CI 及浏览器实际加载包相同。测试临时配置和浏览器均已清理。证据为 `docs/evidence/compatibility-0.7.2.json`；这只是当前阶段交付，不代表“顶级开源项目”目标达成。
 
 2026-10-15，本轮优先补齐许可、可复现回归、打包和贡献流程。维护者已明确选择 MIT；仓库、包元数据和安装包同步采用该许可，第三方许可单独保留。GitHub 私密漏洞报告已启用。
 
