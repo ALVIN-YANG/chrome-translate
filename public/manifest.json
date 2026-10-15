@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "翻译 · 多语言",
-  "version": "0.7.1",
+  "version": "0.7.2",
   "description": "划词后翻译、朗读或问问 AI。支持 MiniMax、DeepSeek 等模型和自定义语音服务，保留网页双语翻译。",
   "minimum_chrome_version": "120",
   "permissions": [

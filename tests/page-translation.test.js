@@ -10,6 +10,16 @@ const doc = html => new DOMParser().parseFromString(`<html><body>${html}</body><
 const tick = () => new Promise(resolve => setImmediate(resolve));
 const deferred = () => { let resolve, reject; const promise = new Promise((a, b) => { resolve = a; reject = b; }); return { promise, resolve, reject }; };
 
+test('段落换行保留词界，内联格式不能把同一词拆开', () => {
+  const page = doc('<main><p>Hello<br>world. Back<strong>track</strong>ing explores paths.</p></main>');
+  assert.deepEqual(collectPageSegments(page).map(row => row.text), ['Hello world. Backtracking explores paths.']);
+});
+
+test('嵌套块前后保留词界，块内原文保持独立', () => {
+  const page = doc('<main><div>Before<section><p>A nested block remains separate.</p></section>After</div></main>');
+  assert.deepEqual(collectPageSegments(page).map(row => row.text), ['Before After', 'A nested block remains separate.']);
+});
+
 test('正文提取保留链接、列表和内联格式，排除代码、表单、私有及插件内容', () => {
   const page = doc('<nav><p>navigation text</p></nav><main><h1>Reading an article about translation</h1><p>Hello <a href="/go"><b>world</b></a>.</p><ul><li>First item</li></ul><pre>code snippet</pre><p translate="no">private no translate</p><div contenteditable>user writing</div><form><p>user input</p></form><p hidden>invisible</p><span data-ct-owned="controls">extension content</span></main><aside><p>sidebar text</p></aside>');
   const original = page.body.innerHTML;

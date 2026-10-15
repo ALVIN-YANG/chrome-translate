@@ -30,6 +30,15 @@ Linux 首次运行可使用 `npx playwright install --with-deps --no-shell chrom
 
 结果 JSON、截图及失败时的 trace 放在 `output/playwright/`。这些文件只含测试数据；不要向公开 Issue 上传含真实 Key、私人网页、会话、原文或请求头的日志。真实服务验证脚本需额外授权凭据和费用，不属于默认 CI。
 
+需要核对真实公共网页与微软免 Key 接口时，在构建后手动执行（macOS/Linux）：
+
+```sh
+npm run build
+TRANSLATE_LIVE_MICROSOFT=1 node --test --test-name-pattern='real-' tests/browser/extension.test.js
+```
+
+此模式只访问固定的 MDN 与 Python 官方文档，不读取用户页面，也不使用付费模型。它验证中文译文、请求无凭据、原段落与代码文本、关闭恢复；结果受网络、免 Key 接口和网站自身更新影响。为避免公共网站资源过多，不收集完整 trace；截图失败会单独记录，不替代功能断言。校验工具会读取高亮组件的开放 Shadow DOM 来核对代码文本，扩展自身仍不翻译网站 Shadow DOM。
+
 ## 改动应该放在哪里
 
 见 [架构说明](docs/架构说明.md)。新增适配优先复用现有协议和 AI SDK provider，避免每个厂商复制一套界面、请求或播放流程。新增依赖前，确认现有实现不能满足需要。

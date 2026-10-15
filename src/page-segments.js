@@ -2,6 +2,7 @@ const BLOCKS = 'p,h1,h2,h3,h4,h5,h6,li,blockquote,figcaption,td,th,dt,dd,div,sec
 const ALWAYS_SKIP = 'script,style,noscript,template,pre,kbd,samp,svg,math,canvas,iframe,input,textarea,select,button,form,[contenteditable]:not([contenteditable="false"]),[translate="no"],.notranslate,[hidden],[aria-hidden="true"],[data-ct-owned]';
 const CHROME_SKIP = 'nav,header,footer,aside,[role="navigation"],[role="banner"],[role="complementary"]';
 const PROSE = 'p,h1,h2,h3,h4,h5,h6,li,blockquote,figcaption,td,th,dt,dd';
+const BREAKS = `br,hr,pre,form,${BLOCKS}`;
 
 function textOutsideCode(node) {
   if (node.nodeType === 3) return node.textContent;
@@ -41,9 +42,16 @@ export function collectPageSegments(doc, scope = 'smart', visible = () => true) 
   const proseCache = new WeakMap();
   for (const root of pageRoots(doc, scope)) {
     if (!root) continue;
-    const walker = doc.createTreeWalker(root, 4);
+    const walker = doc.createTreeWalker(root, 1 | 4); // 元素和文字：换行元素本身没有文本节点。
     for (let node = walker.nextNode(); node; node = walker.nextNode()) {
       const parent = node.parentElement;
+      if (node.nodeType === 1) {
+        const parts = groups.get(parent?.closest(BLOCKS));
+        if (parts && node.matches(BREAKS) && !parent.closest(ALWAYS_SKIP)
+          && !node.matches('[hidden],[aria-hidden="true"]')
+          && (scope === 'all' || !parent.closest(CHROME_SKIP)) && visible(parent) && visible(node)) parts.push(' ');
+        continue;
+      }
       if (!parent || !node.textContent.trim() || parent.closest(ALWAYS_SKIP)
         || (scope !== 'all' && parent.closest(CHROME_SKIP)) || !visible(parent)) continue;
       if (parent.closest('code')) {

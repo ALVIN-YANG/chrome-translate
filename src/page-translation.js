@@ -27,6 +27,7 @@ export class PageTranslation {
     this.context = context;
     this.scope = scope;
     this.error = '';
+    this.repairPaused = false;
     this.queue.start(context);
     this.intersection = new IntersectionObserver(entries => {
       for (const entry of entries) if (entry.isIntersecting) {
@@ -36,7 +37,11 @@ export class PageTranslation {
     }, { rootMargin: '250px 0px' });
     this.scan();
     this.observer = new MutationObserver(mutations => {
-      if (!mutations.some(mutation => !mutation.target.parentElement?.closest('[data-ct-owned]')
+      const lostTranslation = mutations.some(mutation => {
+        const record = this.records.get(mutation.target);
+        return record?.host && record.host.parentNode !== record.element && [...mutation.removedNodes].includes(record.host);
+      });
+      if (!lostTranslation && !mutations.some(mutation => !mutation.target.parentElement?.closest('[data-ct-owned]')
         && !mutation.target.closest?.('[data-ct-owned]')
         && (mutation.type !== 'childList' || [...mutation.addedNodes, ...mutation.removedNodes].some(node => !node.dataset?.ctOwned)))) return;
       clearTimeout(this.scanTimer);
@@ -49,7 +54,8 @@ export class PageTranslation {
     if (!this.active) return;
     const visible = parent => {
       const style = this.doc.defaultView.getComputedStyle(parent);
-      return style.display !== 'none' && style.visibility !== 'hidden' && [...parent.getClientRects()].some(rect => rect.width > 0 && rect.height > 0);
+      return style.display !== 'none' && style.visibility !== 'hidden'
+        && (parent.localName === 'br' || [...parent.getClientRects()].some(rect => rect.width > 0 && rect.height > 0));
     };
     const segments = collectPageSegments(this.doc, this.scope, visible);
     const current = new Set(segments.map(segment => segment.element));
@@ -62,7 +68,10 @@ export class PageTranslation {
     }
     for (const segment of segments) {
       const old = this.records.get(segment.element);
-      if (old?.text === segment.text) continue;
+      if (old?.text === segment.text) {
+        if (old.host && old.host.parentNode !== segment.element) this.repair(old);
+        continue;
+      }
       old?.host?.remove();
       const record = { ...segment, id: ++this.serial, chunks: splitPageText(segment.text), results: [] };
       this.records.set(segment.element, record);
@@ -79,7 +88,26 @@ export class PageTranslation {
     const record = item.record;
     if (!this.active || this.records.get(record.element) !== record || !record.element.isConnected) return;
     record.results[item.index] = result;
+    this.render(record);
+  }
+  repair(record) {
+    if (this.repairPaused) return;
+    // 防止与网站自己的 MutationObserver 反复触发；间隔重绘仍可继续恢复。
+    const now = Date.now();
+    record.rapidRepairs = now - (record.lastRepair || 0) < 1000 ? (record.rapidRepairs || 0) + 1 : 1;
+    record.lastRepair = now;
+    if (record.rapidRepairs > 8) {
+      this.repairPaused = true;
+      this.queue.stop();
+      this.error = '网站持续移除译文，已暂停翻译。请重试或显示原文。';
+      return;
+    }
+    this.render(record);
+  }
+  render(record) {
     if (record.chunks.some((_, index) => !record.results[index])) return;
+    record.host?.remove();
+    record.host = null;
     const text = record.results.map(part => part.text).join('\n');
     if (cleanText(text) !== record.text && !record.results.every(part => normalizeLanguage(part.detected) === this.context.target)) {
       const host = this.doc.createElement('span');

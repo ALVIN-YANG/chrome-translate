@@ -3,7 +3,7 @@ import { readFile } from 'node:fs/promises';
 
 // 随测试启动、随机端口、仅绑定 loopback；不访问真实服务，也不记录凭据。
 export async function startFixtureServer() {
-  const files = new Map(await Promise.all(['article.html', 'strict.html', 'tone.mp3'].map(async name =>
+  const files = new Map(await Promise.all(['article.html', 'strict.html', 'compatibility.html', 'tone.mp3'].map(async name =>
     [`/${name}`, await readFile(new URL(`../fixtures/${name}`, import.meta.url))])));
   const calls = [];
   let delayMs = 0;

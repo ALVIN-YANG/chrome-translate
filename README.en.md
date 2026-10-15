@@ -38,6 +38,8 @@ Selecting text alone does not send API requests. Opening the AI panel alone does
 
 Webpage translation prioritizes article content, loads paragraphs near the viewport, and handles dynamic text. It preserves original links, formatting, and events. Code blocks, forms, editable fields, and `translate="no"` content are skipped. PDF, images, subtitles, browser pages, local files, iframes, and website Shadow DOM are outside the current support boundary. This project is independent of Immersive Translate.
 
+Line breaks preserve word boundaries without splitting words across inline formatting. If a site redraw removes a completed paragraph's translation, it is restored from memory without another provider call. Repeated removals pause the page and offer Retry, avoiding continuous DOM insertion.
+
 ![Actual bilingual reading interface](docs/assets/webpage.png)
 
 ## Models and voices
