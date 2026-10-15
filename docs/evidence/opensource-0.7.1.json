@@ -217,8 +217,7 @@
     "供应商响应受控，无新增真实账号验证",
     "生成测试音验证播放器，不代表语音质量",
     "系统语音事件受控",
-    "未操作用户日常 Chrome 安装或配置",
-    "公开下载在发布后核对；初轮 CI 尚未包含 ZIP 解压加载的测试入口"
+    "未操作用户日常 Chrome 安装或配置"
   ],
   "initialCI": {
     "url": "https://github.com/ALVIN-YANG/chrome-translate/actions/runs/38765406772",
@@ -226,74 +225,69 @@
     "node22": "success",
     "node24": "success",
     "chromium": "success",
-    "linuxArtifactByteIdenticalToMac": true,
+    "linuxArtifactByteIdenticalToMac": true
+  },
+  "finalCI": {
+    "url": "https://github.com/ALVIN-YANG/chrome-translate/actions/runs/38766164423",
+    "commit": "81a41537cf9948e2ac4af9539392977c9a29edf4",
+    "os": "Ubuntu 24.04",
+    "conclusion": "success",
+    "node22": "success",
+    "node24": "success",
+    "chromium": "success",
+    "loadSource": "actual-release-zip-extracted-to-temporary-directory",
+    "package": {
+      "filename": "translate-chrome-0.7.1.zip",
+      "sha256": "c48ec7a10a99071ce2c2c199f4a2ce6985f3c0a42e7c076455fd0d8fb2ebe5ef",
+      "bytes": 592865,
+      "files": [
+        "LICENSE",
+        "THIRD_PARTY_LICENSES.txt",
+        "app.js",
+        "background.js",
+        "content.js",
+        "icons/128.png",
+        "icons/16.png",
+        "icons/32.png",
+        "icons/48.png",
+        "index.html",
+        "manifest.json",
+        "offscreen.html",
+        "offscreen.js",
+        "popup.css",
+        "popup.html",
+        "popup.js",
+        "services.css",
+        "services.html",
+        "services.js",
+        "styles.css",
+        "tabs.js"
+      ]
+    },
     "browserScenarios": [
       {
         "name": "workspace",
         "status": "passed",
-        "requests": 9,
-        "checks": [
-          "词义同一层级和语境优先",
-          "词典晚到保留选区",
-          "单项及全部复制",
-          "更新和失败保留结果",
-          "旧结果按原语言朗读",
-          "句段完整替换",
-          "刷新恢复不重复请求",
-          "目标语言恢复",
-          "撤销清空",
-          "IME去重",
-          "自动语言修正恢复",
-          "真实扩展API复用标签页",
-          "storage和contextMenus权限，无tabs权限",
-          "390px和320px布局"
-        ],
-        "responseMode": "controlled-fixtures",
-        "speech": "controlled-events",
         "browserVersion": "156.0.8078.4",
         "platform": "linux",
-        "extensionVersion": "0.7.1"
+        "extensionVersion": "0.7.1",
+        "checks": 14
       },
       {
         "name": "webpage",
         "status": "passed",
-        "requests": 13,
-        "responseMode": "controlled-fixtures",
-        "checks": [
-          "主动启用前无文本请求",
-          "原文下方双语",
-          "代码块表单隐私排除",
-          "技术段落内联标识符完整",
-          "导航侧栏智能过滤",
-          "目标语言去重",
-          "视口按需加载",
-          "动态段落与修改",
-          "关闭精确恢复源DOM",
-          "当前页内存缓存",
-          "原链接事件",
-          "划词按钮再发送",
-          "算法多义词与例句喇叭",
-          "原生复制",
-          "Escape关闭",
-          "整页模式",
-          "取消隔离迟到结果",
-          "限流暂停与主动重试",
-          "安全设置不含Key",
-          "开关广播",
-          "390px320px浮层",
-          "工具栏服务语言偏好和双语原文切换",
-          "工具栏整页范围"
-        ],
         "browserVersion": "156.0.8078.4",
         "platform": "linux",
-        "extensionVersion": "0.7.1"
+        "extensionVersion": "0.7.1",
+        "checks": 23
       },
       {
         "name": "assistant",
         "status": "passed",
-        "mode": "controlled-provider-real-extension-and-audio-element",
-        "llmCalls": 4,
-        "ttsCalls": 2,
+        "browserVersion": "156.0.8078.4",
+        "platform": "linux",
+        "extensionVersion": "0.7.1",
+        "checks": 18,
         "audioEvents": [
           "idle",
           "loading",
@@ -305,58 +299,37 @@
           "idle",
           "loading",
           "idle"
-        ],
-        "checks": [
-          "三入口操作条",
-          "无自动API请求",
-          "保留翻译词义",
-          "真实SDK流式AI",
-          "多轮上下文",
-          "Enter发送",
-          "取消过期隔离",
-          "鉴权错误和Key排除",
-          "Markdown过滤",
-          "防伪造submit",
-          "复制AI回答",
-          "原文朗读",
-          "实际Audio播放暂停恢复停止",
-          "取消合成",
-          "独立服务配置",
-          "本地自定义接口",
-          "配置保存重载",
-          "320px390px"
-        ],
-        "browserVersion": "156.0.8078.4",
-        "platform": "linux",
-        "extensionVersion": "0.7.1"
+        ]
       },
       {
         "name": "page-csp",
         "status": "passed",
-        "mode": "controlled-response-strict-site-CSP",
-        "checks": [
-          "样式隔离",
-          "后台翻译不受网页connect-src限制",
-          "双语段落",
-          "关闭恢复"
-        ],
         "browserVersion": "156.0.8078.4",
         "platform": "linux",
-        "extensionVersion": "0.7.1"
+        "extensionVersion": "0.7.1",
+        "checks": 4
       },
       {
         "name": "audio-csp",
         "status": "passed",
-        "mode": "real-extension-local-tts-server-real-audio",
-        "checks": [
-          "严格CSP仍可显示操作条",
-          "页面禁止media-src不阻止offscreen朗读",
-          "音频实际播放与停止"
-        ],
         "browserVersion": "156.0.8078.4",
         "platform": "linux",
-        "extensionVersion": "0.7.1"
+        "extensionVersion": "0.7.1",
+        "checks": 3
       }
     ]
+  },
+  "release": {
+    "url": "https://github.com/ALVIN-YANG/chrome-translate/releases/tag/v0.7.1",
+    "targetCommit": "81a41537cf9948e2ac4af9539392977c9a29edf4",
+    "draft": false,
+    "zipHttpStatus": 200,
+    "checksumHttpStatus": 200,
+    "bytes": 592865,
+    "sha256": "c48ec7a10a99071ce2c2c199f4a2ce6985f3c0a42e7c076455fd0d8fb2ebe5ef",
+    "downloadMatchesLocalAndLinuxCI": true,
+    "manifestVersion": "0.7.1",
+    "projectLicense": "MIT",
+    "archiveIntegrity": "passed"
   }
 }

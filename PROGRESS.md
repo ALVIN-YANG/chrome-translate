@@ -4,7 +4,9 @@
 
 2026-10-15，本轮优先补齐许可、可复现回归、打包和贡献流程。维护者已明确选择 MIT；仓库、包元数据和安装包同步采用该许可，第三方许可单独保留。GitHub 私密漏洞报告已启用。
 
-本轮已实现：无真实 Key 的五组隔离 Chromium MV3 回归、本机随机端口和生成测试音；构建清理旧文件与核对版本；白名单 ZIP 和 SHA-256；中英文入口、贡献指南、问题/PR 模板、隐私/安全说明、架构入口及发布说明。81 项 Node 测试、五组本机 Chromium 回归及构建通过；浏览器已加载实际 ZIP 的解压结果。安装包完整性、旧文件清理和两次干净构建的摘要一致性通过；初轮 GitHub Node 22/24 与 Linux Chromium CI 全部通过，其 ZIP 与 macOS 产物逐字节相同。v0.7.1 正在核对最终提交与公开发布结果。
+本轮已完成：无真实 Key 的五组隔离 Chromium MV3 回归、本机随机端口和生成测试音；构建清理旧文件与核对版本；白名单 ZIP 和 SHA-256；中英文入口、贡献指南、问题/PR 模板、隐私/安全说明、架构入口及发布说明。81 项 Node 测试、五组本机 Chromium 回归及构建通过；浏览器加载实际 ZIP 的解压结果。安装包完整性、旧文件清理和两次干净构建的摘要一致性通过；最终 GitHub Node 22/24 与 Linux Chromium CI 全部通过，其 ZIP 与 macOS 产物逐字节相同。
+
+[v0.7.1 已公开发布](https://github.com/ALVIN-YANG/chrome-translate/releases/tag/v0.7.1)，指向 `81a41537cf9948e2ac4af9539392977c9a29edf4`。ZIP 与摘要文件均通过未认证公开下载 HTTP 200 验证；ZIP 为 592,865 字节，SHA-256 为 `c48ec7a10a99071ce2c2c199f4a2ce6985f3c0a42e7c076455fd0d8fb2ebe5ef`，与本机、CI 构建及浏览器实际加载的包一致。最终 CI：https://github.com/ALVIN-YANG/chrome-translate/actions/runs/38766164423。证据保存在 `docs/evidence/opensource-0.7.1.json`。
 
 下一阶段仍需真实用户安装与长期使用反馈、持续兼容性验证和独立社区贡献。不要制造使用量、评价或推广消息，也不要为完成目标自行缩小“顶级开源项目”的含义。
 
