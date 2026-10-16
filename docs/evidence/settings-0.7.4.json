@@ -268,5 +268,80 @@
     "真实网络只验证所列站点与段落，不证明所有网页或翻译质量",
     "未操作用户日常Chrome的配置或安装",
     "未取得新的真实用户采用或外部贡献证据"
-  ]
+  ],
+  "ci": {
+    "url": "https://github.com/ALVIN-YANG/chrome-translate/actions/runs/38845132321",
+    "commit": "ff304eb928f9ab7eefa630b8965142806b52227c",
+    "node22": "success",
+    "node24": "success",
+    "chromium": "success",
+    "scenarios": 11,
+    "checks": 104,
+    "settings": {
+      "name": "settings-persistence",
+      "status": "passed",
+      "mode": "real-extension-local-storage",
+      "checks": [
+        "五轮并发网页偏好不丢更新",
+        "重新打开保留配置",
+        "跨页保存保留其他Key",
+        "同服务独立字段不互相覆盖",
+        "保留最新服务和网页偏好",
+        "保存凭据不切换当前翻译服务"
+      ],
+      "browserVersion": "156.0.8078.4",
+      "platform": "linux",
+      "extensionVersion": "0.7.4"
+    },
+    "package": {
+      "filename": "translate-chrome-0.7.4.zip",
+      "sha256": "542eddb0c78ba92a19cde80bd040c5a7003ebd737a16cf17befcef90a65ba3a5",
+      "bytes": 593617,
+      "files": [
+        "LICENSE",
+        "THIRD_PARTY_LICENSES.txt",
+        "app.js",
+        "background.js",
+        "content.js",
+        "icons/128.png",
+        "icons/16.png",
+        "icons/32.png",
+        "icons/48.png",
+        "index.html",
+        "manifest.json",
+        "offscreen.html",
+        "offscreen.js",
+        "popup.css",
+        "popup.html",
+        "popup.js",
+        "services.css",
+        "services.html",
+        "services.js",
+        "styles.css",
+        "tabs.js"
+      ]
+    },
+    "linuxMatchesMac": true
+  },
+  "release": {
+    "url": "https://github.com/ALVIN-YANG/chrome-translate/releases/tag/v0.7.4",
+    "targetCommit": "ff304eb928f9ab7eefa630b8965142806b52227c",
+    "draft": false,
+    "zipHttpStatus": 200,
+    "checksumHttpStatus": 200,
+    "downloadAuthentication": "none; curl -q without Authorization or netrc",
+    "bytes": 593617,
+    "sha256": "542eddb0c78ba92a19cde80bd040c5a7003ebd737a16cf17befcef90a65ba3a5",
+    "matchesLocalAndCI": true,
+    "manifest": "0.7.4",
+    "license": "MIT",
+    "zipIntegrity": "passed"
+  },
+  "cleanup": {
+    "temporaryDirectoriesByPrefix": {
+      "chrome-translate-test-": 0,
+      "chrome-translate-release-test-": 0
+    },
+    "runningTestBrowsers": 0
+  }
 }
