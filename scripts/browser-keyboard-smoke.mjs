@@ -29,11 +29,11 @@ async function setup(page) {
     await page.keyboard.press('Enter');
     await controls.getByRole('dialog').getByText('backtracking', { exact: true }).waitFor();
   };
-  return { controls, calls, open };
+  return { controls, calls, open, select };
 }
 
 export async function focusReturn(page) {
-  const { controls, open } = await setup(page);
+  const { controls, calls, open, select } = await setup(page);
   assert.equal(await page.locator('#term').getAttribute('tabindex'), null, '原文默认不是交互控件');
   await open();
   await page.keyboard.press('Escape');
@@ -59,7 +59,24 @@ export async function focusReturn(page) {
   await page.locator('#private').focus();
   await page.keyboard.press('Escape');
   assert.equal(await page.evaluate(() => document.activeElement.id), 'private', '焦点已离开浮层时 Esc 不抢回原文');
-  return { status: 'passed', mode: 'real-keyboard-controlled-provider', checks: ['鼠标原生选区与Enter开启', 'Esc返回原文', '关闭按钮返回原文', 'Tab从原文继续', '离焦后清理临时tabindex', '保留网页原tabindex', '外部点击保留新焦点', '外部键盘焦点不被抢回'] };
+  const requestCount = calls.length;
+  const bar = controls.getByRole('toolbar', { name: '划词操作' });
+  await select();
+  await page.keyboard.press('Tab');
+  assert.equal(await page.evaluate(() => document.activeElement.id), 'private');
+  assert.equal(await bar.isVisible(), false, '键盘进入输入框后隐藏旧划词条');
+  await page.evaluate(() => {
+    const editor = document.createElement('div');
+    editor.id = 'writing'; editor.contentEditable = 'true'; editor.textContent = 'An unfinished draft.';
+    document.querySelector('form').before(editor);
+  });
+  await select();
+  await page.keyboard.press('Tab');
+  assert.equal(await page.evaluate(() => document.activeElement.id), 'writing');
+  assert.equal(await bar.isVisible(), false, '键盘进入富文本编辑区后隐藏旧划词条');
+  assert.equal(calls.length, requestCount, '焦点切换不发送翻译请求');
+  assert.equal(await page.locator('#writing').textContent(), 'An unfinished draft.');
+  return { status: 'passed', mode: 'real-keyboard-controlled-provider', checks: ['鼠标原生选区与Enter开启', 'Esc返回原文', '关闭按钮返回原文', 'Tab从原文继续', '离焦后清理临时tabindex', '保留网页原tabindex', '外部点击保留新焦点', '外部键盘焦点不被抢回', '键盘进入输入框隐藏旧划词条', '键盘进入富文本编辑区隐藏旧划词条', '焦点切换不请求或修改草稿'] };
 }
 
 export async function sceneState(page) {

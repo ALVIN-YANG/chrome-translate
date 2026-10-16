@@ -263,6 +263,9 @@ async function initialize() {
     if (!$('.panel').hidden) close();
     $('.selection-bar').hidden = true;
   }, true);
+  document.addEventListener('focusin', event => {
+    if (!event.composedPath().includes(host)) $('.selection-bar').hidden = true;
+  }, true);
   function selectionAction(event) {
     if (!event?.isTrusted || !settings.page.selection || event.composedPath().includes(host) || !$('.panel').hidden) return;
     const selection = window.getSelection();

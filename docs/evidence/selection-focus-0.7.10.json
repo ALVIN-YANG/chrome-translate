@@ -1,0 +1,53 @@
+{
+  "status": "passed",
+  "version": "0.7.10",
+  "mode": "published-baseline-and-fixed-packaged-extension",
+  "baseline": {
+    "version": "0.7.9",
+    "packageSHA256": "cad9b3478ff75aec70500f1145b5c0a78e79391aa940c3ed173e987e2d10382c",
+    "reproductions": 2,
+    "focusedElement": "private",
+    "toolbarVisibleAfterTab": true,
+    "upstreamCalls": 0
+  },
+  "fixed": {
+    "packageSHA256": "e5900f76154c7925c98c08b7e9aebc9aa2edc52199c0edb34ba7dec840977050",
+    "focusedElement": "private",
+    "toolbarVisibleAfterTab": false,
+    "toolbarVisibleAfterInputSelection": false,
+    "upstreamCalls": 0,
+    "originalReproductionPassed": true
+  },
+  "keyboard": {
+    "status": "passed",
+    "mode": "real-keyboard-controlled-provider",
+    "checks": [
+      "鼠标原生选区与Enter开启",
+      "Esc返回原文",
+      "关闭按钮返回原文",
+      "Tab从原文继续",
+      "离焦后清理临时tabindex",
+      "保留网页原tabindex",
+      "外部点击保留新焦点",
+      "外部键盘焦点不被抢回",
+      "键盘进入输入框隐藏旧划词条",
+      "键盘进入富文本编辑区隐藏旧划词条",
+      "焦点切换不请求或修改草稿"
+    ],
+    "browserVersion": "156.0.8078.4",
+    "platform": "darwin",
+    "extensionVersion": "0.7.10"
+  },
+  "localChecks": {
+    "nodeTests": 87,
+    "browserScenarios": 16,
+    "browserChecks": 159,
+    "packageBytes": 594323
+  },
+  "limits": [
+    "使用隔离 Chromium 与合成测试文本，不读取用户 Chrome 配置。",
+    "没有新增真实服务调用；公共网页和长文沿用 v0.7.7，首次文本流程沿用 v0.7.9。",
+    "不证明用户日常 Chrome 已更新、人工读屏通过或独立用户接受度。"
+  ],
+  "userChromeTouched": false
+}
