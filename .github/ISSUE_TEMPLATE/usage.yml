@@ -17,24 +17,25 @@ body:
     id: outcome
     attributes:
       label: 实际结果 / Actual outcome
+      description: 不确定时可保留“未说明”，不会视为任务成功。 / Leave Not specified if unsure; it does not indicate success.
       options:
+        - 未说明 / Not specified
         - 完成了原本的任务 / Completed the intended task
         - 部分完成，仍有阻碍 / Partly completed, with friction
         - 未完成任务 / Could not complete the task
         - 未能完成安装 / Could not finish installation
-    validations:
-      required: true
+      default: 0
   - type: dropdown
     id: usage
     attributes:
       label: 使用情况 / Usage so far
       description: 选择已经发生的情况，而非未来打算。 / Report what has happened, rather than future intent.
       options:
+        - 未说明 / Not specified
         - 首次尝试 / First attempt
         - 已在不同时间再次使用 / Used again later
         - 尚未开始使用 / Not started yet
-    validations:
-      required: true
+      default: 0
   - type: textarea
     id: experience
     attributes:
