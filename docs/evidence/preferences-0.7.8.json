@@ -207,5 +207,213 @@
     "早先偶发入口就绪超时仍未复现或归因",
     "未操作用户日常Chrome安装，也未新增付费模型调用",
     "本轮未取得新增真实采用或独立社区贡献证据"
-  ]
+  ],
+  "ci": {
+    "url": "https://github.com/ALVIN-YANG/chrome-translate/actions/runs/38852838364",
+    "headSha": "ab8701d5e9883b5b6707f479b1936476dc5211c3",
+    "conclusion": "success",
+    "jobs": [
+      {
+        "name": "Chromium extension",
+        "conclusion": "success"
+      },
+      {
+        "name": "Node 22",
+        "conclusion": "success"
+      },
+      {
+        "name": "Node 24",
+        "conclusion": "success"
+      }
+    ],
+    "scenarios": [
+      {
+        "name": "assistant-preferences",
+        "status": "passed",
+        "checks": 10,
+        "extensionVersion": "0.7.8",
+        "platform": "linux",
+        "browserVersion": "156.0.8078.4"
+      },
+      {
+        "name": "assistant",
+        "status": "passed",
+        "checks": 18,
+        "extensionVersion": "0.7.8",
+        "platform": "linux",
+        "browserVersion": "156.0.8078.4"
+      },
+      {
+        "name": "audio-csp",
+        "status": "passed",
+        "checks": 3,
+        "extensionVersion": "0.7.8",
+        "platform": "linux",
+        "browserVersion": "156.0.8078.4"
+      },
+      {
+        "name": "keyboard-focus",
+        "status": "passed",
+        "checks": 8,
+        "extensionVersion": "0.7.8",
+        "platform": "linux",
+        "browserVersion": "156.0.8078.4"
+      },
+      {
+        "name": "page-boundaries",
+        "status": "passed",
+        "checks": 5,
+        "extensionVersion": "0.7.8",
+        "platform": "linux",
+        "browserVersion": "156.0.8078.4"
+      },
+      {
+        "name": "page-csp",
+        "status": "passed",
+        "checks": 4,
+        "extensionVersion": "0.7.8",
+        "platform": "linux",
+        "browserVersion": "156.0.8078.4"
+      },
+      {
+        "name": "page-navigation",
+        "status": "passed",
+        "checks": 11,
+        "extensionVersion": "0.7.8",
+        "platform": "linux",
+        "browserVersion": "156.0.8078.4"
+      },
+      {
+        "name": "page-pending",
+        "status": "passed",
+        "checks": 14,
+        "extensionVersion": "0.7.8",
+        "platform": "linux",
+        "browserVersion": "156.0.8078.4"
+      },
+      {
+        "name": "page-rerender",
+        "status": "passed",
+        "checks": 11,
+        "extensionVersion": "0.7.8",
+        "platform": "linux",
+        "browserVersion": "156.0.8078.4"
+      },
+      {
+        "name": "page-updates",
+        "status": "passed",
+        "checks": 7,
+        "extensionVersion": "0.7.8",
+        "platform": "linux",
+        "browserVersion": "156.0.8078.4"
+      },
+      {
+        "name": "real-site-verifier",
+        "status": "passed",
+        "checks": 7,
+        "extensionVersion": "0.7.8",
+        "platform": "linux",
+        "browserVersion": "156.0.8078.4"
+      },
+      {
+        "name": "scene-state",
+        "status": "passed",
+        "checks": 5,
+        "extensionVersion": "0.7.8",
+        "platform": "linux",
+        "browserVersion": "156.0.8078.4"
+      },
+      {
+        "name": "settings-persistence",
+        "status": "passed",
+        "checks": 6,
+        "extensionVersion": "0.7.8",
+        "platform": "linux",
+        "browserVersion": "156.0.8078.4"
+      },
+      {
+        "name": "webpage",
+        "status": "passed",
+        "checks": 23,
+        "extensionVersion": "0.7.8",
+        "platform": "linux",
+        "browserVersion": "156.0.8078.4"
+      },
+      {
+        "name": "workspace",
+        "status": "passed",
+        "checks": 14,
+        "extensionVersion": "0.7.8",
+        "platform": "linux",
+        "browserVersion": "156.0.8078.4"
+      }
+    ],
+    "preferences": {
+      "status": "passed",
+      "mode": "real-extension-controlled-sdk-and-settings-ui",
+      "requests": 2,
+      "unchangedSavePreserved": true,
+      "speed": 1.1,
+      "modelUnchangedByVoice": true,
+      "retainedRounds": 1,
+      "draftPreserved": true,
+      "modelChangeCancelled": true,
+      "checks": [
+        "真实设置页保存语速",
+        "不改配置保存对照",
+        "声音变化不改变模型快照",
+        "语速变化不中断AI",
+        "无自动模型重发",
+        "原请求正常完成",
+        "切换声音保留对话上下文",
+        "跨场景草稿保留",
+        "模型变化仍取消旧请求",
+        "取消后的回答不能晚到插入"
+      ],
+      "browserVersion": "156.0.8078.4",
+      "platform": "linux",
+      "extensionVersion": "0.7.8"
+    },
+    "packageSha256": "8968df79f5c28846bc4a53b2ce1927de423b561e1040c0fd2d50c6fcb444ee79",
+    "localAndLinuxZipIdentical": true
+  },
+  "release": {
+    "url": "https://github.com/ALVIN-YANG/chrome-translate/releases/tag/v0.7.8",
+    "tag": "v0.7.8",
+    "commit": "ab8701d5e9883b5b6707f479b1936476dc5211c3",
+    "publishedAt": "2026-10-16T04:54:41Z",
+    "draft": false,
+    "prerelease": false,
+    "assets": [
+      {
+        "name": "translate-chrome-0.7.8.zip",
+        "bytes": 594267,
+        "digest": "sha256:8968df79f5c28846bc4a53b2ce1927de423b561e1040c0fd2d50c6fcb444ee79",
+        "url": "https://github.com/ALVIN-YANG/chrome-translate/releases/download/v0.7.8/translate-chrome-0.7.8.zip"
+      },
+      {
+        "name": "translate-chrome-0.7.8.zip.sha256",
+        "bytes": 93,
+        "digest": "sha256:ba45bb143277ee63eb6388bb917b276a3a6214ed61d186ac1d0ed9a335ee77e5",
+        "url": "https://github.com/ALVIN-YANG/chrome-translate/releases/download/v0.7.8/translate-chrome-0.7.8.zip.sha256"
+      }
+    ],
+    "anonymousDownload": {
+      "zipHttpStatus": 200,
+      "checksumHttpStatus": 200,
+      "sha256": "8968df79f5c28846bc4a53b2ce1927de423b561e1040c0fd2d50c6fcb444ee79",
+      "identicalToLocalAndLinux": true,
+      "checksumMatches": true,
+      "crc": "passed",
+      "manifest": "0.7.8",
+      "mitLicense": true,
+      "thirdPartyLicenses": true,
+      "allowlistedFiles": true,
+      "testCredentialAbsent": true
+    }
+  },
+  "cleanup": {
+    "isolatedProfilesRemaining": 0,
+    "temporaryInstrumentationAdded": false
+  }
 }
