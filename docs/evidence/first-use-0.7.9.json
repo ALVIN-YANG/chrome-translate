@@ -1,0 +1,33 @@
+{
+  "status": "passed",
+  "version": "0.7.9",
+  "packageSHA256": "cad9b3478ff75aec70500f1145b5c0a78e79391aa940c3ed173e987e2d10382c",
+  "mode": "published-zip-isolated-profile-real-microsoft",
+  "source": "Hello, world.",
+  "translation": "你好，世界。",
+  "httpStatus": 200,
+  "requests": [
+    {
+      "method": "POST",
+      "texts": [
+        "Hello, world."
+      ],
+      "authorization": false,
+      "cookie": false
+    }
+  ],
+  "hasStoredKey": false,
+  "browserVersion": "156.0.8078.4",
+  "platform": "darwin",
+  "unexpectedHosts": [],
+  "userChromeTouched": false,
+  "independentUserAcceptance": false,
+  "release": "https://github.com/ALVIN-YANG/chrome-translate/releases/tag/v0.7.9",
+  "publicAssetDigestMatched": true,
+  "isolatedProfileRemoved": true,
+  "limits": [
+    "单个固定文本、macOS隔离Chromium样本，不证明全部语言或网络环境",
+    "没有操作用户日常Chrome，也没有独立用户安装或再次使用的证据",
+    "仅实际微软免Key请求，未测试付费账号和真人朗读体验"
+  ]
+}
