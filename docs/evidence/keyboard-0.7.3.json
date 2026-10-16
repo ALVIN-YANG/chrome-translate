@@ -1,0 +1,526 @@
+{
+  "version": "0.7.3",
+  "date": "2026-10-16",
+  "baseline": "314d42c69b4805df0c9db71bd0c266506fa731e4",
+  "beforeFix": {
+    "browserFailures": 2,
+    "keyboardFocus": {
+      "expected": "term",
+      "actual": "body"
+    },
+    "sceneState": "native buttons used aria-selected and exposed no pressed state",
+    "temporaryTabIndex": "removing tabindex immediately after focus returned focus to body"
+  },
+  "node": {
+    "tests": 83,
+    "passed": 83,
+    "failed": 0,
+    "command": "npm run check"
+  },
+  "controlledBrowser": {
+    "commands": [
+      "node --test --test-concurrency=1 tests/browser/extension.test.js",
+      "node --test --test-name-pattern='keyboard-focus' tests/browser/extension.test.js"
+    ],
+    "scenarios": [
+      {
+        "name": "workspace",
+        "status": "passed",
+        "requests": 9,
+        "checks": [
+          "词义同一层级和语境优先",
+          "词典晚到保留选区",
+          "单项及全部复制",
+          "更新和失败保留结果",
+          "旧结果按原语言朗读",
+          "句段完整替换",
+          "刷新恢复不重复请求",
+          "目标语言恢复",
+          "撤销清空",
+          "IME去重",
+          "自动语言修正恢复",
+          "真实扩展API复用标签页",
+          "storage和contextMenus权限，无tabs权限",
+          "390px和320px布局"
+        ],
+        "responseMode": "controlled-fixtures",
+        "speech": "controlled-events",
+        "browserVersion": "156.0.8078.4",
+        "platform": "darwin",
+        "extensionVersion": "0.7.3"
+      },
+      {
+        "name": "webpage",
+        "status": "passed",
+        "requests": 13,
+        "responseMode": "controlled-fixtures",
+        "checks": [
+          "主动启用前无文本请求",
+          "原文下方双语",
+          "代码块表单隐私排除",
+          "技术段落内联标识符完整",
+          "导航侧栏智能过滤",
+          "目标语言去重",
+          "视口按需加载",
+          "动态段落与修改",
+          "关闭精确恢复源DOM",
+          "当前页内存缓存",
+          "原链接事件",
+          "划词按钮再发送",
+          "算法多义词与例句喇叭",
+          "原生复制",
+          "Escape关闭",
+          "整页模式",
+          "取消隔离迟到结果",
+          "限流暂停与主动重试",
+          "安全设置不含Key",
+          "开关广播",
+          "390px320px浮层",
+          "工具栏服务语言偏好和双语原文切换",
+          "工具栏整页范围"
+        ],
+        "browserVersion": "156.0.8078.4",
+        "platform": "darwin",
+        "extensionVersion": "0.7.3"
+      },
+      {
+        "name": "assistant",
+        "status": "passed",
+        "mode": "controlled-provider-real-extension-and-audio-element",
+        "llmCalls": 4,
+        "ttsCalls": 2,
+        "audioEvents": [
+          "idle",
+          "loading",
+          "speaking",
+          "paused",
+          "speaking",
+          "idle",
+          "idle",
+          "idle",
+          "loading",
+          "idle"
+        ],
+        "checks": [
+          "三入口操作条",
+          "无自动API请求",
+          "保留翻译词义",
+          "真实SDK流式AI",
+          "多轮上下文",
+          "Enter发送",
+          "取消过期隔离",
+          "鉴权错误和Key排除",
+          "Markdown过滤",
+          "防伪造submit",
+          "复制AI回答",
+          "原文朗读",
+          "实际Audio播放暂停恢复停止",
+          "取消合成",
+          "独立服务配置",
+          "本地自定义接口",
+          "配置保存重载",
+          "320px390px"
+        ],
+        "browserVersion": "156.0.8078.4",
+        "platform": "darwin",
+        "extensionVersion": "0.7.3"
+      },
+      {
+        "name": "page-csp",
+        "status": "passed",
+        "mode": "controlled-response-strict-site-CSP",
+        "checks": [
+          "样式隔离",
+          "后台翻译不受网页connect-src限制",
+          "双语段落",
+          "关闭恢复"
+        ],
+        "browserVersion": "156.0.8078.4",
+        "platform": "darwin",
+        "extensionVersion": "0.7.3"
+      },
+      {
+        "name": "audio-csp",
+        "status": "passed",
+        "mode": "real-extension-local-tts-server-real-audio",
+        "checks": [
+          "严格CSP仍可显示操作条",
+          "页面禁止media-src不阻止offscreen朗读",
+          "音频实际播放与停止"
+        ],
+        "browserVersion": "156.0.8078.4",
+        "platform": "darwin",
+        "extensionVersion": "0.7.3"
+      },
+      {
+        "name": "page-boundaries",
+        "status": "passed",
+        "mode": "controlled-response-real-extension",
+        "checks": [
+          "可见换行保留词界",
+          "内联词语不拆散",
+          "隐藏换行不添空格",
+          "隐私段落排除",
+          "原格式与关闭恢复"
+        ],
+        "browserVersion": "156.0.8078.4",
+        "platform": "darwin",
+        "extensionVersion": "0.7.3"
+      },
+      {
+        "name": "page-rerender",
+        "status": "passed",
+        "mode": "controlled-response-real-extension",
+        "requests": 2,
+        "checks": [
+          "同文重绘恢复",
+          "重复重绘只有一份译文",
+          "仅删除译文恢复",
+          "无额外翻译调用",
+          "动态隐私属性",
+          "持续冲突有上限并暂停",
+          "暂停后不争抢DOM",
+          "主动重试恢复缓存",
+          "配额暂停后已有结果恢复",
+          "不绕过暂停重试",
+          "关闭后不重新插入"
+        ],
+        "browserVersion": "156.0.8078.4",
+        "platform": "darwin",
+        "extensionVersion": "0.7.3"
+      },
+      {
+        "name": "keyboard-focus",
+        "status": "passed",
+        "mode": "real-keyboard-controlled-provider",
+        "checks": [
+          "鼠标原生选区与Enter开启",
+          "Esc返回原文",
+          "关闭按钮返回原文",
+          "Tab从原文继续",
+          "离焦后清理临时tabindex",
+          "保留网页原tabindex",
+          "外部点击保留新焦点",
+          "外部键盘焦点不被抢回"
+        ],
+        "browserVersion": "156.0.8078.4",
+        "platform": "darwin",
+        "extensionVersion": "0.7.3"
+      },
+      {
+        "name": "scene-state",
+        "status": "passed",
+        "mode": "real-keyboard-and-accessibility-tree",
+        "checks": [
+          "按钮按下语义",
+          "Enter切换场景",
+          "视觉状态同步",
+          "回到翻译状态",
+          "切换不自动发送模型请求"
+        ],
+        "browserVersion": "156.0.8078.4",
+        "platform": "darwin",
+        "extensionVersion": "0.7.3"
+      }
+    ]
+  },
+  "startupProbe": {
+    "command": "node scripts/verify-page-startup.mjs",
+    "version": "0.7.3",
+    "packageSHA256": "291bee81fe7c5393ce335448fcf93308f2c20b9007b8f21738019afdab6278c3",
+    "results": [
+      {
+        "name": "mdn-1",
+        "url": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array",
+        "elapsed": 5649,
+        "readyWithin10s": true,
+        "timeline": [
+          {
+            "time": 1352,
+            "event": "host-absent",
+            "readyState": "loading",
+            "shadow": false,
+            "previousDetached": false
+          },
+          {
+            "time": 2721,
+            "event": "dom-ready",
+            "readyState": "interactive",
+            "shadow": false,
+            "previousDetached": false
+          },
+          {
+            "time": 2962,
+            "event": "host-present",
+            "readyState": "interactive",
+            "shadow": true,
+            "previousDetached": false
+          },
+          {
+            "time": 3258,
+            "event": "load",
+            "readyState": "complete",
+            "shadow": true,
+            "previousDetached": false
+          }
+        ],
+        "host": true,
+        "shadow": true,
+        "button": true,
+        "hidden": false,
+        "label": "翻译当前网页",
+        "disabled": false,
+        "rect": {
+          "x": 1382,
+          "y": 470.390625,
+          "width": 42,
+          "height": 42,
+          "top": 470.390625,
+          "right": 1424,
+          "bottom": 512.390625,
+          "left": 1382
+        },
+        "modal": false,
+        "hiddenAncestor": false,
+        "readyState": "complete",
+        "status": {
+          "active": false,
+          "scope": "smart",
+          "translated": 0,
+          "total": 0,
+          "error": "",
+          "empty": false
+        },
+        "upstreamCalls": 0
+      },
+      {
+        "name": "mdn-2",
+        "url": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array",
+        "elapsed": 6639,
+        "readyWithin10s": true,
+        "timeline": [
+          {
+            "time": 2451,
+            "event": "host-absent",
+            "readyState": "loading",
+            "shadow": false,
+            "previousDetached": false
+          },
+          {
+            "time": 3311,
+            "event": "dom-ready",
+            "readyState": "interactive",
+            "shadow": false,
+            "previousDetached": false
+          },
+          {
+            "time": 3549,
+            "event": "host-present",
+            "readyState": "interactive",
+            "shadow": true,
+            "previousDetached": false
+          },
+          {
+            "time": 3805,
+            "event": "load",
+            "readyState": "complete",
+            "shadow": true,
+            "previousDetached": false
+          }
+        ],
+        "host": true,
+        "shadow": true,
+        "button": true,
+        "hidden": false,
+        "label": "翻译当前网页",
+        "disabled": false,
+        "rect": {
+          "x": 1382,
+          "y": 470.390625,
+          "width": 42,
+          "height": 42,
+          "top": 470.390625,
+          "right": 1424,
+          "bottom": 512.390625,
+          "left": 1382
+        },
+        "modal": false,
+        "hiddenAncestor": false,
+        "readyState": "complete",
+        "status": {
+          "active": false,
+          "scope": "smart",
+          "translated": 0,
+          "total": 0,
+          "error": "",
+          "empty": false
+        },
+        "upstreamCalls": 0
+      },
+      {
+        "name": "mdn-3",
+        "url": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array",
+        "elapsed": 6276,
+        "readyWithin10s": true,
+        "timeline": [
+          {
+            "time": 1092,
+            "event": "host-absent",
+            "readyState": "loading",
+            "shadow": false,
+            "previousDetached": false
+          },
+          {
+            "time": 1613,
+            "event": "dom-ready",
+            "readyState": "interactive",
+            "shadow": false,
+            "previousDetached": false
+          },
+          {
+            "time": 2032,
+            "event": "load",
+            "readyState": "complete",
+            "shadow": false,
+            "previousDetached": false
+          },
+          {
+            "time": 3392,
+            "event": "host-present",
+            "readyState": "complete",
+            "shadow": true,
+            "previousDetached": false
+          }
+        ],
+        "host": true,
+        "shadow": true,
+        "button": true,
+        "hidden": false,
+        "label": "翻译当前网页",
+        "disabled": false,
+        "rect": {
+          "x": 1382,
+          "y": 470.390625,
+          "width": 42,
+          "height": 42,
+          "top": 470.390625,
+          "right": 1424,
+          "bottom": 512.390625,
+          "left": 1382
+        },
+        "modal": false,
+        "hiddenAncestor": false,
+        "readyState": "complete",
+        "status": {
+          "active": false,
+          "scope": "smart",
+          "translated": 0,
+          "total": 0,
+          "error": "",
+          "empty": false
+        },
+        "upstreamCalls": 0
+      },
+      {
+        "name": "python",
+        "url": "https://docs.python.org/3/library/asyncio-task.html",
+        "elapsed": 5336,
+        "readyWithin10s": true,
+        "timeline": [
+          {
+            "time": 1377,
+            "event": "host-absent",
+            "readyState": "loading",
+            "shadow": false,
+            "previousDetached": false
+          },
+          {
+            "time": 2651,
+            "event": "dom-ready",
+            "readyState": "interactive",
+            "shadow": false,
+            "previousDetached": false
+          },
+          {
+            "time": 2727,
+            "event": "load",
+            "readyState": "complete",
+            "shadow": false,
+            "previousDetached": false
+          },
+          {
+            "time": 2770,
+            "event": "host-present",
+            "readyState": "complete",
+            "shadow": true,
+            "previousDetached": false
+          }
+        ],
+        "host": true,
+        "shadow": true,
+        "button": true,
+        "hidden": false,
+        "label": "翻译当前网页",
+        "disabled": false,
+        "rect": {
+          "x": 1382,
+          "y": 470.390625,
+          "width": 42,
+          "height": 42,
+          "top": 470.390625,
+          "right": 1424,
+          "bottom": 512.390625,
+          "left": 1382
+        },
+        "modal": false,
+        "hiddenAncestor": false,
+        "readyState": "complete",
+        "status": {
+          "active": false,
+          "scope": "smart",
+          "translated": 0,
+          "total": 0,
+          "error": "",
+          "empty": false
+        },
+        "upstreamCalls": 0
+      }
+    ],
+    "interpretation": "four fresh profiles; no translation action; routing blocks provider requests and changes network conditions; no reproduction does not establish a fix or performance baseline"
+  },
+  "package": {
+    "filename": "translate-chrome-0.7.3.zip",
+    "sha256": "291bee81fe7c5393ce335448fcf93308f2c20b9007b8f21738019afdab6278c3",
+    "bytes": 593426,
+    "files": [
+      "LICENSE",
+      "THIRD_PARTY_LICENSES.txt",
+      "app.js",
+      "background.js",
+      "content.js",
+      "icons/128.png",
+      "icons/16.png",
+      "icons/32.png",
+      "icons/48.png",
+      "index.html",
+      "manifest.json",
+      "offscreen.html",
+      "offscreen.js",
+      "popup.css",
+      "popup.html",
+      "popup.js",
+      "services.css",
+      "services.html",
+      "services.js",
+      "styles.css",
+      "tabs.js"
+    ]
+  },
+  "limits": [
+    "未完成真人读屏验收",
+    "公共网页偶发就绪/等待超时仍未确认根因，未修改启动逻辑",
+    "没有新的真实供应商或账号权限测试",
+    "没有操作用户日常 Chrome 的安装或配置",
+    "真实采用与独立社区贡献仍需证据"
+  ]
+}

@@ -28,7 +28,7 @@ async function initialize() {
     </div>
     <section class="panel" role="dialog" aria-label="划词翻译" hidden>
       <div class="toolbar"><span class="brand"></span><button class="read-all" aria-label="朗读译文"></button><button class="copy-all" aria-label="复制译文"></button><button class="close" aria-label="关闭划词翻译"></button></div>
-      <nav class="scene-tabs" aria-label="所选内容操作"><button class="scene-translate" aria-selected="true">翻译</button><button class="scene-ai" aria-selected="false">问问 AI</button><button class="scene-settings" aria-label="模型与声音设置">${icon('settings')}</button></nav><div class="source" dir="auto"></div><div class="status" role="status"></div><div class="result" dir="auto"></div>
+      <nav class="scene-tabs" aria-label="所选内容操作"><button class="scene-translate" aria-pressed="true">翻译</button><button class="scene-ai" aria-pressed="false">问问 AI</button><button class="scene-settings" aria-label="模型与声音设置">${icon('settings')}</button></nav><div class="source" dir="auto"></div><div class="status" role="status"></div><div class="result" dir="auto"></div>
       <div class="chat-area" hidden></div><div class="panel-footer"><button class="retry" hidden>重试</button><button class="open-page">打开独立翻译页</button></div><p class="note">中文自动译英文，其他语言译中文 · Esc 关闭</p>
     </section>
     <aside class="page-note" hidden><p class="page-message" role="status"></p><button class="page-retry">重试</button><button class="page-all">翻译整个页面</button><button class="page-stop">显示原文</button></aside>
@@ -40,6 +40,7 @@ async function initialize() {
   $('.read-all').innerHTML = icon('speaker');
   let selected = null;
   let displayed = null;
+  let returnFocusTarget = null;
   let noticeTimer;
   const notify = message => { $('.notify').textContent = message; $('.notify').hidden = false; clearTimeout(noticeTimer); noticeTimer = setTimeout(() => { $('.notify').hidden = true; }, 4000); };
   const speech = new UnifiedSpeech(state => {
@@ -139,14 +140,44 @@ async function initialize() {
     computePosition(virtual, element, { strategy: 'fixed', placement: 'bottom-start', middleware: [offset(10), flip(), shift({ padding: 12 }), size({ padding: 12, apply({ availableHeight, elements }) { elements.floating.style.maxHeight = `${Math.max(180, Math.min(620, availableHeight))}px`; } })] }).then(({ x, y }) => { if (version === placementVersion) { element.style.left = `${x}px`; element.style.top = `${y}px`; } });
 
   }
-  function close() { controller.reset(); chat.reset(); chatSource = ''; speech.stop(); $('.panel').hidden = true; $('.selection-bar').hidden = true; displayed = null; }
+  function rememberFocus() {
+    if (!$('.panel').hidden) return;
+    const active = document.activeElement;
+    const anchor = window.getSelection()?.anchorNode;
+    returnFocusTarget = active && active !== host && active !== document.body && active !== document.documentElement
+      ? active : selected?.origin || (anchor?.nodeType === 1 ? anchor : anchor?.parentElement);
+    if (returnFocusTarget?.getRootNode() !== document) returnFocusTarget = null;
+  }
+  function close(restoreFocus = false) {
+    const target = restoreFocus && !$('.panel').hidden && document.activeElement === host ? returnFocusTarget : null;
+    controller.reset(); chat.reset(); chatSource = ''; speech.stop();
+    $('.panel').hidden = true; $('.selection-bar').hidden = true; displayed = null; returnFocusTarget = null;
+    if (target?.isConnected && typeof target.focus === 'function') {
+      target.focus({ preventScroll: true });
+      if (document.activeElement !== target && !target.hasAttribute('tabindex')) {
+        const cleanup = () => {
+          if (target.getAttribute('tabindex') === '-1') target.removeAttribute('tabindex');
+        };
+        // 普通段落须暂时可聚焦；过早删除 tabindex 会让 Chromium 立即丢失焦点。
+        target.setAttribute('tabindex', '-1');
+        target.addEventListener('blur', cleanup, { once: true });
+        try { target.focus({ preventScroll: true }); }
+        finally {
+          if (document.activeElement !== target) {
+            target.removeEventListener('blur', cleanup); cleanup();
+          }
+        }
+      }
+    }
+  }
   function openSelection(text = selected?.text) {
     if (!text?.trim()) return;
+    rememberFocus();
     speech.stop();
     chat.cancel();
     controller.reset();
     setScene('translate');
-    selected = { text: text.trim(), rect: selected?.rect };
+    selected = { text: text.trim(), rect: selected?.rect, origin: selected?.origin };
     $('.selection-bar').hidden = true;
     $('.panel').hidden = false;
     place($('.panel'), selected.rect);
@@ -166,12 +197,13 @@ async function initialize() {
     $('.panel').classList.toggle('ai-panel', isAI);
     $('.chat-area').hidden = !isAI;
     for (const selector of ['.result','.status','.panel-footer','.read-all','.copy-all']) $(selector).hidden = isAI;
-    $('.scene-translate').setAttribute('aria-selected', String(!isAI));
-    $('.scene-ai').setAttribute('aria-selected', String(isAI));
+    $('.scene-translate').setAttribute('aria-pressed', String(!isAI));
+    $('.scene-ai').setAttribute('aria-pressed', String(isAI));
     $('.note').textContent = isAI ? '仅将所选内容和本轮对话发给所选模型 · Esc 关闭' : '中文自动译英文，其他语言译中文 · Esc 关闭';
   }
   function openChat() {
     if (!selected?.text) return;
+    rememberFocus();
     controller.reset(); speech.stop(); setScene('ai');
     $('.selection-bar').hidden = true; $('.panel').hidden = false;
     place($('.panel'), selected.rect); $('.source').textContent = selected.text;
@@ -209,7 +241,7 @@ async function initialize() {
   $('.scene-ai').addEventListener('click', trustedAction(openChat));
   $('.scene-translate').addEventListener('click', trustedAction(() => openSelection()));
   $('.scene-settings').addEventListener('click', trustedAction(() => pageRpc('ct:assistant-open').catch(error => notify(error.message))));
-  $('.close').addEventListener('click', close);
+  $('.close').addEventListener('click', () => close(true));
   $('.speech-pause').addEventListener('click', trustedAction(() => speech.pause()));
   $('.speech-stop').addEventListener('click', trustedAction(() => speech.stop()));
   $('.retry').addEventListener('click', trustedAction(() => openSelection()));
@@ -234,12 +266,12 @@ async function initialize() {
     const text = selection.toString().trim();
     if (!text || Array.from(text).length > 10000) return;
     if (selected?.text !== text) speech.stop();
-    selected = { text, rect: selection.getRangeAt(0).getBoundingClientRect() };
+    selected = { text, rect: selection.getRangeAt(0).getBoundingClientRect(), origin: element };
     place($('.selection-bar'), selected.rect);
     $('.selection-bar').hidden = false;
   }
   document.addEventListener('pointerup', selectionAction);
-  document.addEventListener('keyup', event => { if (event.key === 'Escape') close(); else if (event.key === 'Shift' || event.shiftKey) selectionAction(event); });
+  document.addEventListener('keyup', event => { if (event.key === 'Escape') close(event.composedPath().includes(host)); else if (event.key === 'Shift' || event.shiftKey) selectionAction(event); });
   window.addEventListener('scroll', () => { $('.selection-bar').hidden = true; }, { passive: true });
   window.addEventListener('resize', () => { $('.selection-bar').hidden = true; if (!$('.panel').hidden) place($('.panel'), selected?.rect); });
   window.addEventListener('pagehide', () => { close(); pageTranslation.stop(); });

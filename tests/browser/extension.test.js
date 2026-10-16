@@ -14,6 +14,7 @@ import pageCSP from '../../scripts/browser-page-csp-smoke.mjs';
 import audioCSP from '../../scripts/browser-assistant-csp-smoke.mjs';
 import { boundaries, rerender } from '../../scripts/browser-page-compatibility-smoke.mjs';
 import realSite from '../../scripts/browser-page-real-sites.mjs';
+import { focusReturn, sceneState } from '../../scripts/browser-keyboard-smoke.mjs';
 
 const artifactPath = resolve('output/playwright');
 await mkdir(artifactPath, { recursive: true });
@@ -38,6 +39,8 @@ for (const [name, scenario, entry] of [
   ['audio-csp', audioCSP, 'article.html'],
   ['page-boundaries', boundaries, 'compatibility.html'],
   ['page-rerender', rerender, 'compatibility.html'],
+  ['keyboard-focus', focusReturn, 'article.html'],
+  ['scene-state', sceneState, 'article.html'],
   ...(process.env.TRANSLATE_LIVE_MICROSOFT === '1' ? [
     ['real-mdn', realSite, 'https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array'],
     ['real-python', realSite, 'https://docs.python.org/3/library/asyncio-task.html'],
