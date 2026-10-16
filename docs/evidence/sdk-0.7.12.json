@@ -135,11 +135,35 @@
     "testCredentialsExcluded": true
   },
   "release": {
-    "status": "prepared"
+    "status": "published",
+    "url": "https://github.com/ALVIN-YANG/chrome-translate/releases/tag/v0.7.12",
+    "tag": "v0.7.12",
+    "targetCommit": "be9409bab7eb0528556ee269b6d9ddac66d65110",
+    "publicZipHTTP": 200,
+    "publicChecksumHTTP": 200,
+    "publicDownloadMatchesLocal": true,
+    "publicChecksumVerified": true,
+    "zipCRCVerified": true,
+    "allowlistedFiles": 21
   },
   "scope": {
     "providerResponses": "controlled-fixtures",
     "liveProviderCalls": 0,
     "userChromeUpdated": false
+  },
+  "sourceCommit": "be9409bab7eb0528556ee269b6d9ddac66d65110",
+  "ci": {
+    "runId": 38863561803,
+    "url": "https://github.com/ALVIN-YANG/chrome-translate/actions/runs/38863561803",
+    "conclusion": "success",
+    "jobs": [
+      "Node 22",
+      "Node 24",
+      "Chromium extension"
+    ],
+    "browserScenarios": 17,
+    "browserChecks": 171,
+    "linuxPackageMatchesLocal": true,
+    "linuxBrowserPackageMatchesLocal": true
   }
 }
