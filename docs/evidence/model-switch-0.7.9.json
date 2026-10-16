@@ -232,5 +232,226 @@
     "早先偶发入口就绪超时仍未复现或归因",
     "未操作用户日常Chrome安装，也未新增付费模型调用",
     "本轮未取得新增真实采用或独立社区贡献证据"
-  ]
+  ],
+  "ci": {
+    "url": "https://github.com/ALVIN-YANG/chrome-translate/actions/runs/38854110461",
+    "headSha": "5372244609327d1cab2684b4aaedb75bec91acd1",
+    "conclusion": "success",
+    "jobs": [
+      {
+        "name": "Chromium extension",
+        "conclusion": "success"
+      },
+      {
+        "name": "Node 22",
+        "conclusion": "success"
+      },
+      {
+        "name": "Node 24",
+        "conclusion": "success"
+      }
+    ],
+    "scenarios": [
+      {
+        "name": "assistant-model-switch",
+        "status": "passed",
+        "checks": 10,
+        "extensionVersion": "0.7.9",
+        "platform": "linux",
+        "browserVersion": "156.0.8078.4"
+      },
+      {
+        "name": "assistant-preferences",
+        "status": "passed",
+        "checks": 10,
+        "extensionVersion": "0.7.9",
+        "platform": "linux",
+        "browserVersion": "156.0.8078.4"
+      },
+      {
+        "name": "assistant",
+        "status": "passed",
+        "checks": 18,
+        "extensionVersion": "0.7.9",
+        "platform": "linux",
+        "browserVersion": "156.0.8078.4"
+      },
+      {
+        "name": "audio-csp",
+        "status": "passed",
+        "checks": 3,
+        "extensionVersion": "0.7.9",
+        "platform": "linux",
+        "browserVersion": "156.0.8078.4"
+      },
+      {
+        "name": "keyboard-focus",
+        "status": "passed",
+        "checks": 8,
+        "extensionVersion": "0.7.9",
+        "platform": "linux",
+        "browserVersion": "156.0.8078.4"
+      },
+      {
+        "name": "page-boundaries",
+        "status": "passed",
+        "checks": 5,
+        "extensionVersion": "0.7.9",
+        "platform": "linux",
+        "browserVersion": "156.0.8078.4"
+      },
+      {
+        "name": "page-csp",
+        "status": "passed",
+        "checks": 4,
+        "extensionVersion": "0.7.9",
+        "platform": "linux",
+        "browserVersion": "156.0.8078.4"
+      },
+      {
+        "name": "page-navigation",
+        "status": "passed",
+        "checks": 11,
+        "extensionVersion": "0.7.9",
+        "platform": "linux",
+        "browserVersion": "156.0.8078.4"
+      },
+      {
+        "name": "page-pending",
+        "status": "passed",
+        "checks": 14,
+        "extensionVersion": "0.7.9",
+        "platform": "linux",
+        "browserVersion": "156.0.8078.4"
+      },
+      {
+        "name": "page-rerender",
+        "status": "passed",
+        "checks": 11,
+        "extensionVersion": "0.7.9",
+        "platform": "linux",
+        "browserVersion": "156.0.8078.4"
+      },
+      {
+        "name": "page-updates",
+        "status": "passed",
+        "checks": 7,
+        "extensionVersion": "0.7.9",
+        "platform": "linux",
+        "browserVersion": "156.0.8078.4"
+      },
+      {
+        "name": "real-site-verifier",
+        "status": "passed",
+        "checks": 7,
+        "extensionVersion": "0.7.9",
+        "platform": "linux",
+        "browserVersion": "156.0.8078.4"
+      },
+      {
+        "name": "scene-state",
+        "status": "passed",
+        "checks": 5,
+        "extensionVersion": "0.7.9",
+        "platform": "linux",
+        "browserVersion": "156.0.8078.4"
+      },
+      {
+        "name": "settings-persistence",
+        "status": "passed",
+        "checks": 6,
+        "extensionVersion": "0.7.9",
+        "platform": "linux",
+        "browserVersion": "156.0.8078.4"
+      },
+      {
+        "name": "webpage",
+        "status": "passed",
+        "checks": 23,
+        "extensionVersion": "0.7.9",
+        "platform": "linux",
+        "browserVersion": "156.0.8078.4"
+      },
+      {
+        "name": "workspace",
+        "status": "passed",
+        "checks": 14,
+        "extensionVersion": "0.7.9",
+        "platform": "linux",
+        "browserVersion": "156.0.8078.4"
+      }
+    ],
+    "modelSwitch": {
+      "status": "passed",
+      "mode": "real-extension-controlled-sdk-and-settings-ui",
+      "providers": [
+        "deepseek",
+        "openai",
+        "openai"
+      ],
+      "labelsAfterSave": {
+        "brand": "OpenAI",
+        "composer": "OpenAI"
+      },
+      "draftPreserved": true,
+      "unavailableBlockedBeforePort": true,
+      "configuredAgain": true,
+      "checks": [
+        "打开及保存无自动提问",
+        "真实设置页切换服务",
+        "请求使用新接口",
+        "品牌与输入区标识同步",
+        "新旧回答标记实际服务",
+        "未发送草稿保留",
+        "未配置时前端拦截",
+        "未配置时问题保留",
+        "恢复配置清理旧错误",
+        "恢复后主动提问成功"
+      ],
+      "browserVersion": "156.0.8078.4",
+      "platform": "linux",
+      "extensionVersion": "0.7.9"
+    },
+    "packageSha256": "cad9b3478ff75aec70500f1145b5c0a78e79391aa940c3ed173e987e2d10382c",
+    "localAndLinuxZipIdentical": true
+  },
+  "release": {
+    "url": "https://github.com/ALVIN-YANG/chrome-translate/releases/tag/v0.7.9",
+    "tag": "v0.7.9",
+    "commit": "5372244609327d1cab2684b4aaedb75bec91acd1",
+    "publishedAt": "2026-10-16T05:10:00Z",
+    "draft": false,
+    "prerelease": false,
+    "assets": [
+      {
+        "name": "translate-chrome-0.7.9.zip",
+        "bytes": 594314,
+        "digest": "sha256:cad9b3478ff75aec70500f1145b5c0a78e79391aa940c3ed173e987e2d10382c",
+        "url": "https://github.com/ALVIN-YANG/chrome-translate/releases/download/v0.7.9/translate-chrome-0.7.9.zip"
+      },
+      {
+        "name": "translate-chrome-0.7.9.zip.sha256",
+        "bytes": 93,
+        "digest": "sha256:c66311d8c71090a045a2f26b29ffbe319ad518b271b2e85c5609d65e289b031a",
+        "url": "https://github.com/ALVIN-YANG/chrome-translate/releases/download/v0.7.9/translate-chrome-0.7.9.zip.sha256"
+      }
+    ],
+    "anonymousDownload": {
+      "zipHttpStatus": 200,
+      "checksumHttpStatus": 200,
+      "sha256": "cad9b3478ff75aec70500f1145b5c0a78e79391aa940c3ed173e987e2d10382c",
+      "identicalToLocalAndLinux": true,
+      "checksumMatches": true,
+      "crc": "passed",
+      "manifest": "0.7.9",
+      "mitLicense": true,
+      "thirdPartyLicenses": true,
+      "allowlistedFiles": true,
+      "testCredentialsAbsent": true
+    }
+  },
+  "cleanup": {
+    "isolatedProfilesRemaining": 0,
+    "temporaryInstrumentationAdded": false
+  }
 }
