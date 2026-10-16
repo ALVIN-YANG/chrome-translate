@@ -542,5 +542,136 @@
     ],
     "correction": "clear the previous selection before each fresh native drag; the same held-mouse reproduction then passed all eight focus checks; the 700ms diagnostic delay was removed from the final test",
     "productionCodeChanged": false
+  },
+  "ci": {
+    "url": "https://github.com/ALVIN-YANG/chrome-translate/actions/runs/38840960510",
+    "commit": "2de16554ccdedca5f01882ec20519159179d13fc",
+    "node22": "success",
+    "node24": "success",
+    "chromium": "success",
+    "linuxMatchesMac": true,
+    "package": {
+      "filename": "translate-chrome-0.7.3.zip",
+      "sha256": "291bee81fe7c5393ce335448fcf93308f2c20b9007b8f21738019afdab6278c3",
+      "bytes": 593426,
+      "files": [
+        "LICENSE",
+        "THIRD_PARTY_LICENSES.txt",
+        "app.js",
+        "background.js",
+        "content.js",
+        "icons/128.png",
+        "icons/16.png",
+        "icons/32.png",
+        "icons/48.png",
+        "index.html",
+        "manifest.json",
+        "offscreen.html",
+        "offscreen.js",
+        "popup.css",
+        "popup.html",
+        "popup.js",
+        "services.css",
+        "services.html",
+        "services.js",
+        "styles.css",
+        "tabs.js"
+      ]
+    },
+    "scenarios": [
+      {
+        "name": "workspace",
+        "status": "passed",
+        "platform": "linux",
+        "browserVersion": "156.0.8078.4",
+        "extensionVersion": "0.7.3",
+        "checks": 14
+      },
+      {
+        "name": "webpage",
+        "status": "passed",
+        "platform": "linux",
+        "browserVersion": "156.0.8078.4",
+        "extensionVersion": "0.7.3",
+        "checks": 23
+      },
+      {
+        "name": "assistant",
+        "status": "passed",
+        "platform": "linux",
+        "browserVersion": "156.0.8078.4",
+        "extensionVersion": "0.7.3",
+        "checks": 18
+      },
+      {
+        "name": "page-csp",
+        "status": "passed",
+        "platform": "linux",
+        "browserVersion": "156.0.8078.4",
+        "extensionVersion": "0.7.3",
+        "checks": 4
+      },
+      {
+        "name": "audio-csp",
+        "status": "passed",
+        "platform": "linux",
+        "browserVersion": "156.0.8078.4",
+        "extensionVersion": "0.7.3",
+        "checks": 3
+      },
+      {
+        "name": "page-boundaries",
+        "status": "passed",
+        "platform": "linux",
+        "browserVersion": "156.0.8078.4",
+        "extensionVersion": "0.7.3",
+        "checks": 5
+      },
+      {
+        "name": "page-rerender",
+        "status": "passed",
+        "platform": "linux",
+        "browserVersion": "156.0.8078.4",
+        "extensionVersion": "0.7.3",
+        "checks": 11
+      },
+      {
+        "name": "keyboard-focus",
+        "status": "passed",
+        "platform": "linux",
+        "browserVersion": "156.0.8078.4",
+        "extensionVersion": "0.7.3",
+        "checks": 8
+      },
+      {
+        "name": "scene-state",
+        "status": "passed",
+        "platform": "linux",
+        "browserVersion": "156.0.8078.4",
+        "extensionVersion": "0.7.3",
+        "checks": 5
+      }
+    ]
+  },
+  "release": {
+    "url": "https://github.com/ALVIN-YANG/chrome-translate/releases/tag/v0.7.3",
+    "targetCommit": "2de16554ccdedca5f01882ec20519159179d13fc",
+    "draft": false,
+    "zipHttpStatus": 200,
+    "checksumHttpStatus": 200,
+    "downloadAuthentication": "none; curl -q without Authorization or netrc",
+    "bytes": 593426,
+    "sha256": "291bee81fe7c5393ce335448fcf93308f2c20b9007b8f21738019afdab6278c3",
+    "matchesLocalAndCI": true,
+    "manifest": "0.7.3",
+    "license": "MIT",
+    "zipIntegrity": "passed"
+  },
+  "cleanup": {
+    "temporaryDirectoriesByPrefix": {
+      "chrome-translate-test-": 0,
+      "chrome-translate-release-test-": 0,
+      "translate-startup-probe-": 0
+    }
   }
 }
