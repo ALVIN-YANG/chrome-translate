@@ -164,7 +164,7 @@ npm run dev
 
 [v0.7.3](https://github.com/ALVIN-YANG/chrome-translate/releases/tag/v0.7.3) 修复划词浮层关闭后的键盘焦点，并让“翻译 / 问问 AI”按钮正确暴露当前状态。83 项 Node 测试、九组 macOS/Linux Chromium 安装包回归及 GitHub Node 22/24 检查通过，包括 Esc、关闭按钮、Tab 继续操作、外部焦点和按钮状态；公开下载包与两平台产物逐字节相同。详见 [本版验证数据](docs/evidence/keyboard-0.7.3.json)。这些自动检查不等于人工读屏验收。
 
-MDN/Python 文档的真实微软、原文与代码保留、关闭恢复记录来自 [v0.7.2](docs/evidence/compatibility-0.7.2.json)。联网整组曾出现就绪/等待超时；本轮四次新配置启动探针未复现入口故障，尚未确认根因，未宣称修复。
+开发分支新增第十组受控场景：只有标题有译文时必须失败，并覆盖译文加载后的排版位移。对 v0.7.3 安装包的 MDN/Python 真实网络检查已覆盖首屏正文、远处段落滚动加载、原文与代码保留、关闭恢复，详见 [正文验证数据](docs/evidence/article-validation-0.7.3.json)。联网整组曾出现就绪/等待超时，本轮仍未复现早先的入口故障，尚未确认根因。
 
 MiniMax LLM/TTS 的真实回答、音频播放和暂停恢复证据来自 v0.7.0；微软 15 种目标语言的真实接口证据来自 v0.3.0。其他服务由 SDK/协议及受控响应覆盖，真实账号权限与翻译质量需自行测试，不能把这些证据混用。历史过程见 [验证记录](docs/验证记录.md)。
 

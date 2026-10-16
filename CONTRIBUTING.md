@@ -26,7 +26,7 @@ npm run test:browser
 
 Linux 首次运行可使用 `npx playwright install --with-deps --no-shell chromium` 安装系统库。可用 `HEADED=1 npm run test:browser` 显示测试窗口（该环境变量写法适用于 macOS/Linux）。
 
-测试使用 Playwright 自带 Chromium、临时浏览器配置和本机随机端口，不读取日常 Chrome 配置，不需要真实 Key，不调用付费模型。先生成实际 ZIP 并解压，再用每组独立的浏览器配置加载，验证独立页、网页双语、划词 AI、音频播放、严格 CSP、键盘关闭后的焦点与场景按钮状态。供应商响应受控，不能证明真实账号权限、翻译质量、真人听感或读屏体验。系统声音事件受控；云端播放链路使用生成的测试音。
+测试使用 Playwright 自带 Chromium、临时浏览器配置和本机随机端口，不读取日常 Chrome 配置，不需要真实 Key，不调用付费模型。先生成实际 ZIP 并解压，再用每组独立的浏览器配置加载，验证独立页、网页双语、划词 AI、音频播放、严格 CSP、键盘关闭后的焦点与场景按钮状态。正文验证器另有受控反例：标题有中文、正文无译文时必须失败；正文和滚动加载成功时才通过。供应商响应受控，不能证明真实账号权限、翻译质量、真人听感或读屏体验。系统声音事件受控；云端播放链路使用生成的测试音。
 
 结果 JSON、截图及失败时的 trace 放在 `output/playwright/`。这些文件只含测试数据；不要向公开 Issue 上传含真实 Key、私人网页、会话、原文或请求头的日志。真实服务验证脚本需额外授权凭据和费用，不属于默认 CI。
 
@@ -34,10 +34,10 @@ Linux 首次运行可使用 `npx playwright install --with-deps --no-shell chrom
 
 ```sh
 npm run build
-TRANSLATE_LIVE_MICROSOFT=1 node --test --test-name-pattern='real-' tests/browser/extension.test.js
+TRANSLATE_LIVE_MICROSOFT=1 node --test --test-name-pattern='real-mdn|real-python' tests/browser/extension.test.js
 ```
 
-此模式只访问固定的 MDN 与 Python 官方文档，不读取用户页面，也不使用付费模型。它验证中文译文、请求无凭据、原段落与代码文本、关闭恢复；结果受网络、免 Key 接口和网站自身更新影响。为避免公共网站资源过多，不收集完整 trace；截图失败会单独记录，不替代功能断言。校验工具会读取高亮组件的开放 Shadow DOM 来核对代码文本，扩展自身仍不翻译网站 Shadow DOM。
+此模式只访问固定的 MDN 与 Python 官方文档，不读取用户页面，也不使用付费模型。它要求首屏英文正文节点内显示中文译文，再选择两个视口之外尚未翻译的正文、滚动并验证译文出现；中文标题不能替代正文证据。同时检查请求无凭据、原段落与代码文本、关闭恢复。结果受网络、免 Key 接口和网站自身更新影响，不证明整页翻译完成或人工翻译质量。为避免公共网站资源过多，不收集完整 trace；截图失败会单独记录，不替代功能断言。校验工具会读取高亮组件的开放 Shadow DOM 来核对代码文本，扩展自身仍不翻译网站 Shadow DOM。
 
 只排查公共网页的扩展入口是否出现时，构建后运行 `node scripts/verify-page-startup.mjs`。它在四个新建配置中打开三次 MDN、一次 Python 文档，检查十秒内入口是否可操作及随后是否仍存在；不实际点击，不触发翻译，并拦截可能发出的微软/词典请求。记录保存到 `output/startup-probe.json`。该探针有网络路由干预，只提供这些样本的诊断记录，不作为性能基准，也不能凭通过就认定偶发启动问题已修复。
 
