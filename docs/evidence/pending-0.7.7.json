@@ -370,5 +370,235 @@
     "早先偶发入口就绪超时仍未复现或归因",
     "未操作用户日常Chrome安装，也未新增付费模型调用",
     "公开仓库当前无开放Issue或PR，Star与Fork均为0，真实采用与独立贡献仍缺证据"
-  ]
+  ],
+  "ci": {
+    "url": "https://github.com/ALVIN-YANG/chrome-translate/actions/runs/38851458220",
+    "headSha": "5baba43993941dab63fbe6a46274ad896c4a8af2",
+    "conclusion": "success",
+    "jobs": [
+      {
+        "name": "Node 22",
+        "conclusion": "success"
+      },
+      {
+        "name": "Node 24",
+        "conclusion": "success"
+      },
+      {
+        "name": "Chromium extension",
+        "conclusion": "success"
+      }
+    ],
+    "scenarios": [
+      {
+        "name": "assistant",
+        "status": "passed",
+        "checks": 18,
+        "extensionVersion": "0.7.7",
+        "platform": "linux",
+        "browserVersion": "156.0.8078.4"
+      },
+      {
+        "name": "audio-csp",
+        "status": "passed",
+        "checks": 3,
+        "extensionVersion": "0.7.7",
+        "platform": "linux",
+        "browserVersion": "156.0.8078.4"
+      },
+      {
+        "name": "keyboard-focus",
+        "status": "passed",
+        "checks": 8,
+        "extensionVersion": "0.7.7",
+        "platform": "linux",
+        "browserVersion": "156.0.8078.4"
+      },
+      {
+        "name": "page-boundaries",
+        "status": "passed",
+        "checks": 5,
+        "extensionVersion": "0.7.7",
+        "platform": "linux",
+        "browserVersion": "156.0.8078.4"
+      },
+      {
+        "name": "page-csp",
+        "status": "passed",
+        "checks": 4,
+        "extensionVersion": "0.7.7",
+        "platform": "linux",
+        "browserVersion": "156.0.8078.4"
+      },
+      {
+        "name": "page-navigation",
+        "status": "passed",
+        "checks": 11,
+        "extensionVersion": "0.7.7",
+        "platform": "linux",
+        "browserVersion": "156.0.8078.4"
+      },
+      {
+        "name": "page-pending",
+        "status": "passed",
+        "checks": 14,
+        "extensionVersion": "0.7.7",
+        "platform": "linux",
+        "browserVersion": "156.0.8078.4"
+      },
+      {
+        "name": "page-rerender",
+        "status": "passed",
+        "checks": 11,
+        "extensionVersion": "0.7.7",
+        "platform": "linux",
+        "browserVersion": "156.0.8078.4"
+      },
+      {
+        "name": "page-updates",
+        "status": "passed",
+        "checks": 7,
+        "extensionVersion": "0.7.7",
+        "platform": "linux",
+        "browserVersion": "156.0.8078.4"
+      },
+      {
+        "name": "real-site-verifier",
+        "status": "passed",
+        "checks": 7,
+        "extensionVersion": "0.7.7",
+        "platform": "linux",
+        "browserVersion": "156.0.8078.4"
+      },
+      {
+        "name": "scene-state",
+        "status": "passed",
+        "checks": 5,
+        "extensionVersion": "0.7.7",
+        "platform": "linux",
+        "browserVersion": "156.0.8078.4"
+      },
+      {
+        "name": "settings-persistence",
+        "status": "passed",
+        "checks": 6,
+        "extensionVersion": "0.7.7",
+        "platform": "linux",
+        "browserVersion": "156.0.8078.4"
+      },
+      {
+        "name": "webpage",
+        "status": "passed",
+        "checks": 23,
+        "extensionVersion": "0.7.7",
+        "platform": "linux",
+        "browserVersion": "156.0.8078.4"
+      },
+      {
+        "name": "workspace",
+        "status": "passed",
+        "checks": 14,
+        "extensionVersion": "0.7.7",
+        "platform": "linux",
+        "browserVersion": "156.0.8078.4"
+      }
+    ],
+    "pending": {
+      "status": "passed",
+      "mode": "real-extension-controlled-provider",
+      "cases": [
+        {
+          "status": "passed",
+          "waitForScan": true,
+          "totalAtRelease": 10,
+          "requests": 2,
+          "sentParagraphs": 10,
+          "checks": [
+            "慢请求期间其余正文排队",
+            "首批未完成时变更正文",
+            "删除或替换及祖先排除的排队正文不发送",
+            "替换后的正文只发送一次",
+            "祖先不翻译标记生效",
+            "祖先隐藏内容不插入",
+            "停止清理译文"
+          ]
+        },
+        {
+          "status": "passed",
+          "waitForScan": false,
+          "totalAtRelease": 13,
+          "requests": 3,
+          "sentParagraphs": 10,
+          "checks": [
+            "慢请求期间其余正文排队",
+            "首批未完成时变更正文",
+            "删除或替换及祖先排除的排队正文不发送",
+            "替换后的正文只发送一次",
+            "祖先不翻译标记生效",
+            "祖先隐藏内容不插入",
+            "停止清理译文"
+          ]
+        }
+      ],
+      "checks": [
+        "扫描后响应：慢请求期间其余正文排队",
+        "扫描后响应：首批未完成时变更正文",
+        "扫描后响应：删除或替换及祖先排除的排队正文不发送",
+        "扫描后响应：替换后的正文只发送一次",
+        "扫描后响应：祖先不翻译标记生效",
+        "扫描后响应：祖先隐藏内容不插入",
+        "扫描后响应：停止清理译文",
+        "直接响应：慢请求期间其余正文排队",
+        "直接响应：首批未完成时变更正文",
+        "直接响应：删除或替换及祖先排除的排队正文不发送",
+        "直接响应：替换后的正文只发送一次",
+        "直接响应：祖先不翻译标记生效",
+        "直接响应：祖先隐藏内容不插入",
+        "直接响应：停止清理译文"
+      ],
+      "browserVersion": "156.0.8078.4",
+      "platform": "linux",
+      "extensionVersion": "0.7.7"
+    },
+    "packageSha256": "e809fa25f4840d9fed23d0baffc7e11b0edc263209206785e6458b9f84c5b2c2",
+    "localAndLinuxZipIdentical": true
+  },
+  "release": {
+    "url": "https://github.com/ALVIN-YANG/chrome-translate/releases/tag/v0.7.7",
+    "tag": "v0.7.7",
+    "commit": "5baba43993941dab63fbe6a46274ad896c4a8af2",
+    "publishedAt": "2026-10-16T04:38:37Z",
+    "draft": false,
+    "prerelease": false,
+    "assets": [
+      {
+        "name": "translate-chrome-0.7.7.zip",
+        "bytes": 594253,
+        "digest": "sha256:e809fa25f4840d9fed23d0baffc7e11b0edc263209206785e6458b9f84c5b2c2",
+        "url": "https://github.com/ALVIN-YANG/chrome-translate/releases/download/v0.7.7/translate-chrome-0.7.7.zip"
+      },
+      {
+        "name": "translate-chrome-0.7.7.zip.sha256",
+        "bytes": 93,
+        "digest": "sha256:a7da83cd70e854c31bf2d10fc63673c383f42be2694e36cca547bcde46d91d23",
+        "url": "https://github.com/ALVIN-YANG/chrome-translate/releases/download/v0.7.7/translate-chrome-0.7.7.zip.sha256"
+      }
+    ],
+    "anonymousDownload": {
+      "zipHttpStatus": 200,
+      "checksumHttpStatus": 200,
+      "sha256": "e809fa25f4840d9fed23d0baffc7e11b0edc263209206785e6458b9f84c5b2c2",
+      "identicalToLocalAndLinux": true,
+      "checksumMatches": true,
+      "crc": "passed",
+      "manifest": "0.7.7",
+      "mitLicense": true,
+      "thirdPartyLicenses": true,
+      "allowlistedFiles": true
+    }
+  },
+  "cleanup": {
+    "isolatedProfilesRemaining": 0,
+    "temporaryInstrumentationAdded": false
+  }
 }

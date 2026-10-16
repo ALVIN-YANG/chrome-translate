@@ -168,7 +168,7 @@ npm run dev
 | `scripts/` | 构建、预览及浏览器验证 |
 | `docs/` | 使用截图与验证记录 |
 
-v0.7.7 修复已删除、替换或排除的排队正文仍被发送的问题。87 项 Node 测试、十四组本机 Chromium 安装包场景共 136 项检查、2,000 段合成长文及 MDN/Python 实测通过，详见 [本版验证数据](docs/evidence/pending-0.7.7.json)。自动检查不等于用户安装或人工读屏验收，也不保证所有网页兼容。持续更新等待见 [v0.7.6 验证](docs/evidence/updates-0.7.6.json)，页面跳转边界见 [v0.7.5 验证](docs/evidence/navigation-0.7.5.json)，配置保存见 [v0.7.4 验证](docs/evidence/settings-0.7.4.json)。
+[v0.7.7](https://github.com/ALVIN-YANG/chrome-translate/releases/tag/v0.7.7) 修复已删除、替换或排除的排队正文仍被发送的问题。87 项 Node 测试、十四组 macOS/Linux Chromium 安装包场景共 136 项检查及 GitHub Node 22/24 检查通过；另通过本机 2,000 段合成长文及 MDN/Python 实测。公开下载包与两平台产物逐字节一致，详见 [本版验证数据](docs/evidence/pending-0.7.7.json)。自动检查不等于用户安装或人工读屏验收，也不保证所有网页兼容。持续更新等待见 [v0.7.6 验证](docs/evidence/updates-0.7.6.json)，页面跳转边界见 [v0.7.5 验证](docs/evidence/navigation-0.7.5.json)，配置保存见 [v0.7.4 验证](docs/evidence/settings-0.7.4.json)。
 
 当前版本的 MDN/Python 真实网络检查覆盖首屏正文、远处段落滚动加载、原文与代码保留、关闭恢复。验证工具排除标题和兼容性控件误判，并覆盖译文加载后的排版位移，设计与反例见 [正文验证数据](docs/evidence/article-validation-0.7.3.json)。划词键盘焦点与场景按钮见 [v0.7.3 验证](docs/evidence/keyboard-0.7.3.json)。联网整组曾出现就绪/等待超时，本轮仍未复现早先入口故障，尚未确认根因。
 
