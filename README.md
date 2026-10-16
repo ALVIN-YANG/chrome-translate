@@ -20,6 +20,8 @@
 
 工具栏或独立页里的 **「模型与声音」** 打开配置页。模型与语音独立选择，不改变原有翻译服务的选择；可修改 API Key、基础地址、模型、音色 ID、语速和回答偏好。MiniMax 模型与声音可共用一个 Key；DeepSeek、Gemini、智谱、硅基流动、Kimi 可沿用已有翻译 Key，也可单独填写。
 
+仅调整朗读偏好时，不中断正在生成的 AI 回答；切换声音服务后，已有对话和未发送的追问草稿仍保留。
+
 LLM 预设包括 **MiniMax、DeepSeek、OpenAI、Claude、Gemini、智谱、通义千问、硅基流动、Kimi Coding Plan、Ollama**，另支持自定义 OpenAI Chat Completions、Anthropic Messages 和 Google Gemini 接口。MiniMax 默认 `MiniMax-M2.7`，使用 Anthropic 兼容协议；DeepSeek 默认 `deepseek-flash`。模型名与地址均可修改。
 
 TTS 预设包括 **系统声音、MiniMax、OpenAI、ElevenLabs、硅基流动**，另支持自定义 OpenAI Audio Speech、MiniMax 和 ElevenLabs 协议。默认系统声音无需 Key；优先适配的 MiniMax 使用 `speech-2.8-turbo`，音色留空时按中英文选择已验证的系统音色，也可填平台自己的音色 ID。用户已有的克隆音色可通过 ID 使用，本插件不创建克隆音色。
@@ -168,9 +170,9 @@ npm run dev
 | `scripts/` | 构建、预览及浏览器验证 |
 | `docs/` | 使用截图与验证记录 |
 
-[v0.7.7](https://github.com/ALVIN-YANG/chrome-translate/releases/tag/v0.7.7) 修复已删除、替换或排除的排队正文仍被发送的问题。87 项 Node 测试、十四组 macOS/Linux Chromium 安装包场景共 136 项检查及 GitHub Node 22/24 检查通过；另通过本机 2,000 段合成长文及 MDN/Python 实测。公开下载包与两平台产物逐字节一致，详见 [本版验证数据](docs/evidence/pending-0.7.7.json)。自动检查不等于用户安装或人工读屏验收，也不保证所有网页兼容。持续更新等待见 [v0.7.6 验证](docs/evidence/updates-0.7.6.json)，页面跳转边界见 [v0.7.5 验证](docs/evidence/navigation-0.7.5.json)，配置保存见 [v0.7.4 验证](docs/evidence/settings-0.7.4.json)。
+v0.7.8 修复修改朗读偏好会取消 AI 回答、切换声音后丢失对话和草稿的问题。87 项 Node 测试、十五组本机 Chromium 安装包场景共 146 项检查通过，详见 [本版验证数据](docs/evidence/preferences-0.7.8.json)。自动检查不等于用户安装或人工读屏验收，也不保证所有网页兼容。待发送正文清理及长文检查见 [v0.7.7 验证](docs/evidence/pending-0.7.7.json)，持续更新等待见 [v0.7.6 验证](docs/evidence/updates-0.7.6.json)，页面跳转边界见 [v0.7.5 验证](docs/evidence/navigation-0.7.5.json)，配置保存见 [v0.7.4 验证](docs/evidence/settings-0.7.4.json)。
 
-当前版本的 MDN/Python 真实网络检查覆盖首屏正文、远处段落滚动加载、原文与代码保留、关闭恢复。验证工具排除标题和兼容性控件误判，并覆盖译文加载后的排版位移，设计与反例见 [正文验证数据](docs/evidence/article-validation-0.7.3.json)。划词键盘焦点与场景按钮见 [v0.7.3 验证](docs/evidence/keyboard-0.7.3.json)。联网整组曾出现就绪/等待超时，本轮仍未复现早先入口故障，尚未确认根因。
+v0.7.7 的 MDN/Python 真实网络检查覆盖首屏正文、远处段落滚动加载、原文与代码保留、关闭恢复。验证工具排除标题和兼容性控件误判，并覆盖译文加载后的排版位移，设计与反例见 [正文验证数据](docs/evidence/article-validation-0.7.3.json)。划词键盘焦点与场景按钮见 [v0.7.3 验证](docs/evidence/keyboard-0.7.3.json)。联网整组曾出现就绪/等待超时，早先入口故障尚未确认根因。
 
 MiniMax LLM/TTS 的真实回答、音频播放和暂停恢复证据来自 v0.7.0；微软 15 种目标语言的真实接口证据来自 v0.3.0。其他服务由 SDK/协议及受控响应覆盖，真实账号权限与翻译质量需自行测试，不能把这些证据混用。历史过程见 [验证记录](docs/验证记录.md)。
 

@@ -20,6 +20,7 @@ import settingsPersistence from '../../scripts/browser-settings-smoke.mjs';
 import pageNavigation from '../../scripts/browser-page-navigation-smoke.mjs';
 import pageUpdates from '../../scripts/browser-page-updates-smoke.mjs';
 import pagePending from '../../scripts/browser-page-pending-smoke.mjs';
+import assistantPreferences from '../../scripts/browser-assistant-preferences-smoke.mjs';
 
 const artifactPath = resolve('output/playwright');
 await mkdir(artifactPath, { recursive: true });
@@ -51,6 +52,7 @@ for (const [name, scenario, entry] of [
   ['page-navigation', pageNavigation, 'article.html'],
   ['page-updates', pageUpdates, 'article.html'],
   ['page-pending', pagePending, 'article.html'],
+  ['assistant-preferences', assistantPreferences, 'article.html'],
   ...(process.env.TRANSLATE_LIVE_MICROSOFT === '1' ? [
     ['real-mdn', realSite, 'https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array'],
     ['real-python', realSite, 'https://docs.python.org/3/library/asyncio-task.html'],

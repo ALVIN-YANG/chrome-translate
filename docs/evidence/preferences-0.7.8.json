@@ -1,0 +1,211 @@
+{
+  "version": "0.7.8",
+  "date": "2026-10-16",
+  "baseline": "26c53ce500a7571fd7dfe34e3b07ee97b198da2d",
+  "beforeFix": {
+    "command": "node --test --test-name-pattern='assistant-preferences' tests/browser/extension.test.js",
+    "reproductions": 3,
+    "observed": "Saving speech rate 1.0 to 1.1 cancelled a pending AI answer even though the public LLM configuration stayed identical.",
+    "control": "Saving without modifying settings kept the same pending request running; the controlled SDK response had not been released in either case."
+  },
+  "implementation": {
+    "change": "Keep speech invalidation on assistant setting changes, and invalidate chat only when the public LLM configuration changes.",
+    "preserved": "Voice-only changes preserve the pending request, conversation and draft; model provider changes still cancel the old request.",
+    "permissionsChanged": false,
+    "dependenciesChanged": false,
+    "storageAndMessageSchemaChanged": false
+  },
+  "node": {
+    "command": "npm run check",
+    "passed": 87,
+    "failed": 0
+  },
+  "controlledBrowser": {
+    "command": "node --test --test-concurrency=1 tests/browser/extension.test.js",
+    "scenarios": [
+      {
+        "name": "workspace",
+        "status": "passed",
+        "checks": 14,
+        "platform": "darwin",
+        "browserVersion": "156.0.8078.4",
+        "extensionVersion": "0.7.8"
+      },
+      {
+        "name": "webpage",
+        "status": "passed",
+        "checks": 23,
+        "platform": "darwin",
+        "browserVersion": "156.0.8078.4",
+        "extensionVersion": "0.7.8"
+      },
+      {
+        "name": "assistant",
+        "status": "passed",
+        "checks": 18,
+        "platform": "darwin",
+        "browserVersion": "156.0.8078.4",
+        "extensionVersion": "0.7.8"
+      },
+      {
+        "name": "page-csp",
+        "status": "passed",
+        "checks": 4,
+        "platform": "darwin",
+        "browserVersion": "156.0.8078.4",
+        "extensionVersion": "0.7.8"
+      },
+      {
+        "name": "audio-csp",
+        "status": "passed",
+        "checks": 3,
+        "platform": "darwin",
+        "browserVersion": "156.0.8078.4",
+        "extensionVersion": "0.7.8"
+      },
+      {
+        "name": "page-boundaries",
+        "status": "passed",
+        "checks": 5,
+        "platform": "darwin",
+        "browserVersion": "156.0.8078.4",
+        "extensionVersion": "0.7.8"
+      },
+      {
+        "name": "page-rerender",
+        "status": "passed",
+        "checks": 11,
+        "platform": "darwin",
+        "browserVersion": "156.0.8078.4",
+        "extensionVersion": "0.7.8"
+      },
+      {
+        "name": "keyboard-focus",
+        "status": "passed",
+        "checks": 8,
+        "platform": "darwin",
+        "browserVersion": "156.0.8078.4",
+        "extensionVersion": "0.7.8"
+      },
+      {
+        "name": "scene-state",
+        "status": "passed",
+        "checks": 5,
+        "platform": "darwin",
+        "browserVersion": "156.0.8078.4",
+        "extensionVersion": "0.7.8"
+      },
+      {
+        "name": "real-site-verifier",
+        "status": "passed",
+        "checks": 7,
+        "platform": "darwin",
+        "browserVersion": "156.0.8078.4",
+        "extensionVersion": "0.7.8"
+      },
+      {
+        "name": "settings-persistence",
+        "status": "passed",
+        "checks": 6,
+        "platform": "darwin",
+        "browserVersion": "156.0.8078.4",
+        "extensionVersion": "0.7.8"
+      },
+      {
+        "name": "page-navigation",
+        "status": "passed",
+        "checks": 11,
+        "platform": "darwin",
+        "browserVersion": "156.0.8078.4",
+        "extensionVersion": "0.7.8"
+      },
+      {
+        "name": "page-updates",
+        "status": "passed",
+        "checks": 7,
+        "platform": "darwin",
+        "browserVersion": "156.0.8078.4",
+        "extensionVersion": "0.7.8"
+      },
+      {
+        "name": "page-pending",
+        "status": "passed",
+        "checks": 14,
+        "platform": "darwin",
+        "browserVersion": "156.0.8078.4",
+        "extensionVersion": "0.7.8"
+      },
+      {
+        "name": "assistant-preferences",
+        "status": "passed",
+        "checks": 10,
+        "platform": "darwin",
+        "browserVersion": "156.0.8078.4",
+        "extensionVersion": "0.7.8"
+      }
+    ],
+    "checks": 146,
+    "preferences": {
+      "status": "passed",
+      "mode": "real-extension-controlled-sdk-and-settings-ui",
+      "requests": 2,
+      "unchangedSavePreserved": true,
+      "speed": 1.1,
+      "modelUnchangedByVoice": true,
+      "retainedRounds": 1,
+      "draftPreserved": true,
+      "modelChangeCancelled": true,
+      "checks": [
+        "真实设置页保存语速",
+        "不改配置保存对照",
+        "声音变化不改变模型快照",
+        "语速变化不中断AI",
+        "无自动模型重发",
+        "原请求正常完成",
+        "切换声音保留对话上下文",
+        "跨场景草稿保留",
+        "模型变化仍取消旧请求",
+        "取消后的回答不能晚到插入"
+      ],
+      "browserVersion": "156.0.8078.4",
+      "platform": "darwin",
+      "extensionVersion": "0.7.8"
+    }
+  },
+  "package": {
+    "filename": "translate-chrome-0.7.8.zip",
+    "sha256": "8968df79f5c28846bc4a53b2ce1927de423b561e1040c0fd2d50c6fcb444ee79",
+    "bytes": 594267,
+    "files": [
+      "LICENSE",
+      "THIRD_PARTY_LICENSES.txt",
+      "app.js",
+      "background.js",
+      "content.js",
+      "icons/128.png",
+      "icons/16.png",
+      "icons/32.png",
+      "icons/48.png",
+      "index.html",
+      "manifest.json",
+      "offscreen.html",
+      "offscreen.js",
+      "popup.css",
+      "popup.html",
+      "popup.js",
+      "services.css",
+      "services.html",
+      "services.js",
+      "styles.css",
+      "tabs.js"
+    ],
+    "testCredentialAbsent": true
+  },
+  "limits": [
+    "本轮使用受控SDK响应和测试凭据，不证明真实账号权限或模型质量",
+    "MDN/Python真实微软与长文验证仍引用v0.7.7，本轮未重复这组未改动的网页翻译验证",
+    "早先偶发入口就绪超时仍未复现或归因",
+    "未操作用户日常Chrome安装，也未新增付费模型调用",
+    "本轮未取得新增真实采用或独立社区贡献证据"
+  ]
+}

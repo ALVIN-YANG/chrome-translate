@@ -225,7 +225,10 @@ async function initialize() {
   function toggle(scope = 'smart') { return pageTranslation.active ? pageTranslation.stop() : start(scope); }
   function applySettings(next) {
     const changed = next.provider !== settings.provider || next.page.target !== settings.page.target;
-    if (next.assistant && settings.assistant && JSON.stringify(next.assistant) !== JSON.stringify(settings.assistant)) { speech.stop(); chat.cancel(); chatSource = ''; }
+    if (next.assistant && settings.assistant && JSON.stringify(next.assistant) !== JSON.stringify(settings.assistant)) {
+      speech.stop();
+      if (JSON.stringify(next.assistant.llm) !== JSON.stringify(settings.assistant.llm)) { chat.cancel(); chatSource = ''; }
+    }
     settings = next;
     $('.float').hidden = !settings.page.floating;
     if (!settings.page.selection) $('.selection-bar').hidden = true;
