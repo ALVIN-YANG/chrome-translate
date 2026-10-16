@@ -18,9 +18,13 @@ export class SelectionChat {
     this.$('.chat-settings').addEventListener('click', event => { if (event.isTrusted) chrome.runtime.sendMessage({ type: 'ct:assistant-open' }).catch(() => {}); });
   }
   open(selection, config) {
-    this.reset(); this.selection = selection; this.config = config;
-    this.$('.chat-model').textContent = config.llm.name;
+    this.reset(); this.selection = selection; this.updateConfig(config);
     this.$('textarea').focus({ preventScroll: true });
+  }
+  updateConfig(config) {
+    this.config = config;
+    this.$('.chat-model').textContent = config.llm.name;
+    this.$('.chat-error').hidden = true;
   }
   busy(value) { this.loading = value; this.$('.chat-send').disabled = value; this.$('.chat-stop').hidden = !value; }
   cancel() {

@@ -227,7 +227,10 @@ async function initialize() {
     const changed = next.provider !== settings.provider || next.page.target !== settings.page.target;
     if (next.assistant && settings.assistant && JSON.stringify(next.assistant) !== JSON.stringify(settings.assistant)) {
       speech.stop();
-      if (JSON.stringify(next.assistant.llm) !== JSON.stringify(settings.assistant.llm)) { chat.cancel(); chatSource = ''; }
+      if (JSON.stringify(next.assistant.llm) !== JSON.stringify(settings.assistant.llm)) {
+        chat.cancel(); chat.updateConfig(next.assistant); chatSource = '';
+        if ($('.panel').classList.contains('ai-panel')) $('.brand').textContent = next.assistant.llm.name;
+      }
     }
     settings = next;
     $('.float').hidden = !settings.page.floating;

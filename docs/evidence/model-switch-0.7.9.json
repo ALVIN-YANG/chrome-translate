@@ -1,0 +1,236 @@
+{
+  "version": "0.7.9",
+  "date": "2026-10-16",
+  "baseline": "8c4638f82d2d4fcb98cacc092ed023dd1dc7cfd0",
+  "beforeFix": {
+    "command": "node --test --test-name-pattern='assistant-model-switch' tests/browser/extension.test.js",
+    "reproductions": 2,
+    "observed": "The settings snapshot and actual second request used OpenAI, but the open panel brand and composer still displayed DeepSeek.",
+    "actualRequestProviders": [
+      "deepseek",
+      "openai"
+    ],
+    "observedLabels": {
+      "brand": "DeepSeek",
+      "composer": "DeepSeek"
+    },
+    "expectedLabels": {
+      "brand": "OpenAI",
+      "composer": "OpenAI"
+    }
+  },
+  "implementation": {
+    "change": "Refresh the existing chat instance with the new public configuration when public LLM settings change, and update the AI panel brand.",
+    "behavior": "Preserve the draft and existing answer authors; new answers and configuration guards use the new public configuration. Clear obsolete errors after configuration changes.",
+    "preserved": "Existing cancellation, scene invalidation and voice-only change behavior remain in place; saving settings never submits a question.",
+    "permissionsChanged": false,
+    "dependenciesChanged": false,
+    "storageAndMessageSchemaChanged": false
+  },
+  "node": {
+    "command": "npm run check",
+    "passed": 87,
+    "failed": 0
+  },
+  "controlledBrowser": {
+    "command": "node --test --test-concurrency=1 tests/browser/extension.test.js",
+    "scenarios": [
+      {
+        "name": "workspace",
+        "status": "passed",
+        "checks": 14,
+        "platform": "darwin",
+        "browserVersion": "156.0.8078.4",
+        "extensionVersion": "0.7.9"
+      },
+      {
+        "name": "webpage",
+        "status": "passed",
+        "checks": 23,
+        "platform": "darwin",
+        "browserVersion": "156.0.8078.4",
+        "extensionVersion": "0.7.9"
+      },
+      {
+        "name": "assistant",
+        "status": "passed",
+        "checks": 18,
+        "platform": "darwin",
+        "browserVersion": "156.0.8078.4",
+        "extensionVersion": "0.7.9"
+      },
+      {
+        "name": "page-csp",
+        "status": "passed",
+        "checks": 4,
+        "platform": "darwin",
+        "browserVersion": "156.0.8078.4",
+        "extensionVersion": "0.7.9"
+      },
+      {
+        "name": "audio-csp",
+        "status": "passed",
+        "checks": 3,
+        "platform": "darwin",
+        "browserVersion": "156.0.8078.4",
+        "extensionVersion": "0.7.9"
+      },
+      {
+        "name": "page-boundaries",
+        "status": "passed",
+        "checks": 5,
+        "platform": "darwin",
+        "browserVersion": "156.0.8078.4",
+        "extensionVersion": "0.7.9"
+      },
+      {
+        "name": "page-rerender",
+        "status": "passed",
+        "checks": 11,
+        "platform": "darwin",
+        "browserVersion": "156.0.8078.4",
+        "extensionVersion": "0.7.9"
+      },
+      {
+        "name": "keyboard-focus",
+        "status": "passed",
+        "checks": 8,
+        "platform": "darwin",
+        "browserVersion": "156.0.8078.4",
+        "extensionVersion": "0.7.9"
+      },
+      {
+        "name": "scene-state",
+        "status": "passed",
+        "checks": 5,
+        "platform": "darwin",
+        "browserVersion": "156.0.8078.4",
+        "extensionVersion": "0.7.9"
+      },
+      {
+        "name": "real-site-verifier",
+        "status": "passed",
+        "checks": 7,
+        "platform": "darwin",
+        "browserVersion": "156.0.8078.4",
+        "extensionVersion": "0.7.9"
+      },
+      {
+        "name": "settings-persistence",
+        "status": "passed",
+        "checks": 6,
+        "platform": "darwin",
+        "browserVersion": "156.0.8078.4",
+        "extensionVersion": "0.7.9"
+      },
+      {
+        "name": "page-navigation",
+        "status": "passed",
+        "checks": 11,
+        "platform": "darwin",
+        "browserVersion": "156.0.8078.4",
+        "extensionVersion": "0.7.9"
+      },
+      {
+        "name": "page-updates",
+        "status": "passed",
+        "checks": 7,
+        "platform": "darwin",
+        "browserVersion": "156.0.8078.4",
+        "extensionVersion": "0.7.9"
+      },
+      {
+        "name": "page-pending",
+        "status": "passed",
+        "checks": 14,
+        "platform": "darwin",
+        "browserVersion": "156.0.8078.4",
+        "extensionVersion": "0.7.9"
+      },
+      {
+        "name": "assistant-preferences",
+        "status": "passed",
+        "checks": 10,
+        "platform": "darwin",
+        "browserVersion": "156.0.8078.4",
+        "extensionVersion": "0.7.9"
+      },
+      {
+        "name": "assistant-model-switch",
+        "status": "passed",
+        "checks": 10,
+        "platform": "darwin",
+        "browserVersion": "156.0.8078.4",
+        "extensionVersion": "0.7.9"
+      }
+    ],
+    "checks": 156,
+    "modelSwitch": {
+      "status": "passed",
+      "mode": "real-extension-controlled-sdk-and-settings-ui",
+      "providers": [
+        "deepseek",
+        "openai",
+        "openai"
+      ],
+      "labelsAfterSave": {
+        "brand": "OpenAI",
+        "composer": "OpenAI"
+      },
+      "draftPreserved": true,
+      "unavailableBlockedBeforePort": true,
+      "configuredAgain": true,
+      "checks": [
+        "打开及保存无自动提问",
+        "真实设置页切换服务",
+        "请求使用新接口",
+        "品牌与输入区标识同步",
+        "新旧回答标记实际服务",
+        "未发送草稿保留",
+        "未配置时前端拦截",
+        "未配置时问题保留",
+        "恢复配置清理旧错误",
+        "恢复后主动提问成功"
+      ],
+      "browserVersion": "156.0.8078.4",
+      "platform": "darwin",
+      "extensionVersion": "0.7.9"
+    }
+  },
+  "package": {
+    "filename": "translate-chrome-0.7.9.zip",
+    "sha256": "cad9b3478ff75aec70500f1145b5c0a78e79391aa940c3ed173e987e2d10382c",
+    "bytes": 594314,
+    "files": [
+      "LICENSE",
+      "THIRD_PARTY_LICENSES.txt",
+      "app.js",
+      "background.js",
+      "content.js",
+      "icons/128.png",
+      "icons/16.png",
+      "icons/32.png",
+      "icons/48.png",
+      "index.html",
+      "manifest.json",
+      "offscreen.html",
+      "offscreen.js",
+      "popup.css",
+      "popup.html",
+      "popup.js",
+      "services.css",
+      "services.html",
+      "services.js",
+      "styles.css",
+      "tabs.js"
+    ],
+    "testCredentialsAbsent": true
+  },
+  "limits": [
+    "本轮使用受控SDK响应和测试凭据，不证明真实账号权限或模型质量",
+    "MDN/Python真实微软与长文验证继续引用v0.7.7，本轮未重复未改动的对应验证",
+    "早先偶发入口就绪超时仍未复现或归因",
+    "未操作用户日常Chrome安装，也未新增付费模型调用",
+    "本轮未取得新增真实采用或独立社区贡献证据"
+  ]
+}
