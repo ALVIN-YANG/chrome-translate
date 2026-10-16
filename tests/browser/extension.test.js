@@ -22,6 +22,7 @@ import pageUpdates from '../../scripts/browser-page-updates-smoke.mjs';
 import pagePending from '../../scripts/browser-page-pending-smoke.mjs';
 import assistantPreferences from '../../scripts/browser-assistant-preferences-smoke.mjs';
 import assistantModelSwitch from '../../scripts/browser-assistant-model-switch-smoke.mjs';
+import freeProviders from '../../scripts/browser-free-providers-smoke.mjs';
 
 const artifactPath = resolve('output/playwright');
 await mkdir(artifactPath, { recursive: true });
@@ -40,6 +41,7 @@ await writeFile(join(artifactPath, 'package-result.json'), JSON.stringify(packag
 
 for (const [name, scenario, entry] of [
   ['workspace', workspace, 'index.html'],
+  ['free-providers', freeProviders, 'index.html'],
   ['webpage', webpage, 'article.html'],
   ['assistant', assistant, 'article.html'],
   ['page-csp', pageCSP, 'article.html'],

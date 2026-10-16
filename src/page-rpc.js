@@ -1,4 +1,4 @@
-import { TranslationError } from './providers.js';
+import { TranslationError } from './translation-error.js';
 export async function pageRpc(type, payload = {}, signal) {
   signal?.throwIfAborted();
   const requestId = crypto.randomUUID();

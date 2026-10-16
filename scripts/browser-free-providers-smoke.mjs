@@ -1,5 +1,5 @@
 // 仅在专用测试配置中执行；使用假 Key 和受控响应，不代表厂商翻译质量。
-async (page) => {
+export default async (page) => {
   const assert = (condition, message) => { if (!condition) throw new Error(message); };
   assert(page.url().startsWith('chrome-extension://'), '必须在真实测试扩展中验证权限和存储');
   const services = {
@@ -78,7 +78,7 @@ async (page) => {
   await page.reload();
   await page.getByRole('button', { name: '智谱', exact: true }).click();
   await page.getByRole('button', { name: '设置', exact: true }).click();
-  await page.screenshot({ path: 'output/playwright/free-provider-settings-0.4.0.png', animations: 'disabled' });
+  await page.screenshot({ path: 'output/playwright/free-provider-settings.png', animations: 'disabled' });
   await page.getByRole('button', { name: '关闭服务设置' }).click();
   assert(errors.length === 0, errors.join('; '));
   return { status: 'passed', providers: Object.keys(services), requests: calls.length, checks: ['七项服务入口', '未配置不发请求', '固定免费模型', '各自 Key 和端点', '连接测试', '词义和英文例句', '例句朗读和候选复制入口', '混元单译文', '配置升级保留', '刷新持久化', '限流无自动转发', '窄屏布局'], responseMode: 'controlled-fixtures' };

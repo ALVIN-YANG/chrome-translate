@@ -244,7 +244,7 @@ function renderAlternatives(translation) {
   if (!candidates.length && translation.candidateStatus === 'ready') $('alternatives-status').textContent = '当前只查到一个可靠译法，可以补充上下文进一步确定词义。';
 }
 
-const controller = new TranslationController(renderTranslation);
+const controller = new TranslationController(renderTranslation, translate);
 
 function translateInput(force = false) {
   updateDirection();

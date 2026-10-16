@@ -1,0 +1,145 @@
+{
+  "version": "0.7.12",
+  "date": "2026-10-16",
+  "change": "Model translation reuses the installed AI SDK OpenAI Compatible provider; Microsoft and Baidu retain their translation protocols.",
+  "dependenciesAdded": 0,
+  "permissionsAdded": 0,
+  "local": {
+    "nodeTests": 87,
+    "browserScenarios": 17,
+    "browserChecks": 171,
+    "scenarios": [
+      {
+        "name": "workspace",
+        "checks": 14,
+        "mode": "controlled-fixtures"
+      },
+      {
+        "name": "free-providers",
+        "checks": 12,
+        "mode": "controlled-fixtures"
+      },
+      {
+        "name": "webpage",
+        "checks": 23,
+        "mode": "controlled-fixtures"
+      },
+      {
+        "name": "assistant",
+        "checks": 18,
+        "mode": "controlled-provider-real-extension-and-audio-element"
+      },
+      {
+        "name": "page-csp",
+        "checks": 4,
+        "mode": "controlled-response-strict-site-CSP"
+      },
+      {
+        "name": "audio-csp",
+        "checks": 3,
+        "mode": "real-extension-local-tts-server-real-audio"
+      },
+      {
+        "name": "page-boundaries",
+        "checks": 5,
+        "mode": "controlled-response-real-extension"
+      },
+      {
+        "name": "page-rerender",
+        "checks": 11,
+        "mode": "controlled-response-real-extension"
+      },
+      {
+        "name": "keyboard-focus",
+        "checks": 11,
+        "mode": "real-keyboard-controlled-provider"
+      },
+      {
+        "name": "scene-state",
+        "checks": 5,
+        "mode": "real-keyboard-and-accessibility-tree"
+      },
+      {
+        "name": "real-site-verifier",
+        "checks": 7,
+        "mode": "controlled-provider-real-extension-verifier"
+      },
+      {
+        "name": "settings-persistence",
+        "checks": 6,
+        "mode": "real-extension-local-storage"
+      },
+      {
+        "name": "page-navigation",
+        "checks": 11,
+        "mode": "real-extension-controlled-provider"
+      },
+      {
+        "name": "page-updates",
+        "checks": 7,
+        "mode": "real-extension-controlled-provider"
+      },
+      {
+        "name": "page-pending",
+        "checks": 14,
+        "mode": "real-extension-controlled-provider"
+      },
+      {
+        "name": "assistant-preferences",
+        "checks": 10,
+        "mode": "real-extension-controlled-sdk-and-settings-ui"
+      },
+      {
+        "name": "assistant-model-switch",
+        "checks": 10,
+        "mode": "real-extension-controlled-sdk-and-settings-ui"
+      }
+    ]
+  },
+  "bundleBytes": {
+    "contentBefore": 176798,
+    "contentAfter": 150518,
+    "appBefore": 64573,
+    "appAfter": 603601
+  },
+  "package": {
+    "filename": "translate-chrome-0.7.12.zip",
+    "sha256": "03a3f094cac9f9fc05bf85332738a6fb3d7da22dfedec0956e9b96b44859ca7e",
+    "bytes": 706078,
+    "files": [
+      "LICENSE",
+      "THIRD_PARTY_LICENSES.txt",
+      "app.js",
+      "background.js",
+      "content.js",
+      "icons/128.png",
+      "icons/16.png",
+      "icons/32.png",
+      "icons/48.png",
+      "index.html",
+      "manifest.json",
+      "offscreen.html",
+      "offscreen.js",
+      "popup.css",
+      "popup.html",
+      "popup.js",
+      "services.css",
+      "services.html",
+      "services.js",
+      "styles.css",
+      "tabs.js"
+    ],
+    "loadedByBrowser": true,
+    "manifestChecked": true,
+    "licenseChecked": true,
+    "testCredentialsExcluded": true
+  },
+  "release": {
+    "status": "prepared"
+  },
+  "scope": {
+    "providerResponses": "controlled-fixtures",
+    "liveProviderCalls": 0,
+    "userChromeUpdated": false
+  }
+}

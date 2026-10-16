@@ -1,11 +1,11 @@
-import { translate, TranslationError } from './providers.js';
+import { TranslationError } from './translation-error.js';
 import { lookupAlternatives } from './dictionary.js';
 import { automaticTarget, detectLanguage, isDictionaryPair, normalizeLanguage } from './language.js';
 import { termNotes } from './terms.js';
 
 // 立即执行；只允许最新输入的请求更新 UI。Abort 不代表服务端一定停止计费。
 export class TranslationController {
-  constructor(onChange, translator = translate, alternativeLookup = lookupAlternatives) {
+  constructor(onChange, translator, alternativeLookup = lookupAlternatives) {
     this.onChange = onChange;
     this.translator = translator;
     this.alternativeLookup = alternativeLookup;

@@ -54,7 +54,7 @@ TTS 预设包括 **系统声音、MiniMax、OpenAI、ElevenLabs、硅基流动**
 
 [![MiniMax 在真实扩展中的回答](docs/assets/selection-ai.png)](docs/assets/selection-ai.png)
 
-新功能基于 [AI SDK](https://ai-sdk.dev/docs/introduction) 及其官方 provider，MiniMax TTS 使用 SpeechModelV4 适配器；定位与图标使用 [Floating UI](https://floating-ui.com/) 和 [Lucide](https://lucide.dev/)。Markdown 使用 Marked 与 DOMPurify，禁用模型返回的图片、脚本和嵌入内容。依赖许可证保留在构建包的 `THIRD_PARTY_LICENSES.txt`。
+模型翻译、AI 问答和云端语音复用 [AI SDK](https://ai-sdk.dev/docs/introduction) 及其官方 provider，MiniMax TTS 使用 SpeechModelV4 适配器。微软与百度使用各自的翻译接口，百度单独签名。SDK 统一协议处理，各服务的 Key、模型权限和额度仍由对应平台校验。定位与图标使用 [Floating UI](https://floating-ui.com/) 和 [Lucide](https://lucide.dev/)。Markdown 使用 Marked 与 DOMPurify，禁用模型返回的图片、脚本和嵌入内容。依赖许可证保留在构建包的 `THIRD_PARTY_LICENSES.txt`。
 
 ## 网页双语与划词
 
@@ -178,7 +178,9 @@ npm run dev
 | `scripts/` | 构建、预览及浏览器验证 |
 | `docs/` | 使用截图与验证记录 |
 
-[v0.7.11](https://github.com/ALVIN-YANG/chrome-translate/releases/tag/v0.7.11) 将网页右侧入口改为 40px 小圆形图标：常态减轻阴影，开启后显示蓝底“显示原文”图标；本机另核对十一种视觉状态。87 项 Node 测试、十六组 macOS/Linux Chromium 安装包场景共 159 项检查及 GitHub Node 22/24 检查通过，本机与 Linux 构建产物一致，详见 [本版验证数据](docs/evidence/floating-button-0.7.11.json)。AI 服务切换见 [v0.7.9 验证](docs/evidence/model-switch-0.7.9.json)。自动检查不等于用户安装或人工读屏验收，也不保证所有网页兼容。声音与对话独立更新见 [v0.7.8 验证](docs/evidence/preferences-0.7.8.json)，待发送正文与长文检查见 [v0.7.7 验证](docs/evidence/pending-0.7.7.json)，持续更新等待见 [v0.7.6 验证](docs/evidence/updates-0.7.6.json)，页面跳转边界见 [v0.7.5 验证](docs/evidence/navigation-0.7.5.json)，配置保存见 [v0.7.4 验证](docs/evidence/settings-0.7.4.json)。
+[v0.7.12](https://github.com/ALVIN-YANG/chrome-translate/releases/tag/v0.7.12) 将 DeepSeek、Kimi、智谱、硅基流动和 Gemini 的模型翻译统一接入现有 AI SDK，保留词义、英文例句和各服务设置；不新增依赖。网页脚本与模型客户端分离，避免每个网页加载 SDK。免费服务的连接、词义、配置和错误流程加入默认浏览器回归，详见 [SDK 接入验证](docs/evidence/sdk-0.7.12.json)。
+
+[v0.7.11](https://github.com/ALVIN-YANG/chrome-translate/releases/tag/v0.7.11) 的圆形悬浮入口与十一种视觉状态见 [验证数据](docs/evidence/floating-button-0.7.11.json)。AI 服务切换见 [v0.7.9 验证](docs/evidence/model-switch-0.7.9.json)。自动检查不等于用户安装或人工读屏验收，也不保证所有网页兼容。声音与对话独立更新见 [v0.7.8 验证](docs/evidence/preferences-0.7.8.json)，待发送正文与长文检查见 [v0.7.7 验证](docs/evidence/pending-0.7.7.json)，持续更新等待见 [v0.7.6 验证](docs/evidence/updates-0.7.6.json)，页面跳转边界见 [v0.7.5 验证](docs/evidence/navigation-0.7.5.json)，配置保存见 [v0.7.4 验证](docs/evidence/settings-0.7.4.json)。
 
 v0.7.7 的 MDN/Python 真实网络检查覆盖首屏正文、远处段落滚动加载、原文与代码保留、关闭恢复。验证工具排除标题和兼容性控件误判，并覆盖译文加载后的排版位移，设计与反例见 [正文验证数据](docs/evidence/article-validation-0.7.3.json)。划词键盘焦点与场景按钮见 [v0.7.3 验证](docs/evidence/keyboard-0.7.3.json)。联网整组曾出现就绪/等待超时，早先入口故障尚未确认根因。
 

@@ -17,7 +17,9 @@ test('三个新增服务仅需 Key，使用各自官方地址和固定免费模�
     assert.equal(isConfigured(provider, { key: 'fixture-key' }), true);
     const result = await translate({ ...request, provider }, async (url, options) => {
       assert.equal(url, endpoint);
-      assert.deepEqual(options.headers, { 'Content-Type': 'application/json', Authorization: 'Bearer fixture-key' });
+      const headers = new Headers(options.headers);
+      assert.equal(headers.get('content-type'), 'application/json');
+      assert.equal(headers.get('authorization'), 'Bearer fixture-key');
       assert.equal(options.redirect, 'error');
       assert.equal(options.credentials, 'omit');
       const body = JSON.parse(options.body);
