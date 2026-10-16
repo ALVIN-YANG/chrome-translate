@@ -1,0 +1,374 @@
+{
+  "version": "0.7.7",
+  "date": "2026-10-16",
+  "baseline": "a8960831557061fe54e89c39e9b463776b361251",
+  "beforeFix": {
+    "command": "node --test --test-name-pattern='page-pending' tests/browser/extension.test.js",
+    "reproductions": 2,
+    "initialParagraphs": 25,
+    "minimizedParagraphs": 13,
+    "inFlightParagraphs": 8,
+    "obsoleteQueuedParagraphs": 4,
+    "observed": "All four removed, replaced, translate=no, and hidden queued originals were still sent after the first response, even after the updated segment count proved the DOM had been rescanned."
+  },
+  "implementation": {
+    "pending": "Discard affected queued chunks as mutations arrive; removing a subtree or changing an exclusion attribute also invalidates its descendants.",
+    "scan": "Discard removed/replaced records when reconciling segments; unchanged deferred records can enqueue again after settling.",
+    "inFlight": "Already sent batches are left running; discard does not recall upstream requests.",
+    "dependenciesChanged": false,
+    "permissionsChanged": false
+  },
+  "node": {
+    "command": "npm run check",
+    "passed": 87,
+    "failed": 0
+  },
+  "controlledBrowser": {
+    "command": "node --test --test-concurrency=1 tests/browser/extension.test.js",
+    "scenarios": [
+      {
+        "name": "workspace",
+        "status": "passed",
+        "checks": 14,
+        "platform": "darwin",
+        "browserVersion": "156.0.8078.4",
+        "extensionVersion": "0.7.7"
+      },
+      {
+        "name": "webpage",
+        "status": "passed",
+        "checks": 23,
+        "platform": "darwin",
+        "browserVersion": "156.0.8078.4",
+        "extensionVersion": "0.7.7"
+      },
+      {
+        "name": "assistant",
+        "status": "passed",
+        "checks": 18,
+        "platform": "darwin",
+        "browserVersion": "156.0.8078.4",
+        "extensionVersion": "0.7.7"
+      },
+      {
+        "name": "page-csp",
+        "status": "passed",
+        "checks": 4,
+        "platform": "darwin",
+        "browserVersion": "156.0.8078.4",
+        "extensionVersion": "0.7.7"
+      },
+      {
+        "name": "audio-csp",
+        "status": "passed",
+        "checks": 3,
+        "platform": "darwin",
+        "browserVersion": "156.0.8078.4",
+        "extensionVersion": "0.7.7"
+      },
+      {
+        "name": "page-boundaries",
+        "status": "passed",
+        "checks": 5,
+        "platform": "darwin",
+        "browserVersion": "156.0.8078.4",
+        "extensionVersion": "0.7.7"
+      },
+      {
+        "name": "page-rerender",
+        "status": "passed",
+        "checks": 11,
+        "platform": "darwin",
+        "browserVersion": "156.0.8078.4",
+        "extensionVersion": "0.7.7"
+      },
+      {
+        "name": "keyboard-focus",
+        "status": "passed",
+        "checks": 8,
+        "platform": "darwin",
+        "browserVersion": "156.0.8078.4",
+        "extensionVersion": "0.7.7"
+      },
+      {
+        "name": "scene-state",
+        "status": "passed",
+        "checks": 5,
+        "platform": "darwin",
+        "browserVersion": "156.0.8078.4",
+        "extensionVersion": "0.7.7"
+      },
+      {
+        "name": "real-site-verifier",
+        "status": "passed",
+        "checks": 7,
+        "platform": "darwin",
+        "browserVersion": "156.0.8078.4",
+        "extensionVersion": "0.7.7"
+      },
+      {
+        "name": "settings-persistence",
+        "status": "passed",
+        "checks": 6,
+        "platform": "darwin",
+        "browserVersion": "156.0.8078.4",
+        "extensionVersion": "0.7.7"
+      },
+      {
+        "name": "page-navigation",
+        "status": "passed",
+        "checks": 11,
+        "platform": "darwin",
+        "browserVersion": "156.0.8078.4",
+        "extensionVersion": "0.7.7"
+      },
+      {
+        "name": "page-updates",
+        "status": "passed",
+        "checks": 7,
+        "platform": "darwin",
+        "browserVersion": "156.0.8078.4",
+        "extensionVersion": "0.7.7"
+      },
+      {
+        "name": "page-pending",
+        "status": "passed",
+        "checks": 14,
+        "platform": "darwin",
+        "browserVersion": "156.0.8078.4",
+        "extensionVersion": "0.7.7"
+      }
+    ],
+    "checks": 136,
+    "pending": {
+      "status": "passed",
+      "mode": "real-extension-controlled-provider",
+      "cases": [
+        {
+          "status": "passed",
+          "waitForScan": true,
+          "totalAtRelease": 10,
+          "requests": 2,
+          "sentParagraphs": 10,
+          "checks": [
+            "慢请求期间其余正文排队",
+            "首批未完成时变更正文",
+            "删除或替换及祖先排除的排队正文不发送",
+            "替换后的正文只发送一次",
+            "祖先不翻译标记生效",
+            "祖先隐藏内容不插入",
+            "停止清理译文"
+          ]
+        },
+        {
+          "status": "passed",
+          "waitForScan": false,
+          "totalAtRelease": 13,
+          "requests": 3,
+          "sentParagraphs": 10,
+          "checks": [
+            "慢请求期间其余正文排队",
+            "首批未完成时变更正文",
+            "删除或替换及祖先排除的排队正文不发送",
+            "替换后的正文只发送一次",
+            "祖先不翻译标记生效",
+            "祖先隐藏内容不插入",
+            "停止清理译文"
+          ]
+        }
+      ],
+      "checks": [
+        "扫描后响应：慢请求期间其余正文排队",
+        "扫描后响应：首批未完成时变更正文",
+        "扫描后响应：删除或替换及祖先排除的排队正文不发送",
+        "扫描后响应：替换后的正文只发送一次",
+        "扫描后响应：祖先不翻译标记生效",
+        "扫描后响应：祖先隐藏内容不插入",
+        "扫描后响应：停止清理译文",
+        "直接响应：慢请求期间其余正文排队",
+        "直接响应：首批未完成时变更正文",
+        "直接响应：删除或替换及祖先排除的排队正文不发送",
+        "直接响应：替换后的正文只发送一次",
+        "直接响应：祖先不翻译标记生效",
+        "直接响应：祖先隐藏内容不插入",
+        "直接响应：停止清理译文"
+      ],
+      "browserVersion": "156.0.8078.4",
+      "platform": "darwin",
+      "extensionVersion": "0.7.7"
+    }
+  },
+  "largeArticle": {
+    "command": "TRANSLATE_PAGE_PARAGRAPHS=2000 node --test --test-name-pattern='page-updates' tests/browser/extension.test.js",
+    "result": {
+      "status": "passed",
+      "mode": "real-extension-controlled-provider",
+      "fixtureParagraphs": 2000,
+      "probes": [
+        {
+          "area": "nav",
+          "duringUpdates": true,
+          "requestedDuringUpdates": true,
+          "firstWaitMs": 165,
+          "afterQuietMs": 29,
+          "afterQuiet": true,
+          "ticks": 75,
+          "elapsedMs": 1515
+        },
+        {
+          "area": "main",
+          "duringUpdates": true,
+          "requestedDuringUpdates": true,
+          "firstWaitMs": 240,
+          "afterQuietMs": 29,
+          "afterQuiet": true,
+          "ticks": 76,
+          "elapsedMs": 1530
+        },
+        {
+          "area": "stream",
+          "duringUpdates": true,
+          "requestedDuringUpdates": true,
+          "firstWaitMs": 184,
+          "afterQuietMs": 215,
+          "afterQuiet": true,
+          "ticks": 76,
+          "elapsedMs": 1524
+        }
+      ],
+      "requests": 5,
+      "checks": [
+        "导航持续更新不饿死新正文",
+        "正文计数器不饿死其他稳定段落",
+        "同页流式更新不阻塞稳定段落",
+        "原文保留",
+        "纯数字不发请求",
+        "流式中间版本不反复发送",
+        "流式结束只翻译最终内容"
+      ],
+      "browserVersion": "156.0.8078.4",
+      "platform": "darwin",
+      "extensionVersion": "0.7.7"
+    }
+  },
+  "realWebsites": {
+    "command": "TRANSLATE_LIVE_MICROSOFT=1 node --test --test-concurrency=1 --test-name-pattern='real-mdn|real-python' tests/browser/extension.test.js",
+    "cases": [
+      {
+        "status": "passed",
+        "mode": "real-public-site-real-microsoft-no-mocks",
+        "url": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array",
+        "sourceParagraphs": 141,
+        "sourceNodesPreserved": 141,
+        "codeBlocksPreserved": 49,
+        "codeBlocksInSiteShadowDOM": 47,
+        "bodySourceCharacters": 197,
+        "bodyTranslationCharacters": 54,
+        "belowFoldSourceCharacters": 76,
+        "belowFoldTranslationCharacters": 30,
+        "belowFoldInitiallyUntranslated": true,
+        "translatedCount": 24,
+        "screenshotCaptured": true,
+        "requests": [
+          {
+            "status": 200,
+            "credentialHeaders": []
+          },
+          {
+            "status": 200,
+            "credentialHeaders": []
+          },
+          {
+            "status": 200,
+            "credentialHeaders": []
+          }
+        ],
+        "checks": [
+          "真实公共网页",
+          "真实微软免Key调用",
+          "首屏正文关联中文译文",
+          "滚动后未翻译正文加载",
+          "无认证或Cookie",
+          "源段落和代码保留",
+          "关闭恢复"
+        ],
+        "browserVersion": "156.0.8078.4",
+        "platform": "darwin",
+        "extensionVersion": "0.7.7"
+      },
+      {
+        "status": "passed",
+        "mode": "real-public-site-real-microsoft-no-mocks",
+        "url": "https://docs.python.org/3/library/asyncio-task.html",
+        "sourceParagraphs": 296,
+        "sourceNodesPreserved": 296,
+        "codeBlocksPreserved": 32,
+        "codeBlocksInSiteShadowDOM": 0,
+        "bodySourceCharacters": 80,
+        "bodyTranslationCharacters": 23,
+        "belowFoldSourceCharacters": 83,
+        "belowFoldTranslationCharacters": 20,
+        "belowFoldInitiallyUntranslated": true,
+        "translatedCount": 14,
+        "screenshotCaptured": true,
+        "requests": [
+          {
+            "status": 200,
+            "credentialHeaders": []
+          },
+          {
+            "status": 200,
+            "credentialHeaders": []
+          }
+        ],
+        "checks": [
+          "真实公共网页",
+          "真实微软免Key调用",
+          "首屏正文关联中文译文",
+          "滚动后未翻译正文加载",
+          "无认证或Cookie",
+          "源段落和代码保留",
+          "关闭恢复"
+        ],
+        "browserVersion": "156.0.8078.4",
+        "platform": "darwin",
+        "extensionVersion": "0.7.7"
+      }
+    ]
+  },
+  "package": {
+    "filename": "translate-chrome-0.7.7.zip",
+    "sha256": "e809fa25f4840d9fed23d0baffc7e11b0edc263209206785e6458b9f84c5b2c2",
+    "bytes": 594253,
+    "files": [
+      "LICENSE",
+      "THIRD_PARTY_LICENSES.txt",
+      "app.js",
+      "background.js",
+      "content.js",
+      "icons/128.png",
+      "icons/16.png",
+      "icons/32.png",
+      "icons/48.png",
+      "index.html",
+      "manifest.json",
+      "offscreen.html",
+      "offscreen.js",
+      "popup.css",
+      "popup.html",
+      "popup.js",
+      "services.css",
+      "services.html",
+      "services.js",
+      "styles.css",
+      "tabs.js"
+    ]
+  },
+  "limits": [
+    "本轮验证不证明任意网页兼容或译文质量",
+    "已经发给服务的请求无法撤回；取消不证明服务端停止处理或计费",
+    "早先偶发入口就绪超时仍未复现或归因",
+    "未操作用户日常Chrome安装，也未新增付费模型调用",
+    "公开仓库当前无开放Issue或PR，Star与Fork均为0，真实采用与独立贡献仍缺证据"
+  ]
+}

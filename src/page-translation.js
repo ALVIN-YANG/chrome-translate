@@ -41,7 +41,13 @@ export class PageTranslation {
     this.scan();
     this.observer = new MutationObserver(mutations => {
       const now = performance.now();
-      const mark = element => { if (element) this.changedAt.set(element.closest(PAGE_BLOCKS) || element, now); };
+      const mark = element => {
+        if (!element) return;
+        const block = element.closest(PAGE_BLOCKS) || element;
+        this.changedAt.set(block, now);
+        const record = this.records.get(block);
+        if (record) { this.discard(record); record.deferred = true; }
+      };
       for (const mutation of mutations) {
         const record = this.records.get(mutation.target);
         const lostTranslation = record?.host && record.host.parentNode !== record.element && [...mutation.removedNodes].includes(record.host);
@@ -50,7 +56,10 @@ export class PageTranslation {
         && (mutation.type !== 'childList' || [...mutation.addedNodes, ...mutation.removedNodes].some(node => !node.dataset?.ctOwned));
         if (!lostTranslation && !sourceChanged) continue;
         mark(mutation.target.nodeType === 1 ? mutation.target : mutation.target.parentElement);
-        for (const node of mutation.addedNodes) {
+        // 属性可排除整棵子树；移除的块也必须立即撤下尚未发送的分块。
+        const subtrees = [...mutation.addedNodes, ...mutation.removedNodes];
+        if (mutation.type === 'attributes') subtrees.push(mutation.target);
+        for (const node of subtrees) {
           if (node.nodeType !== 1 || node.dataset?.ctOwned) continue;
           mark(node);
           for (const element of node.querySelectorAll(PAGE_BLOCKS)) mark(element);
@@ -90,6 +99,7 @@ export class PageTranslation {
     const current = new Set(segments.map(segment => segment.element));
     for (const [element, record] of this.records) {
       if (!current.has(element)) {
+        this.discard(record);
         record.host?.remove();
         this.intersection.unobserve(element);
         this.records.delete(element);
@@ -102,6 +112,7 @@ export class PageTranslation {
         if (old.deferred) this.enqueue(old);
         continue;
       }
+      if (old) this.discard(old);
       old?.host?.remove();
       const record = { ...segment, id: ++this.serial, chunks: splitPageText(segment.text), results: [] };
       this.records.set(segment.element, record);
@@ -110,6 +121,9 @@ export class PageTranslation {
       if (rect.bottom >= -250 && rect.top <= innerHeight + 250) this.enqueue(record);
     }
     this.report();
+  }
+  discard(record) {
+    this.queue.discard(record.chunks.map((_, index) => `${record.id}-${index}`));
   }
   enqueue(record) {
     if (this.changedAt.has(record.element)) { record.deferred = true; return; }

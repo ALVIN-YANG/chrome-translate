@@ -68,6 +68,24 @@ test('关闭或重启网页翻译后，旧响应和错误不能插入或暂停�
   assert.deepEqual(results, ['new']); assert.deepEqual(errors, []); assert.equal(queue.failed, false);
 });
 
+test('撤下过期排队项不影响已发送批次，稳定后的同一项可以重新排队', async () => {
+  const first = deferred(), calls = [], results = [];
+  const queue = new PageQueue(async texts => {
+    calls.push(texts);
+    if (calls.length === 1) return first.promise;
+    return texts.map(text => ({ text: `translated ${text}` }));
+  }, item => results.push(item.id), error => { throw error; }, { batchSize: 1 });
+  queue.start({ provider: 'microsoft', target: 'zh' });
+  for (const [id, text] of [['sent', 'Already sent.'], ['old-0', 'Old first part.'], ['old-1', 'Old second part.'], ['stable', 'Keep this paragraph.'], ['settling', 'An unfinished version.']]) queue.add({ id, text });
+  await tick();
+  queue.discard(['sent', 'old-0', 'old-1', 'settling']);
+  queue.add({ id: 'settling', text: 'The final version.' });
+  first.resolve([{ text: '已发送段落的译文' }]);
+  await tick();
+  assert.deepEqual(calls, [['Already sent.'], ['Keep this paragraph.'], ['The final version.']]);
+  assert.deepEqual(results, ['sent', 'stable', 'settling']);
+});
+
 test('服务失败后暂停网页队列，不重复请求；其他服务一次只取一段', async () => {
   let calls = 0, failures = 0;
   const queue = new PageQueue(async texts => { calls++; assert.equal(texts.length, 1); throw new Error('quota'); }, () => {}, () => failures++);

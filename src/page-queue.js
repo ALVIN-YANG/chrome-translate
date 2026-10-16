@@ -33,6 +33,14 @@ export class PageQueue {
       queueMicrotask(() => { this.scheduled = false; this.pump(); });
     }
   }
+  discard(ids) {
+    const discarded = new Set(ids);
+    this.queue = this.queue.filter(item => {
+      if (!discarded.has(item.id)) return true;
+      this.keys.delete(item.id);
+      return false;
+    });
+  }
   async pump() {
     if (!this.active || this.failed || this.running || !this.queue.length) return;
     const version = this.generation;
