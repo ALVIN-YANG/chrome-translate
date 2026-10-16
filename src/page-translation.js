@@ -1,6 +1,8 @@
-import { collectPageSegments, cleanText, splitPageText } from './page-segments.js';
+import { collectPageSegments, cleanText, splitPageText, PAGE_BLOCKS } from './page-segments.js';
 import { PageQueue } from './page-queue.js';
 import { normalizeLanguage } from './language.js';
+
+const SETTLE_MS = 100;
 
 export class PageTranslation {
   constructor(doc, translateBatch, onState) {
@@ -8,6 +10,7 @@ export class PageTranslation {
     this.onState = onState;
     this.records = new Map();
     this.serial = 0;
+    this.changedAt = new Map();
     this.queue = new PageQueue(translateBatch, (item, result) => this.complete(item, result), error => {
       this.error = error.message || '翻译未完成，请重试。';
       this.report();
@@ -37,18 +40,44 @@ export class PageTranslation {
     }, { rootMargin: '250px 0px' });
     this.scan();
     this.observer = new MutationObserver(mutations => {
-      const lostTranslation = mutations.some(mutation => {
+      const now = performance.now();
+      const mark = element => { if (element) this.changedAt.set(element.closest(PAGE_BLOCKS) || element, now); };
+      for (const mutation of mutations) {
         const record = this.records.get(mutation.target);
-        return record?.host && record.host.parentNode !== record.element && [...mutation.removedNodes].includes(record.host);
-      });
-      if (!lostTranslation && !mutations.some(mutation => !mutation.target.parentElement?.closest('[data-ct-owned]')
+        const lostTranslation = record?.host && record.host.parentNode !== record.element && [...mutation.removedNodes].includes(record.host);
+        const sourceChanged = !mutation.target.parentElement?.closest('[data-ct-owned]')
         && !mutation.target.closest?.('[data-ct-owned]')
-        && (mutation.type !== 'childList' || [...mutation.addedNodes, ...mutation.removedNodes].some(node => !node.dataset?.ctOwned)))) return;
-      clearTimeout(this.scanTimer);
-      this.scanTimer = setTimeout(() => this.scan(), 100);
+        && (mutation.type !== 'childList' || [...mutation.addedNodes, ...mutation.removedNodes].some(node => !node.dataset?.ctOwned));
+        if (!lostTranslation && !sourceChanged) continue;
+        mark(mutation.target.nodeType === 1 ? mutation.target : mutation.target.parentElement);
+        for (const node of mutation.addedNodes) {
+          if (node.nodeType !== 1 || node.dataset?.ctOwned) continue;
+          mark(node);
+          for (const element of node.querySelectorAll(PAGE_BLOCKS)) mark(element);
+        }
+      }
+      this.scheduleScan();
     });
     this.observer.observe(this.doc.body, { childList: true, subtree: true, characterData: true, attributes: true, attributeFilter: ['hidden', 'aria-hidden', 'translate', 'contenteditable'] });
     return this.report();
+  }
+  scheduleScan() {
+    if (!this.active || this.scanTimer || !this.changedAt.size) return;
+    // 各块分别等待稳定，其他块的变化不延长它的等待；没有稳定块时只检查时间，不遍历页面。
+    let next = Infinity;
+    for (const time of this.changedAt.values()) next = Math.min(next, time + SETTLE_MS);
+    this.scanTimer = setTimeout(() => {
+      this.scanTimer = null;
+      const now = performance.now();
+      let ready = false;
+      for (const [element, time] of this.changedAt) {
+        if (time + SETTLE_MS > now) continue;
+        this.changedAt.delete(element);
+        if (element.isConnected) ready = true;
+      }
+      if (ready) this.scan();
+      this.scheduleScan();
+    }, Math.max(0, next - performance.now()));
   }
   scan() {
     if (!this.active) return;
@@ -70,6 +99,7 @@ export class PageTranslation {
       const old = this.records.get(segment.element);
       if (old?.text === segment.text) {
         if (old.host && old.host.parentNode !== segment.element) this.repair(old);
+        if (old.deferred) this.enqueue(old);
         continue;
       }
       old?.host?.remove();
@@ -82,6 +112,10 @@ export class PageTranslation {
     this.report();
   }
   enqueue(record) {
+    if (this.changedAt.has(record.element)) { record.deferred = true; return; }
+    record.deferred = false;
+    const rect = record.element.getBoundingClientRect();
+    if (rect.bottom < -250 || rect.top > innerHeight + 250) return;
     record.chunks.forEach((text, index) => this.queue.add({ text, id: `${record.id}-${index}`, record, index }));
   }
   complete(item, result) {
@@ -132,6 +166,8 @@ export class PageTranslation {
     this.intersection?.disconnect();
     this.observer?.disconnect();
     clearTimeout(this.scanTimer);
+    this.scanTimer = null;
+    this.changedAt.clear();
     for (const record of this.records.values()) record.host?.remove();
     this.records.clear();
     this.error = '';

@@ -1,0 +1,547 @@
+{
+  "version": "0.7.6",
+  "date": "2026-10-16",
+  "baseline": "3e08e366ebf7229083152cbcad8fbe32065e25f6",
+  "beforeFix": {
+    "sharedDebounce": "new stable paragraphs did not get requested during continuous updates; they translated only after the rest of the page became quiet",
+    "cases": [
+      {
+        "area": "nav",
+        "duringUpdates": false,
+        "requestedDuringUpdates": false,
+        "firstWaitMs": 1273,
+        "afterQuietMs": 191,
+        "afterQuiet": true,
+        "startedAtMs": 414.7999999523163,
+        "stoppedAtMs": 1932.2999999523163,
+        "ticks": 74,
+        "elapsedMs": 1518
+      },
+      {
+        "area": "main",
+        "duringUpdates": false,
+        "requestedDuringUpdates": false,
+        "firstWaitMs": 1257,
+        "afterQuietMs": 185,
+        "afterQuiet": true,
+        "startedAtMs": 2125.7000000476837,
+        "stoppedAtMs": 3630.0999999046326,
+        "ticks": 75,
+        "elapsedMs": 1504
+      },
+      {
+        "area": "stream",
+        "duringUpdates": false,
+        "requestedDuringUpdates": false,
+        "firstWaitMs": 1269,
+        "afterQuietMs": 186,
+        "afterQuiet": true,
+        "startedAtMs": 3816,
+        "stoppedAtMs": 5320.200000047684,
+        "ticks": 75,
+        "elapsedMs": 1504
+      }
+    ]
+  },
+  "implementation": {
+    "grouping": "shared PAGE_BLOCKS vocabulary for extraction and mutation ownership",
+    "waiting": "100ms quiet time per changed block, using a monotonic clock; stable blocks trigger a batched scan without waiting for unrelated blocks",
+    "requests": "defer still-changing blocks, preserve viewport loading, do not send intermediate stream versions in the tested cases",
+    "cleanup": "clear pending timers and block state on stop",
+    "newDependencies": false,
+    "permissionsChanged": false
+  },
+  "node": {
+    "command": "npm run check",
+    "tests": 86,
+    "passed": 86,
+    "failed": 0
+  },
+  "controlledBrowser": {
+    "command": "node --test --test-concurrency=1 tests/browser/extension.test.js",
+    "scenarios": [
+      {
+        "name": "workspace",
+        "status": "passed",
+        "platform": "darwin",
+        "browserVersion": "156.0.8078.4",
+        "extensionVersion": "0.7.6",
+        "checks": 14
+      },
+      {
+        "name": "webpage",
+        "status": "passed",
+        "platform": "darwin",
+        "browserVersion": "156.0.8078.4",
+        "extensionVersion": "0.7.6",
+        "checks": 23
+      },
+      {
+        "name": "assistant",
+        "status": "passed",
+        "platform": "darwin",
+        "browserVersion": "156.0.8078.4",
+        "extensionVersion": "0.7.6",
+        "checks": 18
+      },
+      {
+        "name": "page-csp",
+        "status": "passed",
+        "platform": "darwin",
+        "browserVersion": "156.0.8078.4",
+        "extensionVersion": "0.7.6",
+        "checks": 4
+      },
+      {
+        "name": "audio-csp",
+        "status": "passed",
+        "platform": "darwin",
+        "browserVersion": "156.0.8078.4",
+        "extensionVersion": "0.7.6",
+        "checks": 3
+      },
+      {
+        "name": "page-boundaries",
+        "status": "passed",
+        "platform": "darwin",
+        "browserVersion": "156.0.8078.4",
+        "extensionVersion": "0.7.6",
+        "checks": 5
+      },
+      {
+        "name": "page-rerender",
+        "status": "passed",
+        "platform": "darwin",
+        "browserVersion": "156.0.8078.4",
+        "extensionVersion": "0.7.6",
+        "checks": 11
+      },
+      {
+        "name": "keyboard-focus",
+        "status": "passed",
+        "platform": "darwin",
+        "browserVersion": "156.0.8078.4",
+        "extensionVersion": "0.7.6",
+        "checks": 8
+      },
+      {
+        "name": "scene-state",
+        "status": "passed",
+        "platform": "darwin",
+        "browserVersion": "156.0.8078.4",
+        "extensionVersion": "0.7.6",
+        "checks": 5
+      },
+      {
+        "name": "real-site-verifier",
+        "status": "passed",
+        "platform": "darwin",
+        "browserVersion": "156.0.8078.4",
+        "extensionVersion": "0.7.6",
+        "checks": 7
+      },
+      {
+        "name": "settings-persistence",
+        "status": "passed",
+        "platform": "darwin",
+        "browserVersion": "156.0.8078.4",
+        "extensionVersion": "0.7.6",
+        "checks": 6
+      },
+      {
+        "name": "page-navigation",
+        "status": "passed",
+        "platform": "darwin",
+        "browserVersion": "156.0.8078.4",
+        "extensionVersion": "0.7.6",
+        "checks": 11
+      },
+      {
+        "name": "page-updates",
+        "status": "passed",
+        "platform": "darwin",
+        "browserVersion": "156.0.8078.4",
+        "extensionVersion": "0.7.6",
+        "checks": 7
+      }
+    ],
+    "updates": {
+      "name": "page-updates",
+      "status": "passed",
+      "mode": "real-extension-controlled-provider",
+      "fixtureParagraphs": 0,
+      "probes": [
+        {
+          "area": "nav",
+          "duringUpdates": true,
+          "requestedDuringUpdates": true,
+          "firstWaitMs": 162,
+          "afterQuietMs": 16,
+          "afterQuiet": true,
+          "ticks": 74,
+          "elapsedMs": 1509
+        },
+        {
+          "area": "main",
+          "duringUpdates": true,
+          "requestedDuringUpdates": true,
+          "firstWaitMs": 130,
+          "afterQuietMs": 8,
+          "afterQuiet": true,
+          "ticks": 75,
+          "elapsedMs": 1506
+        },
+        {
+          "area": "stream",
+          "duringUpdates": true,
+          "requestedDuringUpdates": true,
+          "firstWaitMs": 134,
+          "afterQuietMs": 196,
+          "afterQuiet": true,
+          "ticks": 75,
+          "elapsedMs": 1506
+        }
+      ],
+      "requests": 5,
+      "checks": [
+        "导航持续更新不饿死新正文",
+        "正文计数器不饿死其他稳定段落",
+        "同页流式更新不阻塞稳定段落",
+        "原文保留",
+        "纯数字不发请求",
+        "流式中间版本不反复发送",
+        "流式结束只翻译最终内容"
+      ],
+      "browserVersion": "156.0.8078.4",
+      "platform": "darwin",
+      "extensionVersion": "0.7.6"
+    }
+  },
+  "largeArticle": {
+    "command": "TRANSLATE_PAGE_PARAGRAPHS=2000 node --test --test-name-pattern='page-updates' tests/browser/extension.test.js",
+    "result": {
+      "status": "passed",
+      "mode": "real-extension-controlled-provider",
+      "fixtureParagraphs": 2000,
+      "probes": [
+        {
+          "area": "nav",
+          "duringUpdates": true,
+          "requestedDuringUpdates": true,
+          "firstWaitMs": 155,
+          "afterQuietMs": 31,
+          "afterQuiet": true,
+          "ticks": 75,
+          "elapsedMs": 1516
+        },
+        {
+          "area": "main",
+          "duringUpdates": true,
+          "requestedDuringUpdates": true,
+          "firstWaitMs": 239,
+          "afterQuietMs": 29,
+          "afterQuiet": true,
+          "ticks": 76,
+          "elapsedMs": 1530
+        },
+        {
+          "area": "stream",
+          "duringUpdates": true,
+          "requestedDuringUpdates": true,
+          "firstWaitMs": 131,
+          "afterQuietMs": 219,
+          "afterQuiet": true,
+          "ticks": 75,
+          "elapsedMs": 1513
+        }
+      ],
+      "requests": 5,
+      "checks": [
+        "导航持续更新不饿死新正文",
+        "正文计数器不饿死其他稳定段落",
+        "同页流式更新不阻塞稳定段落",
+        "原文保留",
+        "纯数字不发请求",
+        "流式中间版本不反复发送",
+        "流式结束只翻译最终内容"
+      ],
+      "browserVersion": "156.0.8078.4",
+      "platform": "darwin",
+      "extensionVersion": "0.7.6"
+    }
+  },
+  "profiling": {
+    "scope": "local synthetic fixture with 2000 extra paragraphs; controlled provider; tracing disabled; temporary instrumented prototypes, not release packages",
+    "before": {
+      "cases": [
+        {
+          "area": "nav",
+          "duringUpdates": false,
+          "requestedDuringUpdates": false,
+          "firstWaitMs": 1273,
+          "afterQuietMs": 191,
+          "afterQuiet": true,
+          "startedAtMs": 414.7999999523163,
+          "stoppedAtMs": 1932.2999999523163,
+          "ticks": 74,
+          "elapsedMs": 1518,
+          "scanCountDuringUpdates": 0
+        },
+        {
+          "area": "main",
+          "duringUpdates": false,
+          "requestedDuringUpdates": false,
+          "firstWaitMs": 1257,
+          "afterQuietMs": 185,
+          "afterQuiet": true,
+          "startedAtMs": 2125.7000000476837,
+          "stoppedAtMs": 3630.0999999046326,
+          "ticks": 75,
+          "elapsedMs": 1504,
+          "scanCountDuringUpdates": 0
+        },
+        {
+          "area": "stream",
+          "duringUpdates": false,
+          "requestedDuringUpdates": false,
+          "firstWaitMs": 1269,
+          "afterQuietMs": 186,
+          "afterQuiet": true,
+          "startedAtMs": 3816,
+          "stoppedAtMs": 5320.200000047684,
+          "ticks": 75,
+          "elapsedMs": 1504,
+          "scanCountDuringUpdates": 0
+        }
+      ],
+      "scans": [
+        {
+          "atMs": 300.7000000476837,
+          "durationMs": 21.59999990463257,
+          "segments": 2007
+        },
+        {
+          "atMs": 2035.7999999523163,
+          "durationMs": 12.799999952316284,
+          "segments": 2008
+        },
+        {
+          "atMs": 3733.7999999523163,
+          "durationMs": 11.299999952316284,
+          "segments": 2009
+        },
+        {
+          "atMs": 5423.899999856949,
+          "durationMs": 11.700000047683716,
+          "segments": 2011
+        }
+      ]
+    },
+    "after": {
+      "cases": [
+        {
+          "area": "nav",
+          "duringUpdates": true,
+          "requestedDuringUpdates": true,
+          "firstWaitMs": 131,
+          "afterQuietMs": 16,
+          "afterQuiet": true,
+          "startedAtMs": 316.7000000476837,
+          "stoppedAtMs": 1821.4000000953674,
+          "ticks": 75,
+          "elapsedMs": 1505,
+          "scanCountDuringUpdates": 1
+        },
+        {
+          "area": "main",
+          "duringUpdates": true,
+          "requestedDuringUpdates": true,
+          "firstWaitMs": 211,
+          "afterQuietMs": 11,
+          "afterQuiet": true,
+          "startedAtMs": 1839.9000000953674,
+          "stoppedAtMs": 3347,
+          "ticks": 75,
+          "elapsedMs": 1507,
+          "scanCountDuringUpdates": 2
+        },
+        {
+          "area": "stream",
+          "duringUpdates": true,
+          "requestedDuringUpdates": true,
+          "firstWaitMs": 228,
+          "afterQuietMs": 190,
+          "afterQuiet": true,
+          "startedAtMs": 3359.7000000476837,
+          "stoppedAtMs": 4865.600000143051,
+          "ticks": 75,
+          "elapsedMs": 1506,
+          "scanCountDuringUpdates": 2
+        }
+      ],
+      "scans": [
+        {
+          "atMs": 201.40000009536743,
+          "durationMs": 26.799999952316284,
+          "segments": 2007
+        },
+        {
+          "atMs": 417.7000000476837,
+          "durationMs": 12.5,
+          "segments": 2008
+        },
+        {
+          "atMs": 1927.6000001430511,
+          "durationMs": 14.299999952316284,
+          "segments": 2009
+        },
+        {
+          "atMs": 1946.7999999523163,
+          "durationMs": 12.800000190734863,
+          "segments": 2009
+        },
+        {
+          "atMs": 3451.7000000476837,
+          "durationMs": 14.099999904632568,
+          "segments": 2011
+        },
+        {
+          "atMs": 3470.7000000476837,
+          "durationMs": 12.599999904632568,
+          "segments": 2011
+        },
+        {
+          "atMs": 4969.5,
+          "durationMs": 23.200000047683716,
+          "segments": 2011
+        }
+      ]
+    },
+    "limits": "single local run per case, not a cross-machine benchmark, CPU utilization measurement or universal latency guarantee; final source excludes instrumentation"
+  },
+  "realWebsites": {
+    "command": "TRANSLATE_LIVE_MICROSOFT=1 node --test --test-concurrency=1 --test-name-pattern='real-mdn|real-python' tests/browser/extension.test.js",
+    "cases": [
+      {
+        "name": "real-mdn",
+        "status": "passed",
+        "mode": "real-public-site-real-microsoft-no-mocks",
+        "url": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array",
+        "sourceParagraphs": 141,
+        "sourceNodesPreserved": 141,
+        "codeBlocksPreserved": 49,
+        "codeBlocksInSiteShadowDOM": 47,
+        "bodySourceCharacters": 197,
+        "bodyTranslationCharacters": 54,
+        "belowFoldSourceCharacters": 76,
+        "belowFoldTranslationCharacters": 30,
+        "belowFoldInitiallyUntranslated": true,
+        "translatedCount": 24,
+        "screenshotCaptured": true,
+        "requests": [
+          {
+            "status": 200,
+            "credentialHeaders": []
+          },
+          {
+            "status": 200,
+            "credentialHeaders": []
+          },
+          {
+            "status": 200,
+            "credentialHeaders": []
+          }
+        ],
+        "checks": [
+          "真实公共网页",
+          "真实微软免Key调用",
+          "首屏正文关联中文译文",
+          "滚动后未翻译正文加载",
+          "无认证或Cookie",
+          "源段落和代码保留",
+          "关闭恢复"
+        ],
+        "browserVersion": "156.0.8078.4",
+        "platform": "darwin",
+        "extensionVersion": "0.7.6"
+      },
+      {
+        "name": "real-python",
+        "status": "passed",
+        "mode": "real-public-site-real-microsoft-no-mocks",
+        "url": "https://docs.python.org/3/library/asyncio-task.html",
+        "sourceParagraphs": 296,
+        "sourceNodesPreserved": 296,
+        "codeBlocksPreserved": 32,
+        "codeBlocksInSiteShadowDOM": 0,
+        "bodySourceCharacters": 80,
+        "bodyTranslationCharacters": 23,
+        "belowFoldSourceCharacters": 83,
+        "belowFoldTranslationCharacters": 20,
+        "belowFoldInitiallyUntranslated": true,
+        "translatedCount": 14,
+        "screenshotCaptured": true,
+        "requests": [
+          {
+            "status": 200,
+            "credentialHeaders": []
+          },
+          {
+            "status": 200,
+            "credentialHeaders": []
+          }
+        ],
+        "checks": [
+          "真实公共网页",
+          "真实微软免Key调用",
+          "首屏正文关联中文译文",
+          "滚动后未翻译正文加载",
+          "无认证或Cookie",
+          "源段落和代码保留",
+          "关闭恢复"
+        ],
+        "browserVersion": "156.0.8078.4",
+        "platform": "darwin",
+        "extensionVersion": "0.7.6"
+      }
+    ]
+  },
+  "package": {
+    "filename": "translate-chrome-0.7.6.zip",
+    "sha256": "9c904365709b85c2c573beace2bfd952659aec2464b7f7db9bff50e680f767e5",
+    "bytes": 594130,
+    "files": [
+      "LICENSE",
+      "THIRD_PARTY_LICENSES.txt",
+      "app.js",
+      "background.js",
+      "content.js",
+      "icons/128.png",
+      "icons/16.png",
+      "icons/32.png",
+      "icons/48.png",
+      "index.html",
+      "manifest.json",
+      "offscreen.html",
+      "offscreen.js",
+      "popup.css",
+      "popup.html",
+      "popup.js",
+      "services.css",
+      "services.html",
+      "services.js",
+      "styles.css",
+      "tabs.js"
+    ]
+  },
+  "cleanup": {
+    "temporaryInstrumentationInRelease": false
+  },
+  "limits": [
+    "长文测量来自本机合成样本，不证明所有网页性能或翻译质量",
+    "等待的稳定性按正文块DOM变更判断，不表示任意网站结构均已验证",
+    "早先偶发入口就绪超时仍未复现或归因",
+    "没有操作用户日常Chrome安装、配置或新增真实付费调用",
+    "真实采用与独立贡献仍缺证据"
+  ]
+}

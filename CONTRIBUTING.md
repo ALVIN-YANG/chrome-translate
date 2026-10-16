@@ -41,6 +41,14 @@ TRANSLATE_LIVE_MICROSOFT=1 node --test --test-name-pattern='real-mdn|real-python
 
 只排查公共网页的扩展入口是否出现时，构建后运行 `node scripts/verify-page-startup.mjs`。它在四个新建配置中打开三次 MDN、一次 Python 文档，检查十秒内入口是否可操作及随后是否仍存在；不实际点击，不触发翻译，并拦截可能发出的微软/词典请求。记录保存到 `output/startup-probe.json`。该探针有网络路由干预，只提供这些样本的诊断记录，不作为性能基准，也不能凭通过就认定偶发启动问题已修复。
 
+动态长文的受控检查可在构建后单独运行：
+
+```sh
+TRANSLATE_PAGE_PARAGRAPHS=2000 node --test --test-name-pattern='page-updates' tests/browser/extension.test.js
+```
+
+此命令生成额外段落，验证导航时钟、正文计数器、同页流式文字持续更新时稳定新段落仍能翻译，以及流式中间版本不会反复发送。段落数支持 0 至 10000，默认 CI 为 0；供应商响应受控，不调用真实账号。结果保存到 `output/playwright/page-updates-result.json`。耗时受机器、浏览器和跟踪开销影响；发布记录中的逐次扫描计时来自临时插桩，仅用于诊断，不是跨机基准或 CI 性能门槛。
+
 ## 改动应该放在哪里
 
 见 [架构说明](docs/架构说明.md)。新增适配优先复用现有协议和 AI SDK provider，避免每个厂商复制一套界面、请求或播放流程。新增依赖前，确认现有实现不能满足需要。

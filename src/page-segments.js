@@ -1,8 +1,8 @@
-const BLOCKS = 'p,h1,h2,h3,h4,h5,h6,li,blockquote,figcaption,td,th,dt,dd,div,section,article,main,body';
+export const PAGE_BLOCKS = 'p,h1,h2,h3,h4,h5,h6,li,blockquote,figcaption,td,th,dt,dd,div,section,article,main,body';
 const ALWAYS_SKIP = 'script,style,noscript,template,pre,kbd,samp,svg,math,canvas,iframe,input,textarea,select,button,form,[contenteditable]:not([contenteditable="false"]),[translate="no"],.notranslate,[hidden],[aria-hidden="true"],[data-ct-owned]';
 const CHROME_SKIP = 'nav,header,footer,aside,[role="navigation"],[role="banner"],[role="complementary"]';
 const PROSE = 'p,h1,h2,h3,h4,h5,h6,li,blockquote,figcaption,td,th,dt,dd';
-const BREAKS = `br,hr,pre,form,${BLOCKS}`;
+const BREAKS = `br,hr,pre,form,${PAGE_BLOCKS}`;
 
 function textOutsideCode(node) {
   if (node.nodeType === 3) return node.textContent;
@@ -46,7 +46,7 @@ export function collectPageSegments(doc, scope = 'smart', visible = () => true) 
     for (let node = walker.nextNode(); node; node = walker.nextNode()) {
       const parent = node.parentElement;
       if (node.nodeType === 1) {
-        const parts = groups.get(parent?.closest(BLOCKS));
+        const parts = groups.get(parent?.closest(PAGE_BLOCKS));
         if (parts && node.matches(BREAKS) && !parent.closest(ALWAYS_SKIP)
           && !node.matches('[hidden],[aria-hidden="true"]')
           && (scope === 'all' || !parent.closest(CHROME_SKIP)) && visible(parent) && visible(node)) parts.push(' ');
@@ -60,7 +60,7 @@ export function collectPageSegments(doc, scope = 'smart', visible = () => true) 
         if (!proseCache.has(prose)) proseCache.set(prose, /\p{Letter}/u.test(textOutsideCode(prose)));
         if (!proseCache.get(prose)) continue;
       }
-      const element = parent.closest(BLOCKS) || parent;
+      const element = parent.closest(PAGE_BLOCKS) || parent;
       if (!groups.has(element)) groups.set(element, []);
       groups.get(element).push(node.textContent);
     }
