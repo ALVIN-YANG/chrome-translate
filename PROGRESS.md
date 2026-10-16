@@ -4,6 +4,8 @@
 
 0.7.11：维护者认为悬浮入口仍丑，并选择小圆形图标。参考沉浸式翻译官方演示的紧凑圆形入口，沿用项目蓝色与现有 Lucide 图标：42px 文字方块改为 40px 圆形，常态弱化阴影，开启后显示蓝底“显示原文”图标；按下即时缩放，焦点与按下语义保留。只在开启状态改变时替换图标，避免逐段更新重复生成 SVG。87 项 Node 测试、十六组本机浏览器场景共 159 项检查通过；实际 ZIP 的十一种视觉状态已渲染核对，含窄窗口、深色页面、按下、焦点、恢复与错误提示。记录见 `docs/evidence/floating-button-0.7.11.json`。X 草稿已改为说明产品用途与制作原因，未发布；不再使用试用邀约文案。尚未增加拖动、贴边收起或悬停设置面板，产品完成度与广泛兼容性仍需继续改进。
 
+[v0.7.11 Release](https://github.com/ALVIN-YANG/chrome-translate/releases/tag/v0.7.11) 指向 `3e48fd1aec67ce3d320a7f6896fc323f5b95c261`，[发布前 CI](https://github.com/ALVIN-YANG/chrome-translate/actions/runs/38860921527) 的 Node 22/24 与 Linux Chromium 全部通过，两平台十六组场景共 159 项检查一致。公开 ZIP 为 594,428 字节，SHA-256 `f5a97cb118a5325ecd3517dc26fc05cf7ffec0707c54a71c2d462b4906b3a39c`，与本机视觉检查及 Linux 产物逐字节一致。匿名下载、摘要、ZIP CRC、21 个白名单文件、Manifest、许可及测试凭据排除均已核对。用户日常 Chrome 安装未改动，需重新加载扩展并刷新网页；目标仍未完成。
+
 0.7.10：公开 v0.7.9 安装包两次复现选中正文后按 Tab 进入输入框，旧划词条仍然显示。修复为网页焦点移出扩展控件时隐藏操作条；不关闭已有面板、不抢回焦点、不改写输入内容。原有键盘回归新增输入框、富文本编辑区与无额外请求三项检查，旧实现失败、修复后通过。87 项 Node 测试、十六组本机安装包浏览器场景共 159 项检查通过，原始复现脚本在新版 ZIP 上通过，见 `docs/evidence/selection-focus-0.7.10.json`。未增加权限、依赖或数据字段。X 试用邀请已在维护者账号的发帖框准备好，尚未获明确发布授权；未发送邀请，独立使用反馈仍缺证据。
 
 [v0.7.10 Release](https://github.com/ALVIN-YANG/chrome-translate/releases/tag/v0.7.10) 指向 `f378e90081843d6f31fafd834af9067edee45da6`，[发布前 CI](https://github.com/ALVIN-YANG/chrome-translate/actions/runs/38858348286) 的 Node 22/24 与 Linux Chromium 全部通过，两平台十六组场景共 159 项检查一致。公开 ZIP 为 594,323 字节，SHA-256 `e5900f76154c7925c98c08b7e9aebc9aa2edc52199c0edb34ba7dec840977050`，与本机、Linux CI 和原始复现实际加载包一致。公开摘要、ZIP 完整性、Manifest、21 个白名单文件和 MIT 许可已核对；临时配置已清理。早先入口就绪超时与真实采用仍无新增结论，顶级开源目标未完成。

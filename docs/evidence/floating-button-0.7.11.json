@@ -171,5 +171,30 @@
   ],
   "paidCredentialsUsed": false,
   "userChromeInstallationChanged": false,
-  "temporaryProfilesRemoved": true
+  "temporaryProfilesRemoved": true,
+  "ci": {
+    "url": "https://github.com/ALVIN-YANG/chrome-translate/actions/runs/38860921527",
+    "sourceCommit": "3e48fd1aec67ce3d320a7f6896fc323f5b95c261",
+    "status": "success",
+    "nodeVersions": [
+      22,
+      24
+    ],
+    "browserScenarios": 16,
+    "browserChecks": 159,
+    "linuxPackageMatchesLocal": true
+  },
+  "release": {
+    "url": "https://github.com/ALVIN-YANG/chrome-translate/releases/tag/v0.7.11",
+    "tagCommit": "3e48fd1aec67ce3d320a7f6896fc323f5b95c261",
+    "publicSHA256": "f5a97cb118a5325ecd3517dc26fc05cf7ffec0707c54a71c2d462b4906b3a39c",
+    "publicBytes": 594428,
+    "anonymousPublicDownload": true,
+    "publicPackageMatchesLocal": true,
+    "publicChecksumMatches": true,
+    "fileCount": 21,
+    "manifestVersion": "0.7.11",
+    "licenseMatches": true,
+    "fixtureCredentialsExcluded": true
+  }
 }
