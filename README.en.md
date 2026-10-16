@@ -24,6 +24,8 @@ Requires Chrome 120+. Release installation does not require Node.js or a develop
 
 To update, replace the files in the same folder, reload the extension, and refresh open translation pages and webpages. Keep that folder in place. The project is not currently published on the Chrome Web Store.
 
+For a first try, open the text workspace, keep the default Microsoft service, and paste `Hello, world.` to see a Chinese translation. AI and cloud speech setup can wait. Whether you complete your task or get stuck during installation, [share your usage experience](https://github.com/ALVIN-YANG/chrome-translate/issues/new?template=usage.yml); no development setup is needed.
+
 ## Use
 
 | Action | Behavior |

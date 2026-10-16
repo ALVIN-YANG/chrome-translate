@@ -2,6 +2,8 @@
 
 欢迎用中文或英文提交问题、文档修正和 Pull Request。先搜索已有 Issue；较大的功能先说明使用场景、预期行为和范围，避免做完后才发现方向不符。
 
+没有明确 Bug 也可以[反馈使用体验](https://github.com/ALVIN-YANG/chrome-translate/issues/new?template=usage.yml)：记录实际任务、完成情况和是否已经再次使用，成功和受阻的体验都欢迎，不需要开发环境。有稳定复现步骤时使用[问题反馈](https://github.com/ALVIN-YANG/chrome-translate/issues/new?template=bug.yml)。
+
 ## 本机开发
 
 需要 Node.js 22 或更新版本，推荐 24。安装后的扩展要求 Chrome 120+。
@@ -71,5 +73,7 @@ TRANSLATE_PAGE_PARAGRAPHS=2000 node --test --test-name-pattern='page-updates' te
 ## English quick start
 
 Use Node.js 22+ (24 recommended). Run `npm ci`, then `npm run check`. For the real MV3 browser suite, run `npx playwright install --no-shell chromium` and `npm run test:browser`. Linux may need `--with-deps` during installation. Test profiles and local fixture servers are created and removed automatically; no real API key is required. Results and failure traces are saved under `output/playwright/`.
+
+You can also [share usage feedback](https://github.com/ALVIN-YANG/chrome-translate/issues/new?template=usage.yml) without a development setup or a reproducible bug. Describe the task, what actually happened, and whether you have used the extension again.
 
 Keep PRs focused. Explain the problem, resulting behavior, and checks actually run. Include actual screenshots for UI changes. Never submit credentials, private text, raw authorization headers, or personal browser profiles. Discuss substantial features in an Issue before implementing them. See the [English README](README.en.md) for installation and product limits.

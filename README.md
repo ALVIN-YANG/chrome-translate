@@ -8,7 +8,27 @@
 
 划词后直接 **翻译、朗读原文或问问 AI** 的 Chrome 扩展。保留网页双语和独立文本翻译，支持 **15 种翻译语言**；模型、语音、Key 和接口可以自己选择。
 
+默认的**微软翻译和系统朗读无需 Key**。问问 AI 和云端声音按需配置，首次翻译不用先申请模型账号。
+
 **[下载最新插件包](https://github.com/ALVIN-YANG/chrome-translate/releases/latest)** · [安装](#安装) · [翻译服务](#翻译服务) · [参与贡献](CONTRIBUTING.md) · [反馈问题](https://github.com/ALVIN-YANG/chrome-translate/issues/new/choose)
+
+## 安装
+
+适用于 **Chrome 120 或更新版本**。安装 Release 插件包不需要 Node.js，也不需要注册开发者账号。
+
+1. 在 [Releases](https://github.com/ALVIN-YANG/chrome-translate/releases/latest) 下载 **`translate-chrome-*.zip`**。
+2. 将安装包解压到一个固定文件夹。
+3. 打开 `chrome://extensions`，开启右上角「开发者模式」。
+4. 点击「加载已解压的扩展程序」，选择**直接包含 `manifest.json` 的那个文件夹**。
+5. 点击工具栏里的「翻译 · 多语言」图标，选择「翻译当前网页」，或选择「打开独立翻译页」后粘贴文本。默认使用微软翻译，无需填写 Key。
+
+> 「Code → Download ZIP」下载的是源码，需先构建。安装请使用 Releases 中的 `translate-chrome-*.zip`，不要选 `Source code`。
+
+首次使用可先打开独立翻译页，使用默认的微软服务，粘贴 `Hello, world.` 查看中文译文，再尝试划词或网页双语。问问 AI 和云端朗读可以稍后再配。
+
+更新时，用新版安装包替换原文件夹内容，在扩展管理页面点击「重新加载」，再刷新翻译页及需要翻译的网页，使新版网页脚本生效。加载后保留该文件夹，避免移动或删除它。
+
+用过之后，无论顺利完成还是卡在安装，都可以[反馈使用体验](https://github.com/ALVIN-YANG/chrome-translate/issues/new?template=usage.yml)，说明实际任务、结果和是否已经再次使用；不需要准备开发环境。
 
 ## 划词后的三个入口
 
@@ -74,20 +94,6 @@ TTS 预设包括 **系统声音、MiniMax、OpenAI、ElevenLabs、硅基流动**
 结果使用无框的连续阅读布局，长内容随页面展开。输入变化后立即翻译，中文输入法选字期间不发请求；新输入会取消旧请求，迟到的结果不会覆盖当前内容。更新或失败时保留上次结果，并标明旧结果的语言和状态，仍可选中、复制或朗读；新结果完成后一次替换。
 
 工具栏菜单里的「打开独立翻译页」会优先激活已经打开的翻译页。当前标签页会暂存原文、服务选择、目标语言和已有结果，刷新可恢复；匹配的结果不重复请求接口。清空后有 8 秒可以点击「撤销清空」。
-
-## 安装
-
-适用于 **Chrome 120 或更新版本**。安装 Release 插件包不需要 Node.js，也不需要注册开发者账号。
-
-1. 在 [Releases](https://github.com/ALVIN-YANG/chrome-translate/releases/latest) 下载 **`translate-chrome-*.zip`**。
-2. 将安装包解压到一个固定文件夹。
-3. 打开 `chrome://extensions`，开启右上角「开发者模式」。
-4. 点击「加载已解压的扩展程序」，选择**直接包含 `manifest.json` 的那个文件夹**。
-5. 点击工具栏里的「翻译 · 多语言」图标，选择「翻译当前网页」，或选择「打开独立翻译页」后粘贴文本。默认使用微软翻译，无需填写 Key。
-
-> 「Code → Download ZIP」下载的是源码，需先构建。安装请使用 Releases 中的 `translate-chrome-*.zip`，不要选 `Source code`。
-
-更新时，用新版安装包替换原文件夹内容，在扩展管理页面点击「重新加载」，再刷新翻译页及需要翻译的网页，使新版网页脚本生效。加载后保留该文件夹，避免移动或删除它。
 
 ## 翻译服务
 

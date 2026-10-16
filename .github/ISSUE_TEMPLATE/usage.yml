@@ -1,0 +1,48 @@
+name: Usage / 使用体验
+description: 首次安装和实际使用反馈，成功与受阻都欢迎 / Share first-install and usage feedback, including success and friction
+title: '[Usage] '
+body:
+  - type: markdown
+    attributes:
+      value: |
+        这是公开反馈。请勿提交 Key、Cookie、私人原文或账号信息；不需要提供联系方式。已有稳定复现步骤时，也可使用[问题反馈](https://github.com/ALVIN-YANG/chrome-translate/issues/new?template=bug.yml)。
+        This feedback is public. Do not include keys, cookies, private text or account details; no contact information is needed. Use the bug form if you have reproducible steps.
+  - type: input
+    id: environment
+    attributes:
+      label: 插件、浏览器和系统 / Extension, browser and OS
+      description: 可填安装包版本或文件名，不清楚的部分可以留空。 / A ZIP version or filename is enough; unknown details can be omitted.
+      placeholder: v0.x.x; Chrome; Windows / macOS / Linux
+  - type: dropdown
+    id: outcome
+    attributes:
+      label: 实际结果 / Actual outcome
+      options:
+        - 完成了原本的任务 / Completed the intended task
+        - 部分完成，仍有阻碍 / Partly completed, with friction
+        - 未完成任务 / Could not complete the task
+        - 未能完成安装 / Could not finish installation
+    validations:
+      required: true
+  - type: dropdown
+    id: usage
+    attributes:
+      label: 使用情况 / Usage so far
+      description: 选择已经发生的情况，而非未来打算。 / Report what has happened, rather than future intent.
+      options:
+        - 首次尝试 / First attempt
+        - 已在不同时间再次使用 / Used again later
+        - 尚未开始使用 / Not started yet
+    validations:
+      required: true
+  - type: textarea
+    id: experience
+    attributes:
+      label: 任务和体验 / Task and experience
+      description: 说明想完成的任务、实际结果和最明显的方便或不便；可以只写站点类型。 / Describe your task, result and what helped or got in the way; a site type is enough.
+      placeholder: |
+        任务 / Task:
+        实际结果 / Result:
+        方便或不便之处 / What helped or got in the way:
+    validations:
+      required: true
