@@ -522,5 +522,25 @@
     "没有新的真实供应商或账号权限测试",
     "没有操作用户日常 Chrome 的安装或配置",
     "真实采用与独立社区贡献仍需证据"
-  ]
+  ],
+  "testGestureIsolation": {
+    "initialCI": {
+      "url": "https://github.com/ALVIN-YANG/chrome-translate/actions/runs/38840434623",
+      "commit": "7ef729218570df1b864d1638fcd1a9917dae2507",
+      "node22": "success",
+      "node24": "success",
+      "browserPassed": 8,
+      "browserFailed": 1,
+      "failure": "third selection retained text but did not receive selection toolbar"
+    },
+    "reproduction": "holding down within the previous selection for 700ms reproduced the same toolbar timeout at the same third-selection step on macOS",
+    "nativeProbeEvents": [
+      "pointerdown",
+      "dragstart",
+      "pointercancel",
+      "dragend"
+    ],
+    "correction": "clear the previous selection before each fresh native drag; the same held-mouse reproduction then passed all eight focus checks; the 700ms diagnostic delay was removed from the final test",
+    "productionCodeChanged": false
+  }
 }

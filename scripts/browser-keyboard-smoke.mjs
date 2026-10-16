@@ -12,6 +12,8 @@ async function setup(page) {
   await controls.getByRole('button', { name: '翻译当前网页', exact: true }).waitFor();
   const select = async () => {
     await page.locator('#term').scrollIntoViewIfNeeded();
+    // 每轮新建选区，避免在旧选区内拖动时变成浏览器原生文字拖放。
+    await page.evaluate(() => getSelection().removeAllRanges());
     const rect = await page.locator('#term').evaluate(element => {
       const node = element.firstChild, start = node.textContent.indexOf('回溯'), range = document.createRange();
       range.setStart(node, start); range.setEnd(node, start + 2); return range.getBoundingClientRect().toJSON();
