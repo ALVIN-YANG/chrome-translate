@@ -4,6 +4,8 @@
 
 本轮补强正文验证工具：已用真实扩展复现“只有标题译文仍能通过”的漏检，新增负例拒绝该情况；正例还排除兼容性控件说明并模拟正文译文出现后上方内容增高。MDN 实测确认原节点和中文译文都存在时，新增排版可把所测译文推离视口；验证器改为等该段译文生成后重新定位，再检查实际可见。83 项 Node 测试、十组本机浏览器场景共 98 项检查通过；MDN/Python 的首屏与远处正文、原文/代码和关闭恢复均通过真实微软检查。此轮不改变运行时代码或安装包，仍使用 v0.7.3，SHA-256 与公开包一致；早先入口就绪超时仍未归因。记录见 `docs/evidence/article-validation-0.7.3.json`。
 
+[本轮 CI](https://github.com/ALVIN-YANG/chrome-translate/actions/runs/38843565132) 对提交 `9e1b9ae6c77dcb5eae217426c2b1a2ab3082c3af` 的 Node 22/24 与 Linux Chromium 检查全部通过；Linux 十组场景共 98 项检查、正文验证器七项边界均通过。Linux 产物与本机及公开 v0.7.3 ZIP 逐字节相同；临时配置与测试浏览器已清理。这里只完成验证可靠性的阶段改进，仍缺真实采用与独立贡献的证据。
+
 0.7.3 已交付：修复划词浮层关闭后焦点退回 body、场景按钮缺少正确按下状态的问题。普通段落使用临时 `tabindex=-1`，焦点离开后清理；保留网页已有属性。Esc、关闭按钮、Tab 继续操作、外部点击和外部键盘焦点均已验证，场景切换不额外调用模型。83 项 Node 测试、macOS/Linux 九组 ZIP 浏览器场景共 91 项检查及 GitHub Node 22/24 检查通过。四个新配置的公共网页启动探针通过且未发翻译请求；启动波动仍未确认根因，未改动启动逻辑。证据见 `docs/evidence/keyboard-0.7.3.json`，不等于人工读屏或用户安装验收。
 
 [v0.7.3 Release](https://github.com/ALVIN-YANG/chrome-translate/releases/tag/v0.7.3) 指向 `2de16554ccdedca5f01882ec20519159179d13fc`，[发布前 CI](https://github.com/ALVIN-YANG/chrome-translate/actions/runs/38840960510) 全部通过。ZIP 和摘要文件的匿名公开下载均 HTTP 200；ZIP 为 593,426 字节、SHA-256 `291bee81fe7c5393ce335448fcf93308f2c20b9007b8f21738019afdab6278c3`，与本机、Linux CI 和浏览器实际加载的包一致。MIT、第三方许可、Manifest 和 ZIP 完整性已核对，临时测试目录已清理。本阶段完成不代表“顶级开源项目”目标已达成。
