@@ -274,5 +274,85 @@
     "早先偶发入口就绪超时仍未复现或归因，本版不是该问题的修复证明",
     "两个真实站点与受控场景不证明所有网站兼容或人工翻译质量",
     "没有操作用户日常Chrome安装或配置，也没有新的采用或社区贡献证据"
-  ]
+  ],
+  "ci": {
+    "url": "https://github.com/ALVIN-YANG/chrome-translate/actions/runs/38847047022",
+    "commit": "385b089c554b076aeedd779f41a33ce99d1f8071",
+    "node22": "success",
+    "node24": "success",
+    "chromium": "success",
+    "scenarios": 12,
+    "checks": 115,
+    "navigation": {
+      "name": "page-navigation",
+      "status": "passed",
+      "mode": "real-extension-controlled-provider",
+      "checks": [
+        "目录锚点继续翻译",
+        "查询参数跳转后停止",
+        "新文章等待主动开启",
+        "旧页面译文清理",
+        "重新开启翻译新正文",
+        "同URL状态更新继续翻译",
+        "哈希路由新正文不自动发送",
+        "哈希路由后退停止",
+        "路径replaceState清理原节点译文",
+        "切换文章关闭划词浮层",
+        "前进到新文章停止翻译"
+      ],
+      "browserVersion": "156.0.8078.4",
+      "platform": "linux",
+      "extensionVersion": "0.7.5"
+    },
+    "package": {
+      "filename": "translate-chrome-0.7.5.zip",
+      "sha256": "7f0fffd71219d824cd08711de5b1cbe240cc59385740b098b060e28f294c805b",
+      "bytes": 593891,
+      "files": [
+        "LICENSE",
+        "THIRD_PARTY_LICENSES.txt",
+        "app.js",
+        "background.js",
+        "content.js",
+        "icons/128.png",
+        "icons/16.png",
+        "icons/32.png",
+        "icons/48.png",
+        "index.html",
+        "manifest.json",
+        "offscreen.html",
+        "offscreen.js",
+        "popup.css",
+        "popup.html",
+        "popup.js",
+        "services.css",
+        "services.html",
+        "services.js",
+        "styles.css",
+        "tabs.js"
+      ]
+    },
+    "linuxMatchesMac": true
+  },
+  "release": {
+    "url": "https://github.com/ALVIN-YANG/chrome-translate/releases/tag/v0.7.5",
+    "targetCommit": "385b089c554b076aeedd779f41a33ce99d1f8071",
+    "draft": false,
+    "zipHttpStatus": 200,
+    "checksumHttpStatus": 200,
+    "downloadAuthentication": "none; curl -q without Authorization or netrc",
+    "bytes": 593891,
+    "sha256": "7f0fffd71219d824cd08711de5b1cbe240cc59385740b098b060e28f294c805b",
+    "matchesLocalAndCI": true,
+    "manifest": "0.7.5",
+    "license": "MIT",
+    "zipIntegrity": "passed"
+  },
+  "cleanup": {
+    "temporaryDirectoriesByPrefix": {
+      "chrome-translate-test-": 0,
+      "chrome-translate-release-test-": 0
+    },
+    "runningTestBrowsers": 0
+  }
 }

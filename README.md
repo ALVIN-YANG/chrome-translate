@@ -164,7 +164,7 @@ npm run dev
 | `scripts/` | 构建、预览及浏览器验证 |
 | `docs/` | 使用截图与验证记录 |
 
-v0.7.5 修复单页网站切换文章后继续自动发送新正文的问题，保留普通目录锚点的连续阅读。86 项 Node 测试、十二组本机 Chromium 安装包场景共 115 项检查通过，详见 [本版验证数据](docs/evidence/navigation-0.7.5.json)。这些自动检查不等于用户浏览器安装或人工读屏验收。跨设置页保存与偏好并发修改见 [v0.7.4 验证](docs/evidence/settings-0.7.4.json)。
+[v0.7.5](https://github.com/ALVIN-YANG/chrome-translate/releases/tag/v0.7.5) 修复单页网站切换文章后继续自动发送新正文的问题，保留普通目录锚点的连续阅读。86 项 Node 测试、十二组 macOS/Linux Chromium 安装包场景共 115 项检查及 GitHub Node 22/24 检查通过；公开下载包与两平台产物逐字节相同。详见 [本版验证数据](docs/evidence/navigation-0.7.5.json)。这些自动检查不等于用户浏览器安装或人工读屏验收。跨设置页保存与偏好并发修改见 [v0.7.4 验证](docs/evidence/settings-0.7.4.json)。
 
 当前版本的 MDN/Python 真实网络检查覆盖首屏正文、远处段落滚动加载、原文与代码保留、关闭恢复。验证工具排除标题和兼容性控件误判，并覆盖译文加载后的排版位移，设计与反例见 [正文验证数据](docs/evidence/article-validation-0.7.3.json)。划词键盘焦点与场景按钮见 [v0.7.3 验证](docs/evidence/keyboard-0.7.3.json)。联网整组曾出现就绪/等待超时，本轮仍未复现早先入口故障，尚未确认根因。
 
