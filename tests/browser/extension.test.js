@@ -16,6 +16,7 @@ import { boundaries, rerender } from '../../scripts/browser-page-compatibility-s
 import realSite from '../../scripts/browser-page-real-sites.mjs';
 import { focusReturn, sceneState } from '../../scripts/browser-keyboard-smoke.mjs';
 import verifyRealSiteScenario from '../../scripts/browser-real-site-verifier-smoke.mjs';
+import settingsPersistence from '../../scripts/browser-settings-smoke.mjs';
 
 const artifactPath = resolve('output/playwright');
 await mkdir(artifactPath, { recursive: true });
@@ -43,6 +44,7 @@ for (const [name, scenario, entry] of [
   ['keyboard-focus', focusReturn, 'article.html'],
   ['scene-state', sceneState, 'article.html'],
   ['real-site-verifier', verifyRealSiteScenario, 'article.html'],
+  ['settings-persistence', settingsPersistence, 'article.html'],
   ...(process.env.TRANSLATE_LIVE_MICROSOFT === '1' ? [
     ['real-mdn', realSite, 'https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array'],
     ['real-python', realSite, 'https://docs.python.org/3/library/asyncio-task.html'],

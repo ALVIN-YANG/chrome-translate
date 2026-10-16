@@ -43,12 +43,35 @@ export async function loadSettings() {
   return normalizeSettings(stored[SETTINGS_KEY]);
 }
 
-export async function saveSettings(settings, { updatePage = false } = {}) {
-  const normalized = normalizeSettings(settings);
-  if (isExtension) {
-    // 独立翻译页打开后，工具栏仍可能调整网页偏好，保存 Key 时保留最新网页偏好。
-    if (!updatePage) normalized.page = (await loadSettings()).page;
-    await chrome.storage.local.set({ [SETTINGS_KEY]: normalized });
+export function providerChanges(before, after) {
+  const previous = normalizeSettings({ providers: before }).providers;
+  const next = normalizeSettings({ providers: after }).providers;
+  const changes = {};
+  for (const [provider, fields] of Object.entries(next)) {
+    const changed = Object.fromEntries(Object.entries(fields).filter(([key, value]) => value !== previous[provider][key]));
+    if (Object.keys(changed).length) changes[provider] = changed;
   }
-  else previewSettings = normalized;
+  return changes;
+}
+
+function mergeSettings(current, patch) {
+  const next = normalizeSettings(current);
+  if (Object.hasOwn(next.providers, patch.provider)) next.provider = patch.provider;
+  next.page = { ...next.page, ...patch.page };
+  for (const provider of Object.keys(next.providers)) next.providers[provider] = { ...next.providers[provider], ...patch.providers?.[provider] };
+  return normalizeSettings(next);
+}
+
+export async function updateSettings(patch) {
+  const snapshot = structuredClone(patch);
+  if (!isExtension) {
+    previewSettings = mergeSettings(previewSettings, snapshot);
+    return structuredClone(previewSettings);
+  }
+  // 扩展页和后台共享同源锁；读取最新值与写入必须属于同一次操作。
+  return navigator.locks.request(SETTINGS_KEY, async () => {
+    const next = mergeSettings(await loadSettings(), snapshot);
+    await chrome.storage.local.set({ [SETTINGS_KEY]: next });
+    return next;
+  });
 }

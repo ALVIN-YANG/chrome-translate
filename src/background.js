@@ -1,5 +1,5 @@
 import { createTranslationTabOpener } from '../public/tabs.js';
-import { loadSettings, saveSettings, SETTINGS_KEY } from './settings.js';
+import { loadSettings, updateSettings, SETTINGS_KEY } from './settings.js';
 import { translate, translateMicrosoftBatch } from './providers.js';
 import { safeSettings, validateTranslationMessage, isPageSender } from './page-protocol.js';
 import { dictionaryUrl } from './dictionary.js';
@@ -34,11 +34,7 @@ async function handle(message, sender) {
     return {};
   }
   if (message.type === 'ct:settings-update' && extensionSender) {
-    const settings = await loadSettings();
-    if (typeof message.provider === 'string' && Object.hasOwn(settings.providers, message.provider)) settings.provider = message.provider;
-    settings.page = { ...settings.page, ...message.page };
-    await saveSettings(settings, { updatePage: true });
-    return safeSettings(await loadSettings());
+    return safeSettings(await updateSettings({ provider: message.provider, page: message.page }));
   }
   if (message.type === 'ct:page-command' && extensionSender && Number.isInteger(message.tabId)) {
     return sendPage(message.tabId, { type: 'ct:toggle', scope: message.scope === 'all' ? 'all' : 'smart' });

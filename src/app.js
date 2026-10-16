@@ -1,7 +1,7 @@
 import { TranslationController } from './controller.js';
 import { PROVIDERS, isConfigured, translate } from './providers.js';
 import { LANGUAGES, detectLanguage, normalizeLanguage, resolveDirection } from './language.js';
-import { defaultSettings, isExtension, loadSettings, normalizeSettings, saveSettings } from './settings.js';
+import { defaultSettings, isExtension, loadSettings, normalizeSettings, providerChanges, updateSettings } from './settings.js';
 import { buildTermEntries, resolveInputMode } from './terms.js';
 import { loadWorkspace, matchesWorkspace, saveWorkspace } from './workspace.js';
 import { UnifiedSpeech } from './unified-speech.js';
@@ -49,9 +49,9 @@ function toast(message) {
   $('toast').hidden = false;
   toastTimer = setTimeout(() => { $('toast').hidden = true; }, 2400);
 }
-function persist(next) {
-  const snapshot = structuredClone(next);
-  persistQueue = persistQueue.catch(() => {}).then(() => saveSettings(snapshot));
+function persist(patch) {
+  const snapshot = structuredClone(patch);
+  persistQueue = persistQueue.catch(() => {}).then(() => updateSettings(snapshot));
   return persistQueue;
 }
 
@@ -303,7 +303,7 @@ for (const button of document.querySelectorAll('[data-provider]')) {
     if (!ready || settings.provider === button.dataset.provider) return;
     settings.provider = button.dataset.provider;
     renderProvider(); translateInput();
-    try { await persist(settings); notice(''); }
+    try { await persist({ provider: settings.provider }); notice(''); }
     catch { notice('服务选择未能保存。当前仍可使用，重新打开页面后需再次选择。'); }
   });
 }
@@ -462,8 +462,9 @@ $('settings-form').addEventListener('submit', async event => {
   const next = normalizeSettings({ provider: settings.provider, providers: drafts });
   $('save-settings').disabled = true;
   try {
-    await persist(next);
-    settings = next;
+    const saved = await persist({ providers: providerChanges(settings.providers, next.providers) });
+    // 保存凭据不改变此标签页正在使用的服务，避免把原文改发到另一服务。
+    settings = { ...saved, provider: settings.provider };
     renderProvider(); dialog.close(); notice(''); toast('配置已保存'); translateInput();
   } catch { connectionStatus('error', '未保存', '无法保存配置，请检查浏览器存储后重试。'); }
   finally { $('save-settings').disabled = false; }

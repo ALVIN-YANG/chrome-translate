@@ -1,0 +1,272 @@
+{
+  "version": "0.7.4",
+  "date": "2026-10-16",
+  "baseline": "054bad4ef4ee9332b6d7dc2e18a38f71f71f937c",
+  "beforeFix": {
+    "parallelPreferences": {
+      "expected": {
+        "target": "ja",
+        "floating": false
+      },
+      "actual": {
+        "target": "zh",
+        "floating": false
+      },
+      "round": 1
+    },
+    "sequentialControl": "five rounds passed",
+    "staleSettingsPage": {
+      "firstKeySaved": true,
+      "secondKeySaved": false,
+      "provider": "microsoft",
+      "model": "deepseek-flash",
+      "expectedProvider": "zhipu",
+      "expectedModel": "fixture-custom-model"
+    }
+  },
+  "implementation": {
+    "writes": "incremental field patches merged with current stored settings inside a shared same-origin Web Lock",
+    "credentials": "submit changed fields only; preserve active service in the current translation tab",
+    "storageKey": "translation-settings-v1",
+    "formatChanged": false,
+    "permissionsChanged": false,
+    "newDependencies": false,
+    "reference": "https://developer.mozilla.org/en-US/docs/Web/API/Web_Locks_API"
+  },
+  "node": {
+    "command": "npm run check",
+    "tests": 86,
+    "passed": 86,
+    "failed": 0
+  },
+  "controlledBrowser": {
+    "command": "node --test --test-concurrency=1 tests/browser/extension.test.js",
+    "scenarios": [
+      {
+        "name": "workspace",
+        "status": "passed",
+        "platform": "darwin",
+        "browserVersion": "156.0.8078.4",
+        "extensionVersion": "0.7.4",
+        "checks": 14
+      },
+      {
+        "name": "webpage",
+        "status": "passed",
+        "platform": "darwin",
+        "browserVersion": "156.0.8078.4",
+        "extensionVersion": "0.7.4",
+        "checks": 23
+      },
+      {
+        "name": "assistant",
+        "status": "passed",
+        "platform": "darwin",
+        "browserVersion": "156.0.8078.4",
+        "extensionVersion": "0.7.4",
+        "checks": 18
+      },
+      {
+        "name": "page-csp",
+        "status": "passed",
+        "platform": "darwin",
+        "browserVersion": "156.0.8078.4",
+        "extensionVersion": "0.7.4",
+        "checks": 4
+      },
+      {
+        "name": "audio-csp",
+        "status": "passed",
+        "platform": "darwin",
+        "browserVersion": "156.0.8078.4",
+        "extensionVersion": "0.7.4",
+        "checks": 3
+      },
+      {
+        "name": "page-boundaries",
+        "status": "passed",
+        "platform": "darwin",
+        "browserVersion": "156.0.8078.4",
+        "extensionVersion": "0.7.4",
+        "checks": 5
+      },
+      {
+        "name": "page-rerender",
+        "status": "passed",
+        "platform": "darwin",
+        "browserVersion": "156.0.8078.4",
+        "extensionVersion": "0.7.4",
+        "checks": 11
+      },
+      {
+        "name": "keyboard-focus",
+        "status": "passed",
+        "platform": "darwin",
+        "browserVersion": "156.0.8078.4",
+        "extensionVersion": "0.7.4",
+        "checks": 8
+      },
+      {
+        "name": "scene-state",
+        "status": "passed",
+        "platform": "darwin",
+        "browserVersion": "156.0.8078.4",
+        "extensionVersion": "0.7.4",
+        "checks": 5
+      },
+      {
+        "name": "real-site-verifier",
+        "status": "passed",
+        "platform": "darwin",
+        "browserVersion": "156.0.8078.4",
+        "extensionVersion": "0.7.4",
+        "checks": 7
+      },
+      {
+        "name": "settings-persistence",
+        "status": "passed",
+        "platform": "darwin",
+        "browserVersion": "156.0.8078.4",
+        "extensionVersion": "0.7.4",
+        "checks": 6
+      }
+    ],
+    "settings": {
+      "name": "settings-persistence",
+      "status": "passed",
+      "mode": "real-extension-local-storage",
+      "checks": [
+        "五轮并发网页偏好不丢更新",
+        "重新打开保留配置",
+        "跨页保存保留其他Key",
+        "同服务独立字段不互相覆盖",
+        "保留最新服务和网页偏好",
+        "保存凭据不切换当前翻译服务"
+      ],
+      "browserVersion": "156.0.8078.4",
+      "platform": "darwin",
+      "extensionVersion": "0.7.4"
+    }
+  },
+  "realWebsites": {
+    "command": "TRANSLATE_LIVE_MICROSOFT=1 node --test --test-concurrency=1 --test-name-pattern='real-mdn|real-python' tests/browser/extension.test.js",
+    "cases": [
+      {
+        "name": "real-mdn",
+        "status": "passed",
+        "mode": "real-public-site-real-microsoft-no-mocks",
+        "url": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array",
+        "sourceParagraphs": 141,
+        "sourceNodesPreserved": 141,
+        "codeBlocksPreserved": 49,
+        "codeBlocksInSiteShadowDOM": 47,
+        "bodySourceCharacters": 197,
+        "bodyTranslationCharacters": 54,
+        "belowFoldSourceCharacters": 76,
+        "belowFoldTranslationCharacters": 30,
+        "belowFoldInitiallyUntranslated": true,
+        "translatedCount": 24,
+        "screenshotCaptured": true,
+        "requests": [
+          {
+            "status": 200,
+            "credentialHeaders": []
+          },
+          {
+            "status": 200,
+            "credentialHeaders": []
+          },
+          {
+            "status": 200,
+            "credentialHeaders": []
+          }
+        ],
+        "checks": [
+          "真实公共网页",
+          "真实微软免Key调用",
+          "首屏正文关联中文译文",
+          "滚动后未翻译正文加载",
+          "无认证或Cookie",
+          "源段落和代码保留",
+          "关闭恢复"
+        ],
+        "browserVersion": "156.0.8078.4",
+        "platform": "darwin",
+        "extensionVersion": "0.7.4"
+      },
+      {
+        "name": "real-python",
+        "status": "passed",
+        "mode": "real-public-site-real-microsoft-no-mocks",
+        "url": "https://docs.python.org/3/library/asyncio-task.html",
+        "sourceParagraphs": 296,
+        "sourceNodesPreserved": 296,
+        "codeBlocksPreserved": 32,
+        "codeBlocksInSiteShadowDOM": 0,
+        "bodySourceCharacters": 80,
+        "bodyTranslationCharacters": 23,
+        "belowFoldSourceCharacters": 83,
+        "belowFoldTranslationCharacters": 20,
+        "belowFoldInitiallyUntranslated": true,
+        "translatedCount": 14,
+        "screenshotCaptured": true,
+        "requests": [
+          {
+            "status": 200,
+            "credentialHeaders": []
+          },
+          {
+            "status": 200,
+            "credentialHeaders": []
+          }
+        ],
+        "checks": [
+          "真实公共网页",
+          "真实微软免Key调用",
+          "首屏正文关联中文译文",
+          "滚动后未翻译正文加载",
+          "无认证或Cookie",
+          "源段落和代码保留",
+          "关闭恢复"
+        ],
+        "browserVersion": "156.0.8078.4",
+        "platform": "darwin",
+        "extensionVersion": "0.7.4"
+      }
+    ]
+  },
+  "package": {
+    "filename": "translate-chrome-0.7.4.zip",
+    "sha256": "542eddb0c78ba92a19cde80bd040c5a7003ebd737a16cf17befcef90a65ba3a5",
+    "bytes": 593617,
+    "files": [
+      "LICENSE",
+      "THIRD_PARTY_LICENSES.txt",
+      "app.js",
+      "background.js",
+      "content.js",
+      "icons/128.png",
+      "icons/16.png",
+      "icons/32.png",
+      "icons/48.png",
+      "index.html",
+      "manifest.json",
+      "offscreen.html",
+      "offscreen.js",
+      "popup.css",
+      "popup.html",
+      "popup.js",
+      "services.css",
+      "services.html",
+      "services.js",
+      "styles.css",
+      "tabs.js"
+    ]
+  },
+  "limits": [
+    "早先偶发入口就绪超时未复现或归因，本版未改变启动逻辑",
+    "真实网络只验证所列站点与段落，不证明所有网页或翻译质量",
+    "未操作用户日常Chrome的配置或安装",
+    "未取得新的真实用户采用或外部贡献证据"
+  ]
+}
