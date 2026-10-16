@@ -274,6 +274,25 @@ async function initialize() {
   document.addEventListener('keyup', event => { if (event.key === 'Escape') close(event.composedPath().includes(host)); else if (event.key === 'Shift' || event.shiftKey) selectionAction(event); });
   window.addEventListener('scroll', () => { $('.selection-bar').hidden = true; }, { passive: true });
   window.addEventListener('resize', () => { $('.selection-bar').hidden = true; if (!$('.panel').hidden) place($('.panel'), selected?.rect); });
+  function isPageAnchor(hash) {
+    let id;
+    try { id = decodeURIComponent(hash.slice(1).split(':~:')[0]); } catch { return false; }
+    return !id || Boolean(document.getElementById(id)) || [...document.getElementsByName(id)].some(element => element.localName === 'a');
+  }
+  let pageAddress = new URL(location.href);
+  let hashRoute = !isPageAnchor(pageAddress.hash);
+  window.navigation.addEventListener('currententrychange', () => {
+    const next = new URL(location.href);
+    if (next.href === pageAddress.href) return;
+    const nextHashRoute = !isPageAnchor(next.hash);
+    const anchorChange = next.origin === pageAddress.origin && next.pathname === pageAddress.pathname
+      && next.search === pageAddress.search && !hashRoute && !nextHashRoute;
+    pageAddress = next; hashRoute = nextHashRoute;
+    if (anchorChange) return;
+    close(); selected = null;
+    pageTranslation.stop();
+    pageTranslation.queue.cache.clear();
+  });
   window.addEventListener('pagehide', () => { close(); pageTranslation.stop(); });
   chrome.runtime.onMessage.addListener((message, sender, respond) => {
     if (sender.id !== chrome.runtime.id) return;
