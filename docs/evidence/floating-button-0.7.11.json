@@ -1,0 +1,175 @@
+{
+  "status": "passed",
+  "version": "0.7.11",
+  "mode": "actual-packaged-extension-visual-matrix",
+  "reference": "https://immersivetranslate.com/zh-Hans/docs/usage/",
+  "decision": "维护者选择小圆形图标；保留既有翻译流程。",
+  "baseline": {
+    "version": "0.7.10",
+    "packageSHA256": "e5900f76154c7925c98c08b7e9aebc9aa2edc52199c0edb34ba7dec840977050",
+    "restingButton": {
+      "name": "desktop-default",
+      "label": "翻译当前网页",
+      "pressed": null,
+      "text": "译",
+      "svg": 0,
+      "rect": {
+        "x": 1222,
+        "y": 432,
+        "width": 42,
+        "height": 42,
+        "top": 432,
+        "right": 1264,
+        "bottom": 474,
+        "left": 1222
+      },
+      "radius": "12px",
+      "color": "rgb(51, 112, 255)",
+      "background": "rgb(255, 255, 255)",
+      "shadow": "rgba(31, 35, 41, 0.1) 0px 3px 14px 0px",
+      "focus": false
+    }
+  },
+  "fixed": {
+    "packageSHA256": "f5a97cb118a5325ecd3517dc26fc05cf7ffec0707c54a71c2d462b4906b3a39c",
+    "restingButton": {
+      "name": "desktop-default",
+      "label": "翻译当前网页",
+      "pressed": "false",
+      "text": "",
+      "svg": 1,
+      "rect": {
+        "x": 1228,
+        "y": 432,
+        "width": 40,
+        "height": 40,
+        "top": 432,
+        "right": 1268,
+        "bottom": 472,
+        "left": 1228
+      },
+      "radius": "50%",
+      "color": "rgb(101, 116, 140)",
+      "background": "rgb(255, 255, 255)",
+      "shadow": "rgba(37, 61, 100, 0.08) 0px 2px 8px 0px",
+      "focus": false
+    }
+  },
+  "states": [
+    {
+      "name": "desktop-default",
+      "label": "翻译当前网页",
+      "pressed": "false",
+      "svg": 1,
+      "width": 40,
+      "height": 40,
+      "focus": false
+    },
+    {
+      "name": "desktop-press",
+      "label": "翻译当前网页",
+      "pressed": "false",
+      "svg": 1,
+      "width": 37.5999755859375,
+      "height": 37.600006103515625,
+      "focus": false
+    },
+    {
+      "name": "desktop-hover",
+      "label": "翻译当前网页",
+      "pressed": "false",
+      "svg": 1,
+      "width": 40,
+      "height": 40,
+      "focus": false
+    },
+    {
+      "name": "desktop-focus",
+      "label": "翻译当前网页",
+      "pressed": "false",
+      "svg": 1,
+      "width": 40,
+      "height": 40,
+      "focus": true
+    },
+    {
+      "name": "desktop-active",
+      "label": "显示原文",
+      "pressed": "true",
+      "svg": 1,
+      "width": 40,
+      "height": 40,
+      "focus": false
+    },
+    {
+      "name": "desktop-restored",
+      "label": "翻译当前网页",
+      "pressed": "false",
+      "svg": 1,
+      "width": 40,
+      "height": 40,
+      "focus": false
+    },
+    {
+      "name": "dark-default",
+      "label": "翻译当前网页",
+      "pressed": "false",
+      "svg": 1,
+      "width": 40,
+      "height": 40,
+      "focus": false
+    },
+    {
+      "name": "dark-active",
+      "label": "显示原文",
+      "pressed": "true",
+      "svg": 1,
+      "width": 40,
+      "height": 40,
+      "focus": false
+    },
+    {
+      "name": "narrow-default",
+      "label": "翻译当前网页",
+      "pressed": "false",
+      "svg": 1,
+      "width": 40,
+      "height": 40,
+      "focus": false
+    },
+    {
+      "name": "narrow-active",
+      "label": "显示原文",
+      "pressed": "true",
+      "svg": 1,
+      "width": 40,
+      "height": 40,
+      "focus": false
+    },
+    {
+      "name": "desktop-error",
+      "label": "显示原文",
+      "pressed": "true",
+      "svg": 1,
+      "width": 40,
+      "height": 40,
+      "focus": false
+    }
+  ],
+  "localChecks": {
+    "nodeTests": 87,
+    "browserScenarios": 16,
+    "browserChecks": 159,
+    "visualStates": 11
+  },
+  "upstream": "最终视觉检查使用受控微软响应，并断言响应标记与请求计数。",
+  "harnessNote": "初版视觉脚本未成功拦截微软请求，已改为既有精确路由；早期结果不作为受控证据。",
+  "limits": [
+    "不代表真实服务翻译质量、用户日常 Chrome 已更新或所有网站兼容。",
+    "没有添加拖动、贴边收起或悬停设置面板。",
+    "仅调整悬浮入口；划词条、译文区和设置流程保持原样。"
+  ],
+  "paidCredentialsUsed": false,
+  "userChromeInstallationChanged": false,
+  "temporaryProfilesRemoved": true
+}

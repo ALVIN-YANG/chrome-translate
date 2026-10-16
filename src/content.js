@@ -20,7 +20,7 @@ async function initialize() {
   host.dataset.ctOwned = 'controls';
   const root = host.attachShadow({ mode: 'open' });
   root.innerHTML = `<style>${css}</style>
-    <button class="float" type="button" aria-label="翻译当前网页" title="翻译当前网页 · Alt+A">译</button>
+    <button class="float" type="button" aria-label="翻译当前网页" aria-pressed="false" title="翻译当前网页 · Alt+A">${icon('translate')}</button>
     <div class="selection-bar" role="toolbar" aria-label="划词操作" hidden>
       <button class="select-action" type="button" aria-label="翻译选中文字">${icon('translate')}<span>翻译</span></button><span class="bar-divider"></span>
       <button class="select-read" type="button" aria-label="朗读选中文字" data-speech="selection" data-label="朗读选中文字">${icon('speaker')}<span>朗读</span></button><span class="bar-divider"></span>
@@ -213,9 +213,14 @@ async function initialize() {
     else $('.chat-area textarea').focus({ preventScroll: true });
   }
   const pageTranslation = new PageTranslation(document, (texts, context, signal) => pageRpc('ct:page-translate', { texts, provider: context.provider, to: context.target }, signal), state => {
-    $('.float').classList.toggle('active', state.active);
-    $('.float').setAttribute('aria-label', state.active ? '显示原文' : '翻译当前网页');
-    $('.float').title = state.active ? `显示原文 · 已翻译 ${state.translated} 段 · Alt+A` : '翻译当前网页 · Alt+A';
+    const floating = $('.float');
+    floating.classList.toggle('active', state.active);
+    if (floating.getAttribute('aria-pressed') !== String(state.active)) {
+      floating.innerHTML = icon(state.active ? 'eye' : 'translate');
+      floating.setAttribute('aria-pressed', String(state.active));
+    }
+    floating.setAttribute('aria-label', state.active ? '显示原文' : '翻译当前网页');
+    floating.title = state.active ? `显示原文 · 已翻译 ${state.translated} 段 · Alt+A` : '翻译当前网页 · Alt+A';
     $('.page-note').hidden = !state.error && !state.empty;
     $('.page-message').textContent = state.error || '未找到可翻译的正文，可以尝试翻译整个页面。';
     $('.page-retry').hidden = !state.error;
