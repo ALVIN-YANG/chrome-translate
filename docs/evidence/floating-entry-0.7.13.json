@@ -155,6 +155,30 @@
     "userChromeUpdated": false
   },
   "release": {
-    "status": "prepared"
+    "status": "published",
+    "url": "https://github.com/ALVIN-YANG/chrome-translate/releases/tag/v0.7.13",
+    "tag": "v0.7.13",
+    "targetCommit": "8422fd3706dfb5f7843c539a7d474623c52a0047",
+    "publicZipHTTP": 200,
+    "publicChecksumHTTP": 200,
+    "publicDownloadMatchesLocal": true,
+    "publicChecksumVerified": true,
+    "zipCRCVerified": true,
+    "translationGlyphVerified": true
+  },
+  "sourceCommit": "8422fd3706dfb5f7843c539a7d474623c52a0047",
+  "ci": {
+    "runId": 39210558829,
+    "url": "https://github.com/ALVIN-YANG/chrome-translate/actions/runs/39210558829",
+    "conclusion": "success",
+    "jobs": [
+      "Node 22",
+      "Node 24",
+      "Chromium extension"
+    ],
+    "browserScenarios": 18,
+    "browserChecks": 187,
+    "linuxPackageMatchesLocal": true,
+    "linuxBrowserPackageMatchesLocal": true
   }
 }
