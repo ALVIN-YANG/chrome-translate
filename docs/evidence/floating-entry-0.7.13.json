@@ -1,0 +1,160 @@
+{
+  "version": "0.7.13",
+  "date": "2026-10-19",
+  "change": "First menu action opens the translation workspace. Floating entry is a 32px shadow-free draggable button with the same A and reciprocal arrows icon in both states.",
+  "geometry": {
+    "previous": 40,
+    "current": 32,
+    "icon": 16,
+    "shadow": "none",
+    "hitAreaExtra": 0
+  },
+  "icon": {
+    "name": "A with reciprocal arrows",
+    "unchangedWhenActive": true,
+    "consumers": [
+      "floating-button",
+      "popup-workspace-entry"
+    ],
+    "eyeRemoved": true
+  },
+  "local": {
+    "nodeTests": 88,
+    "browserScenarios": 18,
+    "browserChecks": 187,
+    "scenarios": [
+      {
+        "name": "assistant-model-switch",
+        "checks": 10,
+        "mode": "real-extension-controlled-sdk-and-settings-ui"
+      },
+      {
+        "name": "assistant-preferences",
+        "checks": 10,
+        "mode": "real-extension-controlled-sdk-and-settings-ui"
+      },
+      {
+        "name": "assistant",
+        "checks": 18,
+        "mode": "controlled-provider-real-extension-and-audio-element"
+      },
+      {
+        "name": "audio-csp",
+        "checks": 3,
+        "mode": "real-extension-local-tts-server-real-audio"
+      },
+      {
+        "name": "floating-entry",
+        "checks": 16,
+        "mode": "native-pointer-keyboard-and-extension-popup"
+      },
+      {
+        "name": "free-providers",
+        "checks": 12,
+        "mode": "controlled-fixtures"
+      },
+      {
+        "name": "keyboard-focus",
+        "checks": 11,
+        "mode": "real-keyboard-controlled-provider"
+      },
+      {
+        "name": "page-boundaries",
+        "checks": 5,
+        "mode": "controlled-response-real-extension"
+      },
+      {
+        "name": "page-csp",
+        "checks": 4,
+        "mode": "controlled-response-strict-site-CSP"
+      },
+      {
+        "name": "page-navigation",
+        "checks": 11,
+        "mode": "real-extension-controlled-provider"
+      },
+      {
+        "name": "page-pending",
+        "checks": 14,
+        "mode": "real-extension-controlled-provider"
+      },
+      {
+        "name": "page-rerender",
+        "checks": 11,
+        "mode": "controlled-response-real-extension"
+      },
+      {
+        "name": "page-updates",
+        "checks": 7,
+        "mode": "real-extension-controlled-provider"
+      },
+      {
+        "name": "real-site-verifier",
+        "checks": 7,
+        "mode": "controlled-provider-real-extension-verifier"
+      },
+      {
+        "name": "scene-state",
+        "checks": 5,
+        "mode": "real-keyboard-and-accessibility-tree"
+      },
+      {
+        "name": "settings-persistence",
+        "checks": 6,
+        "mode": "real-extension-local-storage"
+      },
+      {
+        "name": "webpage",
+        "checks": 23,
+        "mode": "controlled-fixtures"
+      },
+      {
+        "name": "workspace",
+        "checks": 14,
+        "mode": "controlled-fixtures"
+      }
+    ],
+    "visualStates": 11
+  },
+  "package": {
+    "filename": "translate-chrome-0.7.13.zip",
+    "sha256": "d3472f0ef054fea64bc06b1f02e9763e0f26964a2b343ed25e36d5baab3bc99d",
+    "bytes": 708862,
+    "files": [
+      "LICENSE",
+      "THIRD_PARTY_LICENSES.txt",
+      "app.js",
+      "background.js",
+      "content.js",
+      "icons/128.png",
+      "icons/16.png",
+      "icons/32.png",
+      "icons/48.png",
+      "index.html",
+      "manifest.json",
+      "offscreen.html",
+      "offscreen.js",
+      "popup.css",
+      "popup.html",
+      "popup.js",
+      "services.css",
+      "services.html",
+      "services.js",
+      "styles.css",
+      "tabs.js"
+    ],
+    "loadedByBrowser": true,
+    "manifestChecked": true,
+    "licenseChecked": true,
+    "testCredentialsExcluded": true,
+    "translationGlyphChecked": true,
+    "backgroundPositionKeyChecked": true
+  },
+  "scope": {
+    "responses": "controlled-fixtures",
+    "userChromeUpdated": false
+  },
+  "release": {
+    "status": "prepared"
+  }
+}

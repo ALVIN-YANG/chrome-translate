@@ -8,6 +8,7 @@ import { parseDictionary, dictionaryUrl } from './dictionary.js';
 import { UnifiedSpeech } from './unified-speech.js';
 import { SelectionChat } from './selection-chat.js';
 import { icon } from './icons.js';
+import { bindFloatingButton } from './floating-button.js';
 import { computePosition, offset, flip, shift, size } from '@floating-ui/dom';
 
 if (!globalThis.__ctPageLoaded) {
@@ -15,12 +16,12 @@ if (!globalThis.__ctPageLoaded) {
   initialize().catch(() => {});
 }
 async function initialize() {
-  let settings = await pageRpc('ct:settings-get');
+  let [settings, floatingPosition] = await Promise.all([pageRpc('ct:settings-get'), pageRpc('ct:floating-position-get').catch(() => null)]);
   const host = document.createElement('span');
   host.dataset.ctOwned = 'controls';
   const root = host.attachShadow({ mode: 'open' });
   root.innerHTML = `<style>${css}</style>
-    <button class="float" type="button" aria-label="翻译当前网页" aria-pressed="false" title="翻译当前网页 · Alt+A">${icon('translate')}</button>
+    <button class="float" type="button" aria-label="翻译当前网页" aria-pressed="false" title="翻译当前网页 · 可拖动，方向键微调 · Alt+A">${icon('translate-entry')}</button>
     <div class="selection-bar" role="toolbar" aria-label="划词操作" hidden>
       <button class="select-action" type="button" aria-label="翻译选中文字">${icon('translate')}<span>翻译</span></button><span class="bar-divider"></span>
       <button class="select-read" type="button" aria-label="朗读选中文字" data-speech="selection" data-label="朗读选中文字">${icon('speaker')}<span>朗读</span></button><span class="bar-divider"></span>
@@ -212,20 +213,28 @@ async function initialize() {
     if (chatSource !== fingerprint) { chat.open(selected.text, settings.assistant); chatSource = fingerprint; }
     else $('.chat-area textarea').focus({ preventScroll: true });
   }
+  let notePlacement = 0;
   const pageTranslation = new PageTranslation(document, (texts, context, signal) => pageRpc('ct:page-translate', { texts, provider: context.provider, to: context.target }, signal), state => {
     const floating = $('.float');
     floating.classList.toggle('active', state.active);
     if (floating.getAttribute('aria-pressed') !== String(state.active)) {
-      floating.innerHTML = icon(state.active ? 'eye' : 'translate');
       floating.setAttribute('aria-pressed', String(state.active));
     }
     floating.setAttribute('aria-label', state.active ? '显示原文' : '翻译当前网页');
-    floating.title = state.active ? `显示原文 · 已翻译 ${state.translated} 段 · Alt+A` : '翻译当前网页 · Alt+A';
+    floating.title = state.active ? `显示原文 · 已翻译 ${state.translated} 段 · 可拖动，方向键微调 · Alt+A` : '翻译当前网页 · 可拖动，方向键微调 · Alt+A';
     $('.page-note').hidden = !state.error && !state.empty;
     $('.page-message').textContent = state.error || '未找到可翻译的正文，可以尝试翻译整个页面。';
     $('.page-retry').hidden = !state.error;
     $('.page-all').hidden = !state.empty;
+    placePageNote();
   });
+  function placePageNote() {
+    const note = $('.page-note'), version = ++notePlacement;
+    if (note.hidden) return;
+    computePosition($('.float'), note, { strategy: 'fixed', placement: 'left-start', middleware: [offset(8), flip(), shift({ padding: 8 })] }).then(({ x, y }) => {
+      if (version === notePlacement && !note.hidden) { note.style.left = `${x}px`; note.style.top = `${y}px`; note.style.right = 'auto'; }
+    });
+  }
   function start(scope = 'smart') { return pageTranslation.start({ provider: settings.provider, target: settings.page.target }, scope); }
   function toggle(scope = 'smart') { return pageTranslation.active ? pageTranslation.stop() : start(scope); }
   function applySettings(next) {
@@ -245,6 +254,8 @@ async function initialize() {
   }
   const trustedAction = action => event => { if (event.isTrusted) action(event); };
   applySettings(settings);
+  bindFloatingButton($('.float'), { position: floatingPosition,
+    save: position => pageRpc('ct:floating-position-save', { position }).catch(error => notify(error.message)), onMove: placePageNote });
   $('.float').addEventListener('click', trustedAction(() => toggle()));
   $('.select-action').addEventListener('click', trustedAction(() => openSelection()));
   $('.select-read').addEventListener('click', trustedAction(() => selected && read(selected.text, detectLanguage(selected.text) || 'zh', 'selection')));

@@ -1,6 +1,9 @@
 import { LANGUAGES } from './language.js';
 import { pageRpc } from './page-rpc.js';
+import { icon } from './icons.js';
 const $ = id => document.getElementById(id);
+for (const element of document.querySelectorAll('[data-icon]')) element.innerHTML = icon(element.dataset.icon);
+$('open').addEventListener('click', () => pageRpc('ct:open-page').then(() => window.close()).catch(error => status(error.message, true)));
 let tab;
 let settings;
 let state = { active: false };
@@ -55,7 +58,6 @@ async function initialize() {
     if (state.active) await command('smart');
     await command('all');
   });
-  $('open').addEventListener('click', () => pageRpc('ct:open-page').then(() => window.close()).catch(error => status(error.message, true)));
   $('assistant-settings').addEventListener('click', () => pageRpc('ct:assistant-open').then(() => window.close()).catch(error => status(error.message, true)));
   $('settings').addEventListener('click', () => chrome.runtime.openOptionsPage().then(() => window.close()));
   const timer = setInterval(() => { if (!busy && state.active) refresh(); }, 1200);

@@ -6,6 +6,7 @@ import { dictionaryUrl } from './dictionary.js';
 import { ASSISTANT_SETTINGS_KEY, loadAssistantSettings, saveAssistantSettings, publicAssistantSettings, normalizeAssistantSettings } from './assistant-config.js';
 import { askSelection } from './llm-service.js';
 import { speechMessage, stopSpeechForTab } from './cloud-speech-worker.js';
+import { FLOATING_POSITION_KEY, normalizeFloatingPosition } from './floating-button.js';
 
 const openTranslationPage = createTranslationTabOpener(chrome, chrome.runtime.getURL('index.html'));
 const requests = new Map();
@@ -29,6 +30,13 @@ async function handle(message, sender) {
   if (message.type === 'ct:assistant-save' && extensionSender) { await saveAssistantSettings(message.settings); return publicAssistantSettings(await loadAssistantSettings(), await loadSettings()); }
   if (message.type === 'ct:assistant-open') { await chrome.tabs.create({ url: chrome.runtime.getURL('services.html') }); return {}; }
   if (message.type === 'ct:settings-get') return { ...safeSettings(await loadSettings()), assistant: publicAssistantSettings(await loadAssistantSettings(), await loadSettings()) };
+  if (message.type === 'ct:floating-position-get') return normalizeFloatingPosition((await chrome.storage.local.get(FLOATING_POSITION_KEY))[FLOATING_POSITION_KEY]);
+  if (message.type === 'ct:floating-position-save' && pageSender) {
+    const position = normalizeFloatingPosition(message.position);
+    if (!position) throw new Error('悬浮按钮位置无效。');
+    await chrome.storage.local.set({ [FLOATING_POSITION_KEY]: position });
+    return {};
+  }
   if (message.type === 'ct:open-page') {
     await openTranslationPage(sender.tab);
     return {};

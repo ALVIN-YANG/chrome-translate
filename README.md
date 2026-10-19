@@ -20,7 +20,7 @@
 2. 将安装包解压到一个固定文件夹。
 3. 打开 `chrome://extensions`，开启右上角「开发者模式」。
 4. 点击「加载已解压的扩展程序」，选择**直接包含 `manifest.json` 的那个文件夹**。
-5. 从 Chrome 右上角的「扩展程序」菜单（拼图图标）打开「翻译 · 多语言」，选择「打开独立翻译页」后粘贴文本。可按需固定到工具栏。默认使用微软翻译，无需填写 Key。
+5. 从 Chrome 右上角的「扩展程序」菜单（拼图图标）打开「翻译 · 多语言」，选择菜单第一项「打开翻译界面」后粘贴文本。可按需固定到工具栏。默认使用微软翻译，无需填写 Key。
 
 > 「Code → Download ZIP」下载的是源码，需先构建。安装请使用 Releases 中的 `translate-chrome-*.zip`，不要选 `Source code`。
 
@@ -93,7 +93,7 @@ TTS 预设包括 **系统声音、MiniMax、OpenAI、ElevenLabs、硅基流动**
 
 结果使用无框的连续阅读布局，长内容随页面展开。输入变化后立即翻译，中文输入法选字期间不发请求；新输入会取消旧请求，迟到的结果不会覆盖当前内容。更新或失败时保留上次结果，并标明旧结果的语言和状态，仍可选中、复制或朗读；新结果完成后一次替换。
 
-工具栏菜单里的「打开独立翻译页」会优先激活已经打开的翻译页。当前标签页会暂存原文、服务选择、目标语言和已有结果，刷新可恢复；匹配的结果不重复请求接口。清空后有 8 秒可以点击「撤销清空」。
+工具栏菜单第一项「打开翻译界面」会优先激活已经打开的翻译页。当前标签页会暂存原文、服务选择、目标语言和已有结果，刷新可恢复；匹配的结果不重复请求接口。清空后有 8 秒可以点击「撤销清空」。
 
 ## 翻译服务
 
@@ -178,7 +178,9 @@ npm run dev
 | `scripts/` | 构建、预览及浏览器验证 |
 | `docs/` | 使用截图与验证记录 |
 
-[v0.7.12](https://github.com/ALVIN-YANG/chrome-translate/releases/tag/v0.7.12) 将 DeepSeek、Kimi、智谱、硅基流动和 Gemini 的模型翻译统一接入现有 AI SDK，保留词义、英文例句和各服务设置；不新增依赖。网页脚本与模型客户端分离，避免每个网页加载 SDK。免费服务的连接、词义、配置和错误流程加入默认浏览器回归，详见 [SDK 接入验证](docs/evidence/sdk-0.7.12.json)。
+[v0.7.13](https://github.com/ALVIN-YANG/chrome-translate/releases/tag/v0.7.13) 把“打开翻译界面”移到工具栏菜单第一项。悬浮按钮缩为 32px，使用 A 与双向箭头图标，开启后保持图形不变，改为蓝底白线；取消阴影，支持拖动、位置记忆和键盘微调。更新时请覆盖原安装目录，重新加载扩展，并刷新已打开的网页。详见 [入口验证](docs/evidence/floating-entry-0.7.13.json)。
+
+[v0.7.12](https://github.com/ALVIN-YANG/chrome-translate/releases/tag/v0.7.12) 的模型翻译 SDK 接入见 [验证数据](docs/evidence/sdk-0.7.12.json)。
 
 [v0.7.11](https://github.com/ALVIN-YANG/chrome-translate/releases/tag/v0.7.11) 的圆形悬浮入口与十一种视觉状态见 [验证数据](docs/evidence/floating-button-0.7.11.json)。AI 服务切换见 [v0.7.9 验证](docs/evidence/model-switch-0.7.9.json)。自动检查不等于用户安装或人工读屏验收，也不保证所有网页兼容。声音与对话独立更新见 [v0.7.8 验证](docs/evidence/preferences-0.7.8.json)，待发送正文与长文检查见 [v0.7.7 验证](docs/evidence/pending-0.7.7.json)，持续更新等待见 [v0.7.6 验证](docs/evidence/updates-0.7.6.json)，页面跳转边界见 [v0.7.5 验证](docs/evidence/navigation-0.7.5.json)，配置保存见 [v0.7.4 验证](docs/evidence/settings-0.7.4.json)。
 
