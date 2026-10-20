@@ -135,7 +135,7 @@
     ]
   },
   "ci": {
-    "status": "pending",
+    "status": "success",
     "attempts": [
       {
         "runId": 39361294742,
@@ -157,10 +157,32 @@
         "assertion": "narrow panel bounds after 1000ms",
         "diagnosis": "panel grew after asynchronous results without repositioning"
       }
-    ]
+    ],
+    "runId": 39362657004,
+    "url": "https://github.com/ALVIN-YANG/chrome-translate/actions/runs/39362657004",
+    "node22": "success",
+    "node24": "success",
+    "browser": "success",
+    "sourceCommit": "806a4dff983f09038e6af681becfef075290dcd5",
+    "artifactDownload": {
+      "status": "unavailable",
+      "reason": "Azure artifact TLS handshake timeout",
+      "crossPlatformZipByteComparison": "not verified"
+    }
   },
   "release": {
-    "status": "draft",
-    "id": 417952078
-  }
+    "status": "published",
+    "id": 417952078,
+    "tag": "v0.7.14",
+    "url": "https://github.com/ALVIN-YANG/chrome-translate/releases/tag/v0.7.14",
+    "targetCommit": "806a4dff983f09038e6af681becfef075290dcd5",
+    "publicZipHTTP": 200,
+    "publicChecksumHTTP": 200,
+    "anonymousDownload": true,
+    "matchesLocalPackage": true,
+    "checksumValid": true,
+    "zipCRCValid": true,
+    "manifestVersion": "0.7.14"
+  },
+  "sourceCommit": "806a4dff983f09038e6af681becfef075290dcd5"
 }
