@@ -128,9 +128,22 @@
     ]
   },
   "ci": {
-    "status": "pending"
+    "status": "pending",
+    "attempts": [
+      {
+        "runId": 39361294742,
+        "sourceCommit": "70a349e5d25d44030ac7d22504ecbaaa6ab2e0da",
+        "node22": "success",
+        "node24": "success",
+        "browser": "failure",
+        "scenario": "speech",
+        "assertion": "narrow panel bounds",
+        "followup": "wait up to 1000ms for asynchronous positioning with unchanged bounds"
+      }
+    ]
   },
   "release": {
-    "status": "pending"
+    "status": "draft",
+    "id": 417952078
   }
 }

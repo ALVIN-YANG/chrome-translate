@@ -120,7 +120,13 @@ export default async function speechScenario(page) {
     await select();
     const bounds = await bar.boundingBox(); assert(bounds.x >= 0 && bounds.x + bounds.width <= width);
     await bar.getByRole('button', { name: '翻译选中文字' }).click();
-    const rect = await panel.boundingBox(); assert(rect.x >= 0 && rect.x + rect.width <= width && rect.y + rect.height <= 850);
+    // 浮层通过异步定位计算尺寸；先等待实际布局，仍按原边界检查。
+    await page.waitForFunction(() => {
+      const panel = document.querySelector('[data-ct-owned="controls"]').shadowRoot.querySelector('.panel');
+      const rect = panel.getBoundingClientRect();
+      return !panel.hidden && rect.x >= 0 && rect.right <= innerWidth && rect.bottom <= innerHeight;
+    }, null, { timeout: 1000 });
+    const rect = await panel.boundingBox(); assert(rect.x >= 0 && rect.x + rect.width <= width && rect.y + rect.height <= 850, JSON.stringify({ width, rect }));
     await page.keyboard.press('Escape');
   }
   await settingsPage.getByRole('combobox', { name: '服务', exact: true }).selectOption('system');
