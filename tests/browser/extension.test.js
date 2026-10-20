@@ -9,19 +9,17 @@ import { packageExtension } from '../../scripts/package.mjs';
 import { startFixtureServer } from './fixture-server.js';
 import workspace from '../../scripts/browser-workspace-smoke.mjs';
 import webpage from '../../scripts/browser-page-smoke.mjs';
-import assistant from '../../scripts/browser-assistant-smoke.mjs';
+import speech from '../../scripts/browser-cloud-speech-smoke.mjs';
 import pageCSP from '../../scripts/browser-page-csp-smoke.mjs';
-import audioCSP from '../../scripts/browser-assistant-csp-smoke.mjs';
+import audioCSP from '../../scripts/browser-speech-csp-smoke.mjs';
 import { boundaries, rerender } from '../../scripts/browser-page-compatibility-smoke.mjs';
 import realSite from '../../scripts/browser-page-real-sites.mjs';
-import { focusReturn, sceneState } from '../../scripts/browser-keyboard-smoke.mjs';
+import { focusReturn } from '../../scripts/browser-keyboard-smoke.mjs';
 import verifyRealSiteScenario from '../../scripts/browser-real-site-verifier-smoke.mjs';
 import settingsPersistence from '../../scripts/browser-settings-smoke.mjs';
 import pageNavigation from '../../scripts/browser-page-navigation-smoke.mjs';
 import pageUpdates from '../../scripts/browser-page-updates-smoke.mjs';
 import pagePending from '../../scripts/browser-page-pending-smoke.mjs';
-import assistantPreferences from '../../scripts/browser-assistant-preferences-smoke.mjs';
-import assistantModelSwitch from '../../scripts/browser-assistant-model-switch-smoke.mjs';
 import freeProviders from '../../scripts/browser-free-providers-smoke.mjs';
 import floatingEntry from '../../scripts/browser-floating-smoke.mjs';
 
@@ -45,20 +43,17 @@ for (const [name, scenario, entry] of [
   ['free-providers', freeProviders, 'index.html'],
   ['webpage', webpage, 'article.html'],
   ['floating-entry', floatingEntry, 'article.html'],
-  ['assistant', assistant, 'article.html'],
+  ['speech', speech, 'article.html'],
   ['page-csp', pageCSP, 'article.html'],
   ['audio-csp', audioCSP, 'article.html'],
   ['page-boundaries', boundaries, 'compatibility.html'],
   ['page-rerender', rerender, 'compatibility.html'],
   ['keyboard-focus', focusReturn, 'article.html'],
-  ['scene-state', sceneState, 'article.html'],
   ['real-site-verifier', verifyRealSiteScenario, 'article.html'],
   ['settings-persistence', settingsPersistence, 'article.html'],
   ['page-navigation', pageNavigation, 'article.html'],
   ['page-updates', pageUpdates, 'article.html'],
   ['page-pending', pagePending, 'article.html'],
-  ['assistant-preferences', assistantPreferences, 'article.html'],
-  ['assistant-model-switch', assistantModelSwitch, 'article.html'],
   ...(process.env.TRANSLATE_LIVE_MICROSOFT === '1' ? [
     ['real-mdn', realSite, 'https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array'],
     ['real-python', realSite, 'https://docs.python.org/3/library/asyncio-task.html'],

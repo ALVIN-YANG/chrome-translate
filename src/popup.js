@@ -58,7 +58,7 @@ async function initialize() {
     if (state.active) await command('smart');
     await command('all');
   });
-  $('assistant-settings').addEventListener('click', () => pageRpc('ct:assistant-open').then(() => window.close()).catch(error => status(error.message, true)));
+  $('voice-settings').addEventListener('click', () => pageRpc('ct:voice-open').then(() => window.close()).catch(error => status(error.message, true)));
   $('settings').addEventListener('click', () => chrome.runtime.openOptionsPage().then(() => window.close()));
   const timer = setInterval(() => { if (!busy && state.active) refresh(); }, 1200);
   window.addEventListener('pagehide', () => clearInterval(timer));

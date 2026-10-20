@@ -1,10 +1,10 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { defaultAssistantSettings } from '../src/assistant-config.js';
+import { defaultSpeechSettings } from '../src/speech-config.js';
 const tick=()=>new Promise(resolve=>setImmediate(resolve));
 const deferred=()=>{let resolve;const promise=new Promise(done=>resolve=done);return {resolve,promise}};
 function browser(session={}) {
-  const calls=[],settings=defaultAssistantSettings();settings.tts.provider='minimax';settings.tts.providers.minimax.key='fixture-key';
+  const calls=[],settings=defaultSpeechSettings();settings.tts.provider='minimax';settings.tts.providers.minimax.key='fixture-key';
   let player=true;
   const api={
     storage:{local:{get:async key=>({[key]:key==='selection-services-v1'?settings:{}})},session:{get:async()=>session,set:async data=>Object.assign(session,data)}},

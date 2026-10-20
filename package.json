@@ -1,6 +1,6 @@
 {
   "name": "translate-tab",
-  "version": "0.7.13",
+  "version": "0.7.14",
   "license": "MIT",
   "private": true,
   "type": "module",
@@ -16,17 +16,13 @@
     "package": "npm run check && node scripts/package.mjs"
   },
   "dependencies": {
-    "@ai-sdk/anthropic": "4.0.79",
     "@ai-sdk/elevenlabs": "3.0.60",
-    "@ai-sdk/google": "4.0.94",
     "@ai-sdk/openai": "4.0.92",
     "@ai-sdk/openai-compatible": "3.0.68",
     "@floating-ui/dom": "1.8.0",
     "ai": "7.0.138",
-    "dompurify": "3.4.17",
     "js-md5": "0.9.2",
-    "lucide": "1.55.0",
-    "marked": "18.1.1"
+    "lucide": "1.55.0"
   },
   "devDependencies": {
     "esbuild": "0.28.2",

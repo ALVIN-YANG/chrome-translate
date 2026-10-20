@@ -1,4 +1,4 @@
-import { loadAssistantSettings, selectedService, normalizeAssistantSettings } from './assistant-config.js';
+import { loadSpeechSettings, selectedSpeechService, normalizeSpeechSettings } from './speech-config.js';
 import { loadSettings } from './settings.js';
 let active = null, pending = null, sequence = 0, creating, closing;
 const SESSION_KEY = 'selection-audio-session';
@@ -53,8 +53,8 @@ export async function speechMessage(message, sender, { trusted, pageSender }) {
   pending = { sender, playId: message.playId };
   await stopActive(run);
   if (run !== sequence) return { cancelled: true };
-  const settings = message.type === 'ct:speech-preview' ? normalizeAssistantSettings(message.settings) : await loadAssistantSettings();
-  const config = selectedService(settings, 'tts', await loadSettings());
+  const settings = message.type === 'ct:speech-preview' ? normalizeSpeechSettings(message.settings) : await loadSpeechSettings();
+  const config = selectedSpeechService(settings, await loadSettings());
   if (config.protocol === 'system') throw new Error('系统声音应在当前页面中播放。');
   await ensurePlayer();
   if (run !== sequence) return { cancelled: true };

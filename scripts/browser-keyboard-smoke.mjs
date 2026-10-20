@@ -78,22 +78,3 @@ export async function focusReturn(page) {
   assert.equal(await page.locator('#writing').textContent(), 'An unfinished draft.');
   return { status: 'passed', mode: 'real-keyboard-controlled-provider', checks: ['鼠标原生选区与Enter开启', 'Esc返回原文', '关闭按钮返回原文', 'Tab从原文继续', '离焦后清理临时tabindex', '保留网页原tabindex', '外部点击保留新焦点', '外部键盘焦点不被抢回', '键盘进入输入框隐藏旧划词条', '键盘进入富文本编辑区隐藏旧划词条', '焦点切换不请求或修改草稿'] };
 }
-
-export async function sceneState(page) {
-  const { controls, calls, open } = await setup(page);
-  await open();
-  const panel = controls.getByRole('dialog');
-  assert.equal(await panel.getByRole('button', { name: '翻译', exact: true, pressed: true }).count(), 1, '当前翻译场景暴露为已按下按钮');
-  assert.equal(await panel.getByRole('button', { name: '问问 AI', exact: true, pressed: false }).count(), 1, 'AI场景暴露为未按下按钮');
-  const activeColor = await panel.locator('.scene-translate').evaluate(element => getComputedStyle(element).color);
-  const inactiveColor = await panel.locator('.scene-ai').evaluate(element => getComputedStyle(element).color);
-  assert.notEqual(activeColor, inactiveColor, '当前场景有可见选中状态');
-  await panel.getByRole('button', { name: '问问 AI', exact: true }).press('Enter');
-  assert.equal(await panel.getByRole('button', { name: '问问 AI', exact: true, pressed: true }).count(), 1);
-  assert.equal(await panel.getByRole('button', { name: '翻译', exact: true, pressed: false }).count(), 1);
-  assert.equal(await panel.locator('.scene-ai').evaluate(element => getComputedStyle(element).color), activeColor, '视觉状态与无障碍状态一致');
-  await panel.getByRole('button', { name: '翻译', exact: true }).press('Enter');
-  await panel.getByRole('button', { name: '翻译', exact: true, pressed: true }).waitFor();
-  assert.equal(calls.length, 1, '场景切换复用译文，不自动调用AI');
-  return { status: 'passed', mode: 'real-keyboard-and-accessibility-tree', checks: ['按钮按下语义', 'Enter切换场景', '视觉状态同步', '回到翻译状态', '切换不自动发送模型请求'] };
-}

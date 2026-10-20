@@ -1,4 +1,4 @@
-import { validateServiceURL } from './assistant-config.js';
+import { validateServiceURL } from './speech-config.js';
 export function serviceFetch(baseURL, fetcher = fetch, { maxBytes = 2 * 1024 * 1024, audio = false } = {}) {
   const origin = new URL(validateServiceURL(baseURL)).origin;
   return async (input, init = {}) => {

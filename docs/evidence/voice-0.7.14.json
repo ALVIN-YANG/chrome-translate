@@ -1,0 +1,136 @@
+{
+  "version": "0.7.14",
+  "date": "2026-10-20",
+  "scope": {
+    "userChromeUpdated": false,
+    "liveProviderCalls": false
+  },
+  "local": {
+    "nodeTests": 85,
+    "browserScenarios": 15,
+    "browserChecks": 164,
+    "scenarios": [
+      {
+        "name": "workspace",
+        "checks": 14,
+        "status": "passed"
+      },
+      {
+        "name": "free-providers",
+        "checks": 12,
+        "status": "passed"
+      },
+      {
+        "name": "webpage",
+        "checks": 23,
+        "status": "passed"
+      },
+      {
+        "name": "floating-entry",
+        "checks": 16,
+        "status": "passed"
+      },
+      {
+        "name": "speech",
+        "checks": 20,
+        "status": "passed"
+      },
+      {
+        "name": "page-csp",
+        "checks": 4,
+        "status": "passed"
+      },
+      {
+        "name": "audio-csp",
+        "checks": 3,
+        "status": "passed"
+      },
+      {
+        "name": "page-boundaries",
+        "checks": 5,
+        "status": "passed"
+      },
+      {
+        "name": "page-rerender",
+        "checks": 11,
+        "status": "passed"
+      },
+      {
+        "name": "keyboard-focus",
+        "checks": 11,
+        "status": "passed"
+      },
+      {
+        "name": "real-site-verifier",
+        "checks": 7,
+        "status": "passed"
+      },
+      {
+        "name": "settings-persistence",
+        "checks": 6,
+        "status": "passed"
+      },
+      {
+        "name": "page-navigation",
+        "checks": 11,
+        "status": "passed"
+      },
+      {
+        "name": "page-updates",
+        "checks": 7,
+        "status": "passed"
+      },
+      {
+        "name": "page-pending",
+        "checks": 14,
+        "status": "passed"
+      }
+    ]
+  },
+  "configuration": {
+    "storageKey": "selection-services-v1",
+    "preserves": [
+      "tts provider",
+      "API Key",
+      "model",
+      "base URL",
+      "voice ID",
+      "speech rate"
+    ],
+    "legacyMiniMaxKey": "inherited into TTS when no explicit speech key is configured"
+  },
+  "package": {
+    "filename": "translate-chrome-0.7.14.zip",
+    "sha256": "ab31c3be2e43699139d939071742a77f4e3a5fb0296d5eff7a0132738c0cec29",
+    "bytes": 537495,
+    "files": [
+      "LICENSE",
+      "THIRD_PARTY_LICENSES.txt",
+      "app.js",
+      "background.js",
+      "content.js",
+      "icons/128.png",
+      "icons/16.png",
+      "icons/32.png",
+      "icons/48.png",
+      "index.html",
+      "manifest.json",
+      "offscreen.html",
+      "offscreen.js",
+      "popup.css",
+      "popup.html",
+      "popup.js",
+      "services.css",
+      "services.html",
+      "services.js",
+      "styles.css",
+      "tabs.js"
+    ]
+  },
+  "ci": {
+    "status": "pending"
+  },
+  "release": {
+    "status": "pending"
+  }
+}

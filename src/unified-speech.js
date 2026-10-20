@@ -4,9 +4,9 @@ export class UnifiedSpeech {
   constructor(onState, getSettings) {
     this.onState = onState; this.getSettings = getSettings; this.version = 0; this.state = { status: 'idle', key: null };
     this.native = new SystemSpeech(state => this.emit(state)); this.supported = true;
-    if (!getSettings && globalThis.chrome?.runtime?.id) this.ready = pageRpc('ct:assistant-public').then(settings => { this.cachedSettings ||= settings.tts; }, error => { this.settingsError = error; });
+    if (!getSettings && globalThis.chrome?.runtime?.id) this.ready = pageRpc('ct:voice-public').then(settings => { this.cachedSettings ||= settings; }, error => { this.settingsError = error; });
     if (globalThis.chrome?.runtime?.id) chrome.runtime.onMessage.addListener((message, sender) => {
-      if (sender.id === chrome.runtime.id && message.type === 'ct:assistant-settings') { this.cachedSettings = message.settings.tts; this.settingsError = null; }
+      if (sender.id === chrome.runtime.id && message.type === 'ct:voice-settings') { this.cachedSettings = message.settings; this.settingsError = null; }
       if (sender.id === chrome.runtime.id && message.type === 'ct:speech-state' && message.state.playId === this.playId) this.emit(message.state);
     });
   }

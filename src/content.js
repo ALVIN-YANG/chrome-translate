@@ -6,7 +6,6 @@ import { resolveDirection, detectLanguage } from './language.js';
 import { resolveInputMode, buildTermEntries, mergeCandidates, termNotes } from './terms.js';
 import { parseDictionary, dictionaryUrl } from './dictionary.js';
 import { UnifiedSpeech } from './unified-speech.js';
-import { SelectionChat } from './selection-chat.js';
 import { icon } from './icons.js';
 import { bindFloatingButton } from './floating-button.js';
 import { computePosition, offset, flip, shift, size } from '@floating-ui/dom';
@@ -24,13 +23,12 @@ async function initialize() {
     <button class="float" type="button" aria-label="翻译当前网页" aria-pressed="false" title="翻译当前网页 · 可拖动，方向键微调 · Alt+A">${icon('translate-entry')}</button>
     <div class="selection-bar" role="toolbar" aria-label="划词操作" hidden>
       <button class="select-action" type="button" aria-label="翻译选中文字">${icon('translate')}<span>翻译</span></button><span class="bar-divider"></span>
-      <button class="select-read" type="button" aria-label="朗读选中文字" data-speech="selection" data-label="朗读选中文字">${icon('speaker')}<span>朗读</span></button><span class="bar-divider"></span>
-      <button class="select-ai" type="button" aria-label="问问 AI">${icon('ai')}<span>问问 AI</span></button>
+      <button class="select-read" type="button" aria-label="朗读选中文字" data-speech="selection" data-label="朗读选中文字">${icon('speaker')}<span>朗读</span></button>
     </div>
     <section class="panel" role="dialog" aria-label="划词翻译" hidden>
-      <div class="toolbar"><span class="brand"></span><button class="read-all" aria-label="朗读译文"></button><button class="copy-all" aria-label="复制译文"></button><button class="close" aria-label="关闭划词翻译"></button></div>
-      <nav class="scene-tabs" aria-label="所选内容操作"><button class="scene-translate" aria-pressed="true">翻译</button><button class="scene-ai" aria-pressed="false">问问 AI</button><button class="scene-settings" aria-label="模型与声音设置">${icon('settings')}</button></nav><div class="source" dir="auto"></div><div class="status" role="status"></div><div class="result" dir="auto"></div>
-      <div class="chat-area" hidden></div><div class="panel-footer"><button class="retry" hidden>重试</button><button class="open-page">打开独立翻译页</button></div><p class="note">中文自动译英文，其他语言译中文 · Esc 关闭</p>
+      <div class="toolbar"><span class="brand"></span><button class="read-all" aria-label="朗读译文"></button><button class="copy-all" aria-label="复制译文"></button><button class="voice-settings" aria-label="朗读声音设置" title="朗读声音设置">${icon('settings')}</button><button class="close" aria-label="关闭划词翻译"></button></div>
+      <div class="source" dir="auto"></div><div class="status" role="status"></div><div class="result" dir="auto"></div>
+      <div class="panel-footer"><button class="retry" hidden>重试</button><button class="open-page">打开独立翻译页</button></div><p class="note">中文自动译英文，其他语言译中文 · Esc 关闭</p>
     </section>
     <aside class="page-note" hidden><p class="page-message" role="status"></p><button class="page-retry">重试</button><button class="page-all">翻译整个页面</button><button class="page-stop">显示原文</button></aside>
     <div class="speech-chip" hidden><span class="speech-wave">${icon('speaker')}</span><span class="speech-caption"></span><button class="speech-pause" aria-label="暂停朗读">${icon('pause')}</button><button class="speech-stop" aria-label="停止当前朗读">${icon('stop')}</button></div><div class="notify" role="status" hidden></div>`;
@@ -52,12 +50,12 @@ async function initialize() {
     }
     $('.select-read').classList.toggle('speaking', ['loading', 'speaking', 'paused'].includes(state.status) && state.key === 'selection');
     $('.speech-chip').hidden = !['loading', 'speaking', 'paused'].includes(state.status);
-    $('.speech-caption').textContent = `${settings.assistant?.tts.name || '系统声音'} · ${state.status === 'loading' ? '准备声音' : state.status === 'paused' ? '已暂停' : state.status === 'speaking' ? '正在朗读' : ''}`;
+    $('.speech-caption').textContent = `${settings.speech?.name || '系统声音'} · ${state.status === 'loading' ? '准备声音' : state.status === 'paused' ? '已暂停' : state.status === 'speaking' ? '正在朗读' : ''}`;
     $('.speech-pause').disabled = state.status === 'loading';
     $('.speech-pause').innerHTML = icon(state.status === 'paused' ? 'play' : 'pause');
     $('.speech-pause').setAttribute('aria-label', state.status === 'paused' ? '继续朗读' : '暂停朗读');
     if (state.status === 'error') notify(state.message);
-  }, () => settings.assistant?.tts);
+  }, () => settings.speech);
   $('.read-all').dataset.speech = 'all';
   $('.read-all').dataset.label = '朗读译文';
   async function copy(text) {
@@ -126,8 +124,6 @@ async function initialize() {
       return { candidates: termNotes(request.text, request.from, request.to), status: 'unavailable' };
     }
   });
-  const chat = new SelectionChat($('.chat-area'), notify, speech, copy);
-  let chatSource = '';
   let placementVersion = 0;
   function place(element, rect) {
     if (element === $('.selection-bar')) {
@@ -151,7 +147,7 @@ async function initialize() {
   }
   function close(restoreFocus = false) {
     const target = restoreFocus && !$('.panel').hidden && document.activeElement === host ? returnFocusTarget : null;
-    controller.reset(); chat.reset(); chatSource = ''; speech.stop();
+    controller.reset(); speech.stop();
     $('.panel').hidden = true; $('.selection-bar').hidden = true; displayed = null; returnFocusTarget = null;
     if (target?.isConnected && typeof target.focus === 'function') {
       target.focus({ preventScroll: true });
@@ -175,9 +171,7 @@ async function initialize() {
     if (!text?.trim()) return;
     rememberFocus();
     speech.stop();
-    chat.cancel();
     controller.reset();
-    setScene('translate');
     selected = { text: text.trim(), rect: selected?.rect, origin: selected?.origin };
     $('.selection-bar').hidden = true;
     $('.panel').hidden = false;
@@ -191,27 +185,6 @@ async function initialize() {
     displayed = null;
     const direction = resolveDirection(selected.text);
     controller.run({ provider: settings.provider, text: selected.text, from: 'auto', to: direction.to, automaticTarget: true, mode: resolveInputMode(selected.text), config: {} });
-  }
-  function setScene(scene) {
-    const isAI = scene === 'ai';
-    $('.panel').setAttribute('aria-label', isAI ? '问问 AI' : '划词翻译');
-    $('.panel').classList.toggle('ai-panel', isAI);
-    $('.chat-area').hidden = !isAI;
-    for (const selector of ['.result','.status','.panel-footer','.read-all','.copy-all']) $(selector).hidden = isAI;
-    $('.scene-translate').setAttribute('aria-pressed', String(!isAI));
-    $('.scene-ai').setAttribute('aria-pressed', String(isAI));
-    $('.note').textContent = isAI ? '仅将所选内容和本轮对话发给所选模型 · Esc 关闭' : '中文自动译英文，其他语言译中文 · Esc 关闭';
-  }
-  function openChat() {
-    if (!selected?.text) return;
-    rememberFocus();
-    controller.reset(); speech.stop(); setScene('ai');
-    $('.selection-bar').hidden = true; $('.panel').hidden = false;
-    place($('.panel'), selected.rect); $('.source').textContent = selected.text;
-    $('.brand').textContent = settings.assistant.llm.name;
-    const fingerprint = `${settings.assistant.llm.provider}:${selected.text}`;
-    if (chatSource !== fingerprint) { chat.open(selected.text, settings.assistant); chatSource = fingerprint; }
-    else $('.chat-area textarea').focus({ preventScroll: true });
   }
   let notePlacement = 0;
   const pageTranslation = new PageTranslation(document, (texts, context, signal) => pageRpc('ct:page-translate', { texts, provider: context.provider, to: context.target }, signal), state => {
@@ -239,13 +212,7 @@ async function initialize() {
   function toggle(scope = 'smart') { return pageTranslation.active ? pageTranslation.stop() : start(scope); }
   function applySettings(next) {
     const changed = next.provider !== settings.provider || next.page.target !== settings.page.target;
-    if (next.assistant && settings.assistant && JSON.stringify(next.assistant) !== JSON.stringify(settings.assistant)) {
-      speech.stop();
-      if (JSON.stringify(next.assistant.llm) !== JSON.stringify(settings.assistant.llm)) {
-        chat.cancel(); chat.updateConfig(next.assistant); chatSource = '';
-        if ($('.panel').classList.contains('ai-panel')) $('.brand').textContent = next.assistant.llm.name;
-      }
-    }
+    if (JSON.stringify(next.speech) !== JSON.stringify(settings.speech)) speech.stop();
     settings = next;
     $('.float').hidden = !settings.page.floating;
     if (!settings.page.selection) $('.selection-bar').hidden = true;
@@ -259,10 +226,7 @@ async function initialize() {
   $('.float').addEventListener('click', trustedAction(() => toggle()));
   $('.select-action').addEventListener('click', trustedAction(() => openSelection()));
   $('.select-read').addEventListener('click', trustedAction(() => selected && read(selected.text, detectLanguage(selected.text) || 'zh', 'selection')));
-  $('.select-ai').addEventListener('click', trustedAction(openChat));
-  $('.scene-ai').addEventListener('click', trustedAction(openChat));
-  $('.scene-translate').addEventListener('click', trustedAction(() => openSelection()));
-  $('.scene-settings').addEventListener('click', trustedAction(() => pageRpc('ct:assistant-open').catch(error => notify(error.message))));
+  $('.voice-settings').addEventListener('click', trustedAction(() => pageRpc('ct:voice-open').catch(error => notify(error.message))));
   $('.close').addEventListener('click', () => close(true));
   $('.speech-pause').addEventListener('click', trustedAction(() => speech.pause()));
   $('.speech-stop').addEventListener('click', trustedAction(() => speech.stop()));
