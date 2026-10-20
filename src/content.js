@@ -107,12 +107,18 @@ async function initialize() {
     $('.retry').hidden = state.status !== 'error';
     $('.status').classList.toggle('error', state.status === 'error');
     if (state.status === 'loading') { $('.status').textContent = '正在翻译…'; return; }
-    if (state.status === 'error') { $('.status').textContent = state.error.message; return; }
+    if (state.status === 'error') {
+      $('.status').textContent = state.error.message;
+      if (!$('.panel').hidden) place($('.panel'), selected?.rect);
+      return;
+    }
     if (state.status === 'success') {
       // 词典补充到达时，用户选中的内容保持可复制。
       if (state.phase === 'alternatives' && root.getSelection?.()?.toString()) return;
       $('.status').textContent = '';
       renderResult(state.result, state.request);
+      // 译文与后到词义会改变浮层高度，须按当前尺寸重新贴合选区。
+      if (!$('.panel').hidden) place($('.panel'), selected?.rect);
     }
   }, request => pageRpc('ct:selection-translate', { provider: request.provider, text: request.text, to: request.to, mode: request.mode }, request.signal), async request => {
     try {

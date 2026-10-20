@@ -85,7 +85,14 @@
         "checks": 14,
         "status": "passed"
       }
-    ]
+    ],
+    "positionRegression": {
+      "fixtureDelayMs": 180,
+      "selectionAtViewportBottom": true,
+      "baselineBuild": "failed",
+      "correctedBuild": "passed",
+      "unchangedWindowBounds": true
+    }
   },
   "configuration": {
     "storageKey": "selection-services-v1",
@@ -101,8 +108,8 @@
   },
   "package": {
     "filename": "translate-chrome-0.7.14.zip",
-    "sha256": "ab31c3be2e43699139d939071742a77f4e3a5fb0296d5eff7a0132738c0cec29",
-    "bytes": 537495,
+    "sha256": "1d02a100b65fd96d91294a4fdd791f9c5c96623c2f4ef7dc0a7b7f28bd28bcdd",
+    "bytes": 537503,
     "files": [
       "LICENSE",
       "THIRD_PARTY_LICENSES.txt",
@@ -139,6 +146,16 @@
         "scenario": "speech",
         "assertion": "narrow panel bounds",
         "followup": "wait up to 1000ms for asynchronous positioning with unchanged bounds"
+      },
+      {
+        "runId": 39361774143,
+        "sourceCommit": "b47c0a087b60369e810f15b0f54c2435235c3f39",
+        "node22": "success",
+        "node24": "success",
+        "browser": "failure",
+        "scenario": "speech",
+        "assertion": "narrow panel bounds after 1000ms",
+        "diagnosis": "panel grew after asynchronous results without repositioning"
       }
     ]
   },

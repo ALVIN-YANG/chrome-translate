@@ -13,7 +13,12 @@ export default async function speechScenario(page) {
       tts: { provider: 'minimax', speed: 1.2, providers: { minimax: { baseURL: `${origin}/v1`, voice } } },
     } });
   }, { origin, voice });
-  await context.route('https://edge.microsoft.com/translate/translatetext?*', route => route.fulfill({ contentType: 'application/json', body: JSON.stringify(JSON.parse(route.request().postData()).map(text => ({ detectedLanguage: { language: text === '回溯' ? 'zh-Hans' : 'en' }, translations: [{ text: text === '回溯' ? 'Looking back' : '中文译文：' + text }] }))) }));
+  await context.route('https://edge.microsoft.com/translate/translatetext?*', async route => {
+    const texts = JSON.parse(route.request().postData());
+    // 先呈现短的加载状态，再返回较长词义，覆盖浮层内容增长后的定位。
+    if (texts.includes('回溯')) await new Promise(resolve => setTimeout(resolve, 180));
+    return route.fulfill({ contentType: 'application/json', body: JSON.stringify(texts.map(text => ({ detectedLanguage: { language: text === '回溯' ? 'zh-Hans' : 'en' }, translations: [{ text: text === '回溯' ? 'Looking back' : '中文译文：' + text }] }))) });
+  });
   await context.route('https://cn.bing.com/dict/search?*', route => route.fulfill({ contentType: 'text/html', body: '<div id="headword">回溯</div><div class="qdef"><ul><li><span class="pos">v.</span><span class="def">backtrack</span></li></ul></div>' }));
   const ttsCalls = () => worker.evaluate(async origin => (await fetch(`${origin}/calls`)).json(), origin);
   const controlTTS = delayMs => worker.evaluate(({ origin, delayMs }) => fetch(`${origin}/control`, { method: 'POST', body: JSON.stringify({ delayMs }) }), { origin, delayMs });
@@ -116,10 +121,15 @@ export default async function speechScenario(page) {
     await settingsPage.setViewportSize({ width, height: 850 });
     assert(await settingsPage.evaluate(() => document.documentElement.scrollWidth <= innerWidth));
     await page.setViewportSize({ width, height: 850 });
+    await page.locator('#term').evaluate(element => {
+      element.style.marginTop = '700px';
+      element.scrollIntoView({ block: 'end' });
+    });
     await page.evaluate(() => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve))));
     await select();
     const bounds = await bar.boundingBox(); assert(bounds.x >= 0 && bounds.x + bounds.width <= width);
     await bar.getByRole('button', { name: '翻译选中文字' }).click();
+    await panel.getByText('backtracking', { exact: true }).waitFor();
     // 浮层通过异步定位计算尺寸；先等待实际布局，仍按原边界检查。
     await page.waitForFunction(() => {
       const panel = document.querySelector('[data-ct-owned="controls"]').shadowRoot.querySelector('.panel');
