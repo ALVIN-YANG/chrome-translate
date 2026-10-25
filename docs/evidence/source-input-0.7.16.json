@@ -130,10 +130,31 @@
     ]
   },
   "ci": {
-    "status": "pending"
+    "status": "success",
+    "runId": 40186289816,
+    "url": "https://github.com/ALVIN-YANG/chrome-translate/actions/runs/40186289816",
+    "sourceCommit": "d07c4f099df296d309c7ca7ee6d4c17dbc52318e",
+    "jobs": {
+      "Chromium extension": "success",
+      "Node 22": "success",
+      "Node 24": "success"
+    }
   },
   "release": {
-    "status": "pending"
+    "status": "published",
+    "id": 423334601,
+    "tag": "v0.7.16",
+    "url": "https://github.com/ALVIN-YANG/chrome-translate/releases/tag/v0.7.16",
+    "targetCommit": "d07c4f099df296d309c7ca7ee6d4c17dbc52318e",
+    "tagCommit": "d07c4f099df296d309c7ca7ee6d4c17dbc52318e",
+    "anonymousZipHTTP": 200,
+    "anonymousChecksumHTTP": 200,
+    "downloadRoute": "Unauthenticated public release asset API redirects to release-assets.githubusercontent.com",
+    "matchesLocalAndBrowserPackage": true,
+    "checksumValid": true,
+    "zipCRCValid": true,
+    "manifestVersion": "0.7.16",
+    "standardDownloadURLProbe": "Local curl connection/transfer timeouts; public unauthenticated asset API downloads succeeded"
   },
   "scope": {
     "userChromeUpdated": false,
@@ -141,5 +162,6 @@
     "liveProviderCalls": false,
     "newDependencies": false,
     "newPermissions": false
-  }
+  },
+  "sourceCommit": "d07c4f099df296d309c7ca7ee6d4c17dbc52318e"
 }

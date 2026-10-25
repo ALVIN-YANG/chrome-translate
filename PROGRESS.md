@@ -2,7 +2,7 @@
 
 当前目标：成为顶级开源项目。此目标仍在推进，不能由功能数量、文档或单次测试认定完成。
 
-0.7.16 本地验收通过：原文语言默认自动识别，允许手动选择 15 种语言；手动选择进入实际服务请求、自动目标与词典判断，并随会话恢复。输入区新增原文朗读，沿用现有声音设置；翻译返回不打断原文，修改输入或切换语言停止播放。89 项 Node 检查、十七组实际 ZIP 浏览器场景共 191 项检查通过；包括 MiniMax 音色与语速保留的受控音频播放。中英文 README、隐私说明已同步，安装包与浏览器加载包一致，未修改用户 Chrome、账号 Key 或音色。CI 和公开发布待后续核对，见 `docs/evidence/source-input-0.7.16.json`。
+0.7.16 已发布：原文语言默认自动识别，允许手动选择 15 种语言；手动选择进入实际服务请求、自动目标与词典判断，并随会话恢复。输入区新增原文朗读，沿用现有声音设置；翻译返回不打断原文，修改输入或切换语言停止播放。89 项 Node 检查、十七组实际 ZIP 浏览器场景共 191 项检查通过，包括 MiniMax 音色与语速保留的受控音频播放。[GitHub CI](https://github.com/ALVIN-YANG/chrome-translate/actions/runs/40186289816) 的 Node 22/24 和 Linux Chromium 全部通过，[v0.7.16 Release](https://github.com/ALVIN-YANG/chrome-translate/releases/tag/v0.7.16) 与 tag 指向 `d07c4f099df296d309c7ca7ee6d4c17dbc52318e`。公开 ZIP 与摘要通过未鉴权公开资产 API 下载均 HTTP 200，跟随至 GitHub CDN 后核对内容与本机及实际浏览器加载包相同；常规下载 URL 在本机网络超时。537,945 字节，SHA-256 `a6066332162aadd483897342704d4c6e14497c7afe9344e7050212570f323fff`，CRC、版本、21 个白名单文件与许可已核对。中英文 README、隐私说明和本机 dist 已更新，未修改用户 Chrome、账号 Key 或音色。见 `docs/evidence/source-input-0.7.16.json`。
 
 0.7.15 已发布：修复 Chrome CSP 不接受 `http://[::1]:*` 而产生的无效源警告；实际扩展页先复现原提示，修正后无该警告。保留 HTTPS、localhost、127.0.0.1，其他 HTTP 仍在网络前被拦截；HTTP IPv6 地址提供明确提示，不改写用户配置。85 项 Node 检查、十六组实际 ZIP 浏览器场景共 170 项检查通过，[GitHub CI](https://github.com/ALVIN-YANG/chrome-translate/actions/runs/40184769025) 的 Node 22/24 与 Linux Chromium 全部通过。[v0.7.15](https://github.com/ALVIN-YANG/chrome-translate/releases/tag/v0.7.15) 和 tag 指向 `84427f7a9e5b5f4cc49f50ce165e5f2aab723783`。公开 ZIP 和摘要匿名下载均 HTTP 200，与本机和浏览器实际加载包一致；537,608 字节，SHA-256 `9900533a21655c617d85134e22a8261c0f02dffd5ce001270ea1d3fbefda27fb`，Manifest、21 个白名单文件、许可与 CRC 检查通过。dist 已更新，未操作用户 Chrome 或修改账号 Key；用户需清空旧错误、重新加载插件并刷新网页。见 `docs/evidence/csp-0.7.15.json`。
 
