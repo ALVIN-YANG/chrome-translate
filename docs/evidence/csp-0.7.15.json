@@ -133,15 +133,33 @@
     ]
   },
   "ci": {
-    "status": "pending"
+    "status": "success",
+    "runId": 40184769025,
+    "url": "https://github.com/ALVIN-YANG/chrome-translate/actions/runs/40184769025",
+    "sourceCommit": "84427f7a9e5b5f4cc49f50ce165e5f2aab723783",
+    "node22": "success",
+    "node24": "success",
+    "browser": "success"
   },
   "release": {
-    "status": "pending"
+    "status": "published",
+    "id": 423321617,
+    "tag": "v0.7.15",
+    "url": "https://github.com/ALVIN-YANG/chrome-translate/releases/tag/v0.7.15",
+    "targetCommit": "84427f7a9e5b5f4cc49f50ce165e5f2aab723783",
+    "anonymousZipHTTP": 200,
+    "anonymousChecksumHTTP": 200,
+    "matchesLocalAndBrowserPackage": true,
+    "checksumValid": true,
+    "zipCRCValid": true,
+    "manifestVersion": "0.7.15",
+    "invalidIPv6SourceAbsent": true
   },
   "scope": {
     "userChromeUpdated": false,
     "providerCredentialsChanged": false,
     "liveProviderCalls": false
   },
-  "source": "https://www.w3.org/TR/CSP/"
+  "source": "https://www.w3.org/TR/CSP/",
+  "sourceCommit": "84427f7a9e5b5f4cc49f50ce165e5f2aab723783"
 }
