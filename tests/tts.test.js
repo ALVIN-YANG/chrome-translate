@@ -34,6 +34,9 @@ test('明确配置的语音 Key 优先，硅基流动仍可沿用翻译 Key，�
 
 test('自定义接口只允许 HTTPS 和本机 HTTP，禁止 URL 凭据、查询、跳转和跨域转发', async () => {
   assert.equal(validateServiceURL('http://127.0.0.1:11434/v1/'),'http://127.0.0.1:11434/v1');
+  assert.equal(validateServiceURL('http://localhost:11434/v1/'),'http://localhost:11434/v1');
+  assert.equal(validateServiceURL('https://[::1]:11434/v1/'),'https://[::1]:11434/v1');
+  assert.throws(()=>validateServiceURL('http://[::1]:11434/v1'),/localhost 或 127\.0\.0\.1/);
   for(const url of ['http://example.com/v1','https://key@example.com/v1','https://example.com/v1?key=secret','file:///tmp','https://example.com/#x'])assert.throws(()=>validateServiceURL(url));
   let options;
   const fetcher=serviceFetch('https://example.test/v1',async (_url,init)=>{options=init;return new Response('test');});

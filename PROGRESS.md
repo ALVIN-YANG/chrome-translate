@@ -2,6 +2,8 @@
 
 当前目标：成为顶级开源项目。此目标仍在推进，不能由功能数量、文档或单次测试认定完成。
 
+0.7.15 本地修复通过：移除 Chrome CSP 不接受的 `http://[::1]:*`，保留 HTTPS、localhost 与 127.0.0.1；HTTP IPv6 配置给出明确地址提示，不改写已保存接口。实际扩展页先复现原警告，修正后无无效源警告；本机 HTTP 与 HTTPS 均可连接，非本机 HTTP 在发出请求前被 CSP 拦截。85 项 Node 检查、十六组隔离 Chromium 扩展场景共 170 项检查通过；新版 dist 和 ZIP 已生成。CI 与发布待完成，未操作用户 Chrome 或修改账号 Key。见 `docs/evidence/csp-0.7.15.json`。
+
 0.7.14 已发布：划词仅保留翻译与朗读，声音设置独立为单页；已有声音服务、Key、地址、音色与语速保持兼容。异步译文、词义和错误展示后重算浮层位置，底部选区与延迟响应回归先失败后通过。中英文 README 与实际截图已同步 GitHub。85 项 Node 检查、十五组隔离 Chromium 场景共 164 项检查通过；[最终 CI](https://github.com/ALVIN-YANG/chrome-translate/actions/runs/39362657004) 的 Node 22/24 与 Linux Chromium 全部通过。[v0.7.14](https://github.com/ALVIN-YANG/chrome-translate/releases/tag/v0.7.14) 指向 `806a4dff983f09038e6af681becfef075290dcd5`，公开 ZIP 和摘要匿名下载均 HTTP 200，内容与本机及实际浏览器加载包一致，21 个白名单文件、版本、许可与 CRC 已核对。ZIP 为 537,503 字节，SHA-256 `1d02a100b65fd96d91294a4fdd791f9c5c96623c2f4ef7dc0a7b7f28bd28bcdd`。最终 CI artifact 下载遇到 Azure TLS 握手超时，未完成该版本 Linux ZIP 的逐字节比较；未操作用户 Chrome，也未新增真实服务调用。证据见 `docs/evidence/voice-0.7.14.json`。
 
 0.7.13 已发布：工具栏菜单首项直达翻译页，悬浮按钮改为 32px 无阴影圆形，使用 A 与双向箭头，开启后只反色、不切换眼睛。支持拖动、位置记忆、边界限制和方向键微调；位置单独存储，不触发翻译或改写服务设置。88 项 Node 检查、十八组 macOS/Linux 扩展场景共 187 项检查，以及实际 ZIP 的十一种视觉状态通过。安装包为 708,862 字节，SHA-256 `d3472f0ef054fea64bc06b1f02e9763e0f26964a2b343ed25e36d5baab3bc99d`，版本、白名单、许可、测试凭据排除和新图标均已核对。[发布前 CI](https://github.com/ALVIN-YANG/chrome-translate/actions/runs/39210558829) 的 Node 22/24 与 Chromium 全部通过。[v0.7.13 Release](https://github.com/ALVIN-YANG/chrome-translate/releases/tag/v0.7.13) 指向 `8422fd3706dfb5f7843c539a7d474623c52a0047`；公开 ZIP、摘要均匿名下载成功，CRC、版本、新图标与内容均与本机和 Linux CI 一致。没有操作用户 Chrome；使用新按钮需覆盖原目录、重新加载扩展并刷新网页。记录见 `docs/evidence/floating-entry-0.7.13.json`。

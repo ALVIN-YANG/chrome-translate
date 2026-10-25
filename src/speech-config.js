@@ -34,7 +34,8 @@ export function normalizeSpeechSettings(raw) {
 export function validateServiceURL(value) {
   let url;
   try { url = new URL(value); } catch { throw new Error('请填写完整的 API 地址。'); }
-  const local = ['localhost', '127.0.0.1', '[::1]'].includes(url.hostname);
+  if (url.protocol === 'http:' && url.hostname === '[::1]') throw new Error('本机 HTTP 服务请使用 localhost 或 127.0.0.1。');
+  const local = ['localhost', '127.0.0.1'].includes(url.hostname);
   if (url.username || url.password || url.search || url.hash || !(url.protocol === 'https:' || url.protocol === 'http:' && local)) throw new Error('服务地址需使用 HTTPS；只有本机服务可以使用 HTTP。地址不能包含账户、查询参数或片段。');
   return url.href.replace(/\/+$/, '');
 }

@@ -51,7 +51,7 @@ For MiniMax's gentle male voice, choose **MiniMax**, enter your key, use model `
 
 *These selection and voice screenshots come from the running extension with fixture credentials, controlled translation responses, and a local test tone.*
 
-Custom remote endpoints require HTTPS. Loopback services can use HTTP on `localhost`, `127.0.0.1`, or `::1`. Enter the base URL without credentials, query parameters, or fragments; the extension appends the API path and rejects redirects.
+Custom remote endpoints require HTTPS. Loopback services can use HTTP on `localhost` or `127.0.0.1`. Enter the base URL without credentials, query parameters, or fragments; the extension appends the API path and rejects redirects.
 
 System speech selects device-local voices. Translation language support does not guarantee that a matching system voice is installed. Cloud voice availability, permissions, quotas, and billing depend on your provider account.
 

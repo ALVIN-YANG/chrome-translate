@@ -11,6 +11,7 @@ import workspace from '../../scripts/browser-workspace-smoke.mjs';
 import webpage from '../../scripts/browser-page-smoke.mjs';
 import speech from '../../scripts/browser-cloud-speech-smoke.mjs';
 import pageCSP from '../../scripts/browser-page-csp-smoke.mjs';
+import manifestCSP from '../../scripts/browser-manifest-csp-smoke.mjs';
 import audioCSP from '../../scripts/browser-speech-csp-smoke.mjs';
 import { boundaries, rerender } from '../../scripts/browser-page-compatibility-smoke.mjs';
 import realSite from '../../scripts/browser-page-real-sites.mjs';
@@ -45,6 +46,7 @@ for (const [name, scenario, entry] of [
   ['floating-entry', floatingEntry, 'article.html'],
   ['speech', speech, 'article.html'],
   ['page-csp', pageCSP, 'article.html'],
+  ['manifest-csp', manifestCSP, 'article.html'],
   ['audio-csp', audioCSP, 'article.html'],
   ['page-boundaries', boundaries, 'compatibility.html'],
   ['page-rerender', rerender, 'compatibility.html'],

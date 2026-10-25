@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "翻译 · 多语言",
-  "version": "0.7.14",
+  "version": "0.7.15",
   "description": "划词翻译与朗读、网页双语和独立文本翻译。支持微软、百度及自定义模型，朗读可选系统声音或 MiniMax 等语音服务。",
   "minimum_chrome_version": "120",
   "permissions": [
@@ -41,7 +41,7 @@
   },
   "options_page": "index.html#settings",
   "content_security_policy": {
-    "extension_pages": "script-src 'self'; object-src 'none'; base-uri 'none'; connect-src https: http://localhost:* http://127.0.0.1:* http://[::1]:*; media-src 'self' blob:"
+    "extension_pages": "script-src 'self'; object-src 'none'; base-uri 'none'; connect-src https: http://localhost:* http://127.0.0.1:*; media-src 'self' blob:"
   },
   "content_scripts": [
     {

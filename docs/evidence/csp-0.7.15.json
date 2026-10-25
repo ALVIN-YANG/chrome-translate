@@ -1,0 +1,147 @@
+{
+  "version": "0.7.15",
+  "date": "2026-10-25",
+  "cause": "Chromium rejects http://[::1]:* as a CSP source",
+  "reproduction": {
+    "baseline": "failed with the exact invalid source warning",
+    "corrected": "passed",
+    "scope": "actual ZIP in isolated Chromium extension pages"
+  },
+  "policy": {
+    "connectSources": [
+      "https:",
+      "http://localhost:*",
+      "http://127.0.0.1:*"
+    ],
+    "nonLocalHTTP": "blocked before network",
+    "httpIPv6": "rejected with explicit localhost or IPv4 guidance",
+    "httpsIPv6": "URL validation preserved"
+  },
+  "local": {
+    "nodeTests": 85,
+    "browserScenarios": 16,
+    "browserChecks": 170,
+    "scenarios": [
+      {
+        "name": "workspace",
+        "checks": 14,
+        "status": "passed"
+      },
+      {
+        "name": "free-providers",
+        "checks": 12,
+        "status": "passed"
+      },
+      {
+        "name": "webpage",
+        "checks": 23,
+        "status": "passed"
+      },
+      {
+        "name": "floating-entry",
+        "checks": 16,
+        "status": "passed"
+      },
+      {
+        "name": "speech",
+        "checks": 20,
+        "status": "passed"
+      },
+      {
+        "name": "page-csp",
+        "checks": 4,
+        "status": "passed"
+      },
+      {
+        "name": "manifest-csp",
+        "checks": 6,
+        "status": "passed"
+      },
+      {
+        "name": "audio-csp",
+        "checks": 3,
+        "status": "passed"
+      },
+      {
+        "name": "page-boundaries",
+        "checks": 5,
+        "status": "passed"
+      },
+      {
+        "name": "page-rerender",
+        "checks": 11,
+        "status": "passed"
+      },
+      {
+        "name": "keyboard-focus",
+        "checks": 11,
+        "status": "passed"
+      },
+      {
+        "name": "real-site-verifier",
+        "checks": 7,
+        "status": "passed"
+      },
+      {
+        "name": "settings-persistence",
+        "checks": 6,
+        "status": "passed"
+      },
+      {
+        "name": "page-navigation",
+        "checks": 11,
+        "status": "passed"
+      },
+      {
+        "name": "page-updates",
+        "checks": 7,
+        "status": "passed"
+      },
+      {
+        "name": "page-pending",
+        "checks": 14,
+        "status": "passed"
+      }
+    ]
+  },
+  "package": {
+    "filename": "translate-chrome-0.7.15.zip",
+    "sha256": "9900533a21655c617d85134e22a8261c0f02dffd5ce001270ea1d3fbefda27fb",
+    "bytes": 537608,
+    "files": [
+      "LICENSE",
+      "THIRD_PARTY_LICENSES.txt",
+      "app.js",
+      "background.js",
+      "content.js",
+      "icons/128.png",
+      "icons/16.png",
+      "icons/32.png",
+      "icons/48.png",
+      "index.html",
+      "manifest.json",
+      "offscreen.html",
+      "offscreen.js",
+      "popup.css",
+      "popup.html",
+      "popup.js",
+      "services.css",
+      "services.html",
+      "services.js",
+      "styles.css",
+      "tabs.js"
+    ]
+  },
+  "ci": {
+    "status": "pending"
+  },
+  "release": {
+    "status": "pending"
+  },
+  "scope": {
+    "userChromeUpdated": false,
+    "providerCredentialsChanged": false,
+    "liveProviderCalls": false
+  },
+  "source": "https://www.w3.org/TR/CSP/"
+}
