@@ -8,6 +8,7 @@ import { unzipSync } from 'fflate';
 import { packageExtension } from '../../scripts/package.mjs';
 import { startFixtureServer } from './fixture-server.js';
 import workspace from '../../scripts/browser-workspace-smoke.mjs';
+import sourceInput from '../../scripts/browser-source-input-smoke.mjs';
 import webpage from '../../scripts/browser-page-smoke.mjs';
 import speech from '../../scripts/browser-cloud-speech-smoke.mjs';
 import pageCSP from '../../scripts/browser-page-csp-smoke.mjs';
@@ -41,6 +42,7 @@ await writeFile(join(artifactPath, 'package-result.json'), JSON.stringify(packag
 
 for (const [name, scenario, entry] of [
   ['workspace', workspace, 'index.html'],
+  ['source-input', sourceInput, 'index.html'],
   ['free-providers', freeProviders, 'index.html'],
   ['webpage', webpage, 'article.html'],
   ['floating-entry', floatingEntry, 'article.html'],

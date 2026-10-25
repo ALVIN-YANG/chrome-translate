@@ -23,7 +23,7 @@ async (page) => {
     await page.waitForFunction(() => document.getElementById('translation-status').dataset.status === 'success');
     const translated = await result.textContent();
     assert(/\p{Script=Han}/u.test(translated), `${language} 未译成中文`);
-    assert(await page.locator('#source-language').textContent() === `自动识别 · ${language}`, `${language} 未自动识别`);
+    assert(await page.locator('#source-language option:checked').textContent() === `自动识别 · ${language}`, `${language} 未自动识别`);
     results.push({ source: language, target: 'zh', text: translated });
   }
   await target.selectOption('ja');

@@ -19,6 +19,8 @@ export class UnifiedSpeech {
   async speak(text, language, key) {
     this.stop(); if (!text.trim()) return;
     const version = this.version;
+    // 读取声音配置期间也归属当前按钮，允许立即停止，避免译文返回时误取消原文。
+    this.emit({ status: 'loading', key });
     try {
       let settings = this.getSettings?.();
       if (!settings && globalThis.chrome?.runtime?.id) {
@@ -29,7 +31,6 @@ export class UnifiedSpeech {
       if (version !== this.version) return;
       if (!settings || settings.provider === 'system') { this.native.rate = settings?.speed || 1; this.native.speak(text, language, key); return; }
       this.playId = crypto.randomUUID();
-      this.emit({ status: 'loading', key });
       await pageRpc('ct:speech-start', { text, language, key, playId: this.playId });
     }
     catch (error) { if (version === this.version) this.emit({ status: 'error', key: null, message: error.message }); }

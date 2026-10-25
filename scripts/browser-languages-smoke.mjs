@@ -26,7 +26,7 @@ async (page) => {
   const target = page.getByRole('combobox', { name: '译文语言', exact: true });
   const result = page.getByRole('region', { name: '翻译结果', exact: true });
   assert(await page.getByRole('combobox', { name: '翻译模式' }).count() === 0, '不得显示词语句段模式选项');
-  assert(await page.getByRole('combobox', { name: '原文语言' }).count() === 0, '不得显示原文语言选项');
+  assert(await page.getByRole('combobox', { name: '原文语言' }).inputValue() === 'auto', '原文默认自动识别');
   assert(await target.locator('option').count() === 16, '自动目标加 15 种常用语言');
   await input.fill('欢迎使用翻译。');
   await result.filter({ hasText: 'Hello' }).waitFor();
@@ -42,9 +42,9 @@ async (page) => {
   await input.fill('こんにちは');
   await result.filter({ hasText: '你好' }).waitFor();
   assert(calls.at(-1).target === 'zh', '日语默认译为中文');
-  assert(await page.locator('#source-language').textContent() === '自动识别 · 日语', '日语源语言应来自实际服务结果');
+  assert(await page.locator('#source-language option:checked').textContent() === '自动识别 · 日语', '日语源语言应来自实际服务结果');
   await input.fill('Bonjour');
-  await page.waitForFunction(() => document.getElementById('source-language').textContent === '自动识别 · 法语');
+  await page.waitForFunction(() => document.getElementById('source-language').selectedOptions[0].textContent === '自动识别 · 法语');
   assert(dictionaries.length === 0, '法语短词不误查英语词典');
   const beforeTokyo = calls.length;
   await input.fill('東京');

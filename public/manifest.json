@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "翻译 · 多语言",
-  "version": "0.7.15",
+  "version": "0.7.16",
   "description": "划词翻译与朗读、网页双语和独立文本翻译。支持微软、百度及自定义模型，朗读可选系统声音或 MiniMax 等语音服务。",
   "minimum_chrome_version": "120",
   "permissions": [

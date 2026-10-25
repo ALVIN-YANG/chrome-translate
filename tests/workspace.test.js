@@ -72,6 +72,23 @@ test('会话保留用户选择的服务，即使结果来自前一个服务也�
   assert(!matchesWorkspace(restored.displayed, restored.text, restored.target, restored.provider));
 });
 
+test('手动原文语言及结果来源随会话恢复，切换来源不能复用旧结果，旧会话默认自动', () => {
+  const storage = memoryStorage();
+  const displayed = { ...savedDisplay, sourcePreference: 'ja' };
+  saveWorkspace({ text: '回溯', source: 'ja', target: 'auto', provider: 'microsoft', displayed }, storage);
+  const restored = loadWorkspace(storage);
+  assert.equal(restored.source, 'ja');
+  assert.equal(restored.displayed.sourcePreference, 'ja');
+  assert(matchesWorkspace(restored.displayed, restored.text, restored.target, restored.provider, 'ja'));
+  assert(!matchesWorkspace(restored.displayed, restored.text, restored.target, restored.provider, 'zh'));
+  assert(!matchesWorkspace(restored.displayed, restored.text, restored.target, restored.provider, 'auto'));
+  saveWorkspace({ text: '回溯', source: 'invalid', target: 'auto', displayed: savedDisplay }, storage);
+  const legacy = loadWorkspace(storage);
+  assert.equal(legacy.source, 'auto');
+  assert.equal(legacy.displayed.sourcePreference, 'auto');
+  assert(matchesWorkspace(legacy.displayed, legacy.text, legacy.target, legacy.provider));
+});
+
 function fakeBrowser(contexts = []) {
   const calls = [], tabs = new Map();
   return {

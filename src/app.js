@@ -68,20 +68,26 @@ function renderProvider() {
 }
 
 function updateDirection() {
+  const source = $('source-language').value;
   const target = $('target-language').value;
-  currentDirection = resolveDirection(input.value, 'auto', target);
-  $('source-language').textContent = '自动识别';
-  const automaticTarget = resolveDirection(input.value).to;
+  currentDirection = resolveDirection(input.value, source, target);
+  renderSourceLanguage();
+  const automaticTarget = resolveDirection(input.value, source).to;
   $('target-language').options[0].textContent = `${LANGUAGES[automaticTarget].label}（自动）`;
   $('direction-title').textContent = target === 'auto' ? '自动翻译' : `译为${LANGUAGES[target].name}`;
-  $('direction-description').textContent = target === 'auto' ? '中文默认译为英文，其他语言默认译为中文' : '原文自动识别，词语与句段自动判断';
+  $('direction-description').textContent = source !== 'auto' ? `原文按${LANGUAGES[source].name}翻译，词语与句段自动判断` : target === 'auto' ? '中文默认译为英文，其他语言默认译为中文' : '原文自动识别，词语与句段自动判断';
   const count = Array.from(input.value).length;
   $('character-count').textContent = `${count.toLocaleString('en-US')} / 10,000`;
   $('character-count').classList.toggle('is-over-limit', count > 10000);
   $('clear-text').disabled = !input.value;
+  $('read-source').disabled = !ready || composing || !input.value.trim() || !speech.supported;
 }
 
-function snapshotWorkspace() { return { text: input.value, target: $('target-language').value, provider: settings.provider, displayed }; }
+function renderSourceLanguage(detected) {
+  $('source-language').options[0].textContent = detected ? `自动识别 · ${LANGUAGES[detected].name}` : '自动识别';
+}
+
+function snapshotWorkspace() { return { text: input.value, source: $('source-language').value, target: $('target-language').value, provider: settings.provider, displayed }; }
 function rememberWorkspace() { saveWorkspace(snapshotWorkspace()); }
 function isTermDisplay() {
   return displayed?.mode === 'term' && Array.from(displayed.result.text).length <= 120
@@ -115,7 +121,8 @@ function renderTranslation(state) {
     displayed.result = state.result;
     renderAlternatives(state.result); rememberWorkspace(); return;
   }
-  speech.stop();
+  // 原文没有变化时，服务返回译文不应打断正在进行的原文朗读。
+  if (speech.state.key !== 'source') speech.stop();
   copyVersion++;
   for (const id of ['empty-state', 'loading-state', 'error-state']) $(id).hidden = true;
   $('translation-status').dataset.status = state.status;
@@ -133,12 +140,13 @@ function renderTranslation(state) {
     const request = state.request;
     displayed = {
       sourceText: request.text, mode: request.mode, provider: request.provider,
+      sourcePreference: request.from || 'auto',
       targetPreference: request.targetPreference || $('target-language').value, result: state.result,
     };
     currentDirection.to = state.result.target || currentDirection.to;
     const detected = normalizeLanguage(state.result.detected);
-    if (detected) currentDirection.detected = detected;
-    $('source-language').textContent = detected ? `自动识别 · ${LANGUAGES[detected].name}` : '自动识别';
+    if ($('source-language').value === 'auto' && detected) currentDirection.detected = detected;
+    renderSourceLanguage($('source-language').value === 'auto' ? detected : null);
     if ($('target-language').value === 'auto') $('target-language').options[0].textContent = `${LANGUAGES[currentDirection.to].label}（自动）`;
     $('translation-output').hidden = false;
     // 译文始终按纯文本显示，包括来自模型的 HTML 或脚本。
@@ -247,6 +255,7 @@ function renderAlternatives(translation) {
 const controller = new TranslationController(renderTranslation, translate);
 
 function translateInput(force = false) {
+  speech.stop();
   updateDirection();
   currentMode = resolveInputMode(input.value);
   rememberWorkspace();
@@ -266,18 +275,19 @@ function translateInput(force = false) {
 
 input.addEventListener('input', event => {
   forgetUndo();
-  if (composing || event.isComposing) { updateDirection(); rememberWorkspace(); return; }
+  if (composing || event.isComposing) { speech.stop(); updateDirection(); rememberWorkspace(); return; }
   translateInput();
 });
-input.addEventListener('compositionstart', () => { composing = true; controller.reset({ preserveResult: true }); });
+input.addEventListener('compositionstart', () => { composing = true; speech.stop(); updateDirection(); controller.reset({ preserveResult: true }); });
 input.addEventListener('compositionend', () => { composing = false; translateInput(); });
+$('source-language').addEventListener('change', () => translateInput());
 $('target-language').addEventListener('change', () => translateInput());
 $('retry').addEventListener('click', () => translateInput(true));
 $('clear-text').addEventListener('click', () => {
   undoWorkspace = snapshotWorkspace();
   clearTimeout(undoTimer); $('undo-clear').hidden = false;
   undoTimer = setTimeout(forgetUndo, 8000);
-  input.value = ''; composing = false; controller.reset(); updateDirection(); input.focus();
+  speech.stop(); input.value = ''; composing = false; controller.reset(); updateDirection(); input.focus();
 });
 $('undo-clear').addEventListener('click', () => {
   const saved = undoWorkspace; forgetUndo();
@@ -288,14 +298,14 @@ function forgetUndo() { clearTimeout(undoTimer); undoWorkspace = null; $('undo-c
 function restoreWorkspace(saved) {
   if (saved.provider && Object.hasOwn(PROVIDERS, saved.provider)) settings.provider = saved.provider;
   renderProvider();
-  input.value = saved.text; $('target-language').value = saved.target;
+  input.value = saved.text; $('source-language').value = saved.source || 'auto'; $('target-language').value = saved.target;
   updateDirection();
   if (saved.displayed) {
     const previous = saved.displayed;
-    renderTranslation({ status: 'success', restored: true, result: previous.result, request: { text: previous.sourceText, provider: previous.provider, mode: previous.mode, targetPreference: previous.targetPreference } });
+    renderTranslation({ status: 'success', restored: true, result: previous.result, request: { text: previous.sourceText, provider: previous.provider, mode: previous.mode, from: previous.sourcePreference || 'auto', targetPreference: previous.targetPreference } });
   }
   if (!saved.text.trim()) controller.reset();
-  else if (!matchesWorkspace(saved.displayed, saved.text, saved.target, settings.provider)) translateInput();
+  else if (!matchesWorkspace(saved.displayed, saved.text, saved.target, settings.provider, saved.source)) translateInput();
   rememberWorkspace();
 }
 for (const button of document.querySelectorAll('[data-provider]')) {
@@ -309,6 +319,7 @@ for (const button of document.querySelectorAll('[data-provider]')) {
 }
 $('copy-result').addEventListener('click', () => copyText(outputText()));
 $('read-result').addEventListener('click', () => toggleSpeech(outputText(), 'result'));
+$('read-source').addEventListener('click', () => toggleSpeech(input.value, 'source', normalizeLanguage(currentDirection.detected) || 'zh'));
 
 async function copyText(text) {
   const version = copyVersion;
@@ -327,7 +338,7 @@ function toggleSpeech(text, key, language = displayed?.result.target || currentD
 function renderSpeech(state) {
   for (const button of document.querySelectorAll('[data-speech-key]')) {
     const active = state.key === button.dataset.speechKey;
-    const suffix = button.dataset.speechKind === 'example' ? `例句 ${button.dataset.speechLabel}` : ` ${button.dataset.speechLabel}`;
+    const suffix = button.dataset.speechKey === 'source' ? '原文' : button.dataset.speechKind === 'example' ? `例句 ${button.dataset.speechLabel}` : ` ${button.dataset.speechLabel}`;
     const all = button.dataset.speechKey === 'result' && isTermDisplay() && buildTermEntries(displayed.result).length > 1;
     button.setAttribute('aria-label', active ? `停止朗读${button.dataset.speechKey === 'result' ? '' : suffix}` : `朗读${button.dataset.speechKey === 'result' ? all ? '全部译法' : '译文' : suffix}`);
     button.setAttribute('aria-pressed', String(active));
@@ -482,20 +493,23 @@ window.addEventListener('hashchange', () => { if (location.hash === '#settings')
 
 async function init() {
   for (const [code, language] of Object.entries(LANGUAGES)) {
-    const option = document.createElement('option'); option.value = code; option.textContent = language.label;
-    $('target-language').append(option);
+    for (const id of ['source-language', 'target-language']) {
+      const option = document.createElement('option'); option.value = code; option.textContent = language.label;
+      $(id).append(option);
+    }
   }
   $('preview-note').hidden = isExtension;
   if (!isExtension) document.querySelector('.privacy-note span').textContent = '预览模式：Key 仅保留在当前页面，刷新即清除。';
   try { settings = await loadSettings(); }
   catch { notice('暂时无法读取已保存的配置，请重新打开扩展页面后重试。'); }
-  ready = true; input.disabled = false;
+  ready = true; input.disabled = false; $('source-language').disabled = false;
   renderProvider();
   const saved = loadWorkspace();
   if (saved) restoreWorkspace(saved);
   else updateDirection();
   renderSpeech(speech.state);
   $('read-result').title = speech.supported ? '按朗读声音设置朗读' : '当前浏览器不支持系统朗读';
+  $('read-source').title = $('read-result').title;
   if (location.hash === '#settings') openSettings();
   else input.focus();
 }

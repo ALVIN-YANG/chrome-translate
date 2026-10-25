@@ -1,0 +1,145 @@
+{
+  "version": "0.7.16",
+  "date": "2026-10-25",
+  "changes": [
+    "Manual source language selection with automatic detection as default",
+    "Input speech shares existing system and cloud voice preferences",
+    "Source selection included in session and displayed-result identity",
+    "Manual source takes precedence over service detection and dictionary direction",
+    "Translation completion preserves input speech; input/language changes cancel playback"
+  ],
+  "local": {
+    "nodeTests": 89,
+    "browserScenarios": 17,
+    "browserChecks": 191,
+    "scenarios": [
+      {
+        "name": "audio-csp",
+        "status": "passed",
+        "checks": 3
+      },
+      {
+        "name": "floating-entry",
+        "status": "passed",
+        "checks": 16
+      },
+      {
+        "name": "free-providers",
+        "status": "passed",
+        "checks": 12
+      },
+      {
+        "name": "keyboard-focus",
+        "status": "passed",
+        "checks": 11
+      },
+      {
+        "name": "manifest-csp",
+        "status": "passed",
+        "checks": 6
+      },
+      {
+        "name": "page-boundaries",
+        "status": "passed",
+        "checks": 5
+      },
+      {
+        "name": "page-csp",
+        "status": "passed",
+        "checks": 4
+      },
+      {
+        "name": "page-navigation",
+        "status": "passed",
+        "checks": 11
+      },
+      {
+        "name": "page-pending",
+        "status": "passed",
+        "checks": 14
+      },
+      {
+        "name": "page-rerender",
+        "status": "passed",
+        "checks": 11
+      },
+      {
+        "name": "page-updates",
+        "status": "passed",
+        "checks": 7
+      },
+      {
+        "name": "real-site-verifier",
+        "status": "passed",
+        "checks": 7
+      },
+      {
+        "name": "settings-persistence",
+        "status": "passed",
+        "checks": 6
+      },
+      {
+        "name": "source-input",
+        "status": "passed",
+        "checks": 20
+      },
+      {
+        "name": "speech",
+        "status": "passed",
+        "checks": 21
+      },
+      {
+        "name": "webpage",
+        "status": "passed",
+        "checks": 23
+      },
+      {
+        "name": "workspace",
+        "status": "passed",
+        "checks": 14
+      }
+    ],
+    "responseMode": "controlled fixtures and local test audio, no live provider accounts"
+  },
+  "package": {
+    "filename": "translate-chrome-0.7.16.zip",
+    "sha256": "a6066332162aadd483897342704d4c6e14497c7afe9344e7050212570f323fff",
+    "bytes": 537945,
+    "files": [
+      "LICENSE",
+      "THIRD_PARTY_LICENSES.txt",
+      "app.js",
+      "background.js",
+      "content.js",
+      "icons/128.png",
+      "icons/16.png",
+      "icons/32.png",
+      "icons/48.png",
+      "index.html",
+      "manifest.json",
+      "offscreen.html",
+      "offscreen.js",
+      "popup.css",
+      "popup.html",
+      "popup.js",
+      "services.css",
+      "services.html",
+      "services.js",
+      "styles.css",
+      "tabs.js"
+    ]
+  },
+  "ci": {
+    "status": "pending"
+  },
+  "release": {
+    "status": "pending"
+  },
+  "scope": {
+    "userChromeUpdated": false,
+    "providerCredentialsChanged": false,
+    "liveProviderCalls": false,
+    "newDependencies": false,
+    "newPermissions": false
+  }
+}

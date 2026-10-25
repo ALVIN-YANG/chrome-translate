@@ -77,7 +77,11 @@ Only normal HTTP/HTTPS text pages are supported. PDF, images, video subtitles, s
 
 Paste or edit text to translate immediately. IME composition waits for confirmation. New input cancels old requests; late results cannot replace the current result. Outputs support selection, copy, and speech. Failed updates keep the previous result with a clear label.
 
-The toolbar's first action reuses an existing workspace tab. Input, provider, target, and results can survive a tab refresh through `sessionStorage`. Clear has an eight-second undo window. Input is limited to 10,000 characters; Baidu also has a 6,000-byte limit.
+Source language defaults to automatic detection. Use the selector above the input to choose any of the 15 supported languages manually. Chinese defaults to English; other languages default to Chinese. The target can also be selected manually.
+
+The input's speech button reads the original without waiting for a translation. Click again to stop. Originals, translations, and examples share your speech settings. Editing the input or changing languages stops playback.
+
+The toolbar's first action reuses an existing workspace tab. Input, provider, source and target languages, and results can survive a tab refresh through `sessionStorage`. Clear has an eight-second undo window. Input is limited to 10,000 characters; Baidu also has a 6,000-byte limit.
 
 | Provider | Credentials | Default use |
 | --- | --- | --- |

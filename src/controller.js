@@ -38,14 +38,15 @@ export class TranslationController {
     try {
       let result = await this.translator({ ...request, signal });
       if (version !== this.version || signal.aborted) return;
+      const manualSource = normalizeLanguage(request.from);
       const detected = normalizeLanguage(result.detected);
       // 日语纯汉字等有歧义时，以服务识别结果修正自动目标，不显示中间译文。
-      if (request.automaticTarget && detected && automaticTarget(detected) !== request.to) {
+      if (!manualSource && request.automaticTarget && detected && automaticTarget(detected) !== request.to) {
         request = { ...request, to: automaticTarget(detected) };
         result = await this.translator({ ...request, signal });
         if (version !== this.version || signal.aborted) return;
       }
-      result = { ...result, target: request.to };
+      result = { ...result, target: request.to, ...(manualSource ? { detected: manualSource } : {}) };
       const source = normalizeLanguage(result.detected) || (request.from === 'auto' ? detectLanguage(request.text) : request.from);
       const needsLookup = request.mode === 'term' && request.provider === 'microsoft' && isDictionaryPair(source, request.to);
       const notes = needsLookup ? termNotes(request.text, source, request.to) : [];

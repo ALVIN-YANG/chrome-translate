@@ -1,9 +1,44 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { SystemSpeech } from '../src/speech.js';
+import { UnifiedSpeech } from '../src/unified-speech.js';
 
 const english = { name: 'System English', lang: 'en-US', localService: true };
 const chinese = { name: 'System Chinese', lang: 'zh_CN', localService: true };
+
+test('等待声音配置时原文朗读已有按钮归属，停止后迟到配置不会启动播放', async () => {
+  const names = ['chrome', 'speechSynthesis', 'SpeechSynthesisUtterance'];
+  const originals = names.map(name => Object.getOwnPropertyDescriptor(globalThis, name));
+  let resolveSettings, speech;
+  const utterances = [];
+  const synthesis = new EventTarget();
+  synthesis.cancel = () => {};
+  synthesis.getVoices = () => [english];
+  synthesis.speak = utterance => { utterances.push(utterance); utterance.onstart(); };
+  try {
+    const runtime = { id: 'fixture-extension', onMessage: { addListener() {} }, sendMessage: () => new Promise(resolve => { resolveSettings = resolve; }) };
+    for (const [name, value] of [['chrome', { runtime }], ['speechSynthesis', synthesis], ['SpeechSynthesisUtterance', class { constructor(text) { this.text = text; } }]]) {
+      Object.defineProperty(globalThis, name, { configurable: true, value });
+    }
+    speech = new UnifiedSpeech(() => {});
+    const pending = speech.speak('Hello', 'en', 'source');
+    assert.deepEqual(speech.state, { status: 'loading', key: 'source' });
+    speech.stop();
+    resolveSettings({ ok: true, data: { provider: 'system', speed: 1.2 } });
+    await pending;
+    assert.equal(utterances.length, 0);
+    await speech.speak('New input', 'en', 'source');
+    assert.equal(utterances[0].text, 'New input');
+    assert.equal(utterances[0].rate, 1.2);
+    assert.equal(speech.state.key, 'source');
+  } finally {
+    speech?.stop();
+    for (const [index, name] of names.entries()) {
+      if (originals[index]) Object.defineProperty(globalThis, name, originals[index]);
+      else delete globalThis[name];
+    }
+  }
+});
 function fixture(voices = [english, chinese], voiceTimeoutMs = 30) {
   class Synthesis extends EventTarget {
     voices = voices;

@@ -18,6 +18,7 @@ export function loadWorkspace(storage) {
 function normalizeWorkspace(data) {
   try {
     if (!data || typeof data.text !== 'string') return null;
+    const source = isLanguage(data.source) ? data.source : 'auto';
     const target = data.target === 'auto' || isLanguage(data.target) ? data.target : 'auto';
     const saved = data.displayed;
     let displayed = null;
@@ -25,7 +26,8 @@ function normalizeWorkspace(data) {
       && ['term', 'text'].includes(saved.mode) && (saved.targetPreference === 'auto' || isLanguage(saved.targetPreference))
       && typeof saved.result?.text === 'string' && isLanguage(saved.result.target)) {
       displayed = {
-        sourceText: saved.sourceText, provider: saved.provider, mode: saved.mode, targetPreference: saved.targetPreference,
+        sourceText: saved.sourceText, provider: saved.provider, mode: saved.mode,
+        sourcePreference: isLanguage(saved.sourcePreference) ? saved.sourcePreference : 'auto', targetPreference: saved.targetPreference,
         result: {
           text: saved.result.text, target: saved.result.target, detected: saved.result.detected,
           candidates: mergeCandidates(saved.result.candidates || []),
@@ -36,10 +38,11 @@ function normalizeWorkspace(data) {
       };
     }
     const provider = Object.hasOwn(PROVIDERS, data.provider) ? data.provider : displayed?.provider || 'microsoft';
-    return { text: data.text, target, provider, displayed };
+    return { text: data.text, source, target, provider, displayed };
   } catch { return null; }
 }
 
-export function matchesWorkspace(displayed, text, targetPreference, provider) {
-  return Boolean(displayed && displayed.sourceText === text && displayed.targetPreference === targetPreference && displayed.provider === provider);
+export function matchesWorkspace(displayed, text, targetPreference, provider, sourcePreference = 'auto') {
+  return Boolean(displayed && displayed.sourceText === text && displayed.targetPreference === targetPreference && displayed.provider === provider
+    && (displayed.sourcePreference || 'auto') === sourcePreference);
 }

@@ -2,6 +2,8 @@
 
 当前目标：成为顶级开源项目。此目标仍在推进，不能由功能数量、文档或单次测试认定完成。
 
+0.7.16 本地验收通过：原文语言默认自动识别，允许手动选择 15 种语言；手动选择进入实际服务请求、自动目标与词典判断，并随会话恢复。输入区新增原文朗读，沿用现有声音设置；翻译返回不打断原文，修改输入或切换语言停止播放。89 项 Node 检查、十七组实际 ZIP 浏览器场景共 191 项检查通过；包括 MiniMax 音色与语速保留的受控音频播放。中英文 README、隐私说明已同步，安装包与浏览器加载包一致，未修改用户 Chrome、账号 Key 或音色。CI 和公开发布待后续核对，见 `docs/evidence/source-input-0.7.16.json`。
+
 0.7.15 已发布：修复 Chrome CSP 不接受 `http://[::1]:*` 而产生的无效源警告；实际扩展页先复现原提示，修正后无该警告。保留 HTTPS、localhost、127.0.0.1，其他 HTTP 仍在网络前被拦截；HTTP IPv6 地址提供明确提示，不改写用户配置。85 项 Node 检查、十六组实际 ZIP 浏览器场景共 170 项检查通过，[GitHub CI](https://github.com/ALVIN-YANG/chrome-translate/actions/runs/40184769025) 的 Node 22/24 与 Linux Chromium 全部通过。[v0.7.15](https://github.com/ALVIN-YANG/chrome-translate/releases/tag/v0.7.15) 和 tag 指向 `84427f7a9e5b5f4cc49f50ce165e5f2aab723783`。公开 ZIP 和摘要匿名下载均 HTTP 200，与本机和浏览器实际加载包一致；537,608 字节，SHA-256 `9900533a21655c617d85134e22a8261c0f02dffd5ce001270ea1d3fbefda27fb`，Manifest、21 个白名单文件、许可与 CRC 检查通过。dist 已更新，未操作用户 Chrome 或修改账号 Key；用户需清空旧错误、重新加载插件并刷新网页。见 `docs/evidence/csp-0.7.15.json`。
 
 0.7.14 已发布：划词仅保留翻译与朗读，声音设置独立为单页；已有声音服务、Key、地址、音色与语速保持兼容。异步译文、词义和错误展示后重算浮层位置，底部选区与延迟响应回归先失败后通过。中英文 README 与实际截图已同步 GitHub。85 项 Node 检查、十五组隔离 Chromium 场景共 164 项检查通过；[最终 CI](https://github.com/ALVIN-YANG/chrome-translate/actions/runs/39362657004) 的 Node 22/24 与 Linux Chromium 全部通过。[v0.7.14](https://github.com/ALVIN-YANG/chrome-translate/releases/tag/v0.7.14) 指向 `806a4dff983f09038e6af681becfef075290dcd5`，公开 ZIP 和摘要匿名下载均 HTTP 200，内容与本机及实际浏览器加载包一致，21 个白名单文件、版本、许可与 CRC 已核对。ZIP 为 537,503 字节，SHA-256 `1d02a100b65fd96d91294a4fdd791f9c5c96623c2f4ef7dc0a7b7f28bd28bcdd`。最终 CI artifact 下载遇到 Azure TLS 握手超时，未完成该版本 Linux ZIP 的逐字节比较；未操作用户 Chrome，也未新增真实服务调用。证据见 `docs/evidence/voice-0.7.14.json`。

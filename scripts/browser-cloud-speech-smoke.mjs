@@ -106,6 +106,15 @@ export default async function speechScenario(page) {
   assert.equal((await ttsCalls()).at(-1).voice, voice);
   await settingsPage.screenshot({ path: 'output/playwright/voice-settings-current.png', fullPage: true });
   if (process.env.UPDATE_README_SCREENSHOTS === '1') await settingsPage.locator('.settings-shell').screenshot({ path: 'docs/assets/voice-settings.png' });
+  const cloudWorkspace = await context.newPage();
+  await cloudWorkspace.goto(await worker.evaluate(() => chrome.runtime.getURL('index.html')));
+  await cloudWorkspace.getByRole('textbox', { name: '输入要翻译的文本' }).fill('Read the original with my saved voice.');
+  await cloudWorkspace.locator('#read-source').click();
+  await cloudWorkspace.waitForFunction(() => document.getElementById('speech-status').dataset.status === 'speaking');
+  assert.deepEqual((await ttsCalls()).at(-1), { text: 'Read the original with my saved voice.', model: 'speech-2.8-turbo', voice, speed: 1.2 });
+  await cloudWorkspace.locator('#read-source').click();
+  assert.equal(await cloudWorkspace.locator('#read-source').getAttribute('aria-pressed'), 'false');
+  await cloudWorkspace.close();
   await settingsPage.getByRole('combobox', { name: '服务', exact: true }).selectOption('custom');
   await settingsPage.getByRole('textbox', { name: 'API 基础地址' }).fill(`${origin}/v1`);
   await settingsPage.getByRole('textbox', { name: '模型', exact: true }).fill('custom-speech');
@@ -163,5 +172,5 @@ export default async function speechScenario(page) {
   await workspace.close();
   await settingsPage.close();
   return { status: 'passed', mode: 'controlled-provider-real-extension-and-audio', ttsCalls: (await ttsCalls()).length, audioEvents: events,
-    checks: ['翻译朗读双入口', '选择不自动请求', '原词义和复制', '译文与英文例句朗读', '原文朗读', '实际音频暂停恢复停止', '取消合成隔离', '旧MiniMax共享Key兼容', '音色地址语速保留', '声音设置单页', '旧问答消息拒绝', '公开设置无凭据', '保存刷新保留语音Key', '保存不改翻译偏好', '试听指定声音', '自定义协议持久化', '320px390px布局', '独立页系统声音与语速', '系统声音无网络请求', '朗读不推移复制按钮'] };
+    checks: ['翻译朗读双入口', '选择不自动请求', '原词义和复制', '译文与英文例句朗读', '原文朗读', '实际音频暂停恢复停止', '取消合成隔离', '旧MiniMax共享Key兼容', '音色地址语速保留', '声音设置单页', '旧问答消息拒绝', '公开设置无凭据', '保存刷新保留语音Key', '保存不改翻译偏好', '试听指定声音', '自定义协议持久化', '320px390px布局', '独立页系统声音与语速', '系统声音无网络请求', '朗读不推移复制按钮', '独立页原文沿用MiniMax音色语速并实际播放'] };
 }

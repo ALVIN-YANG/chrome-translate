@@ -114,3 +114,31 @@ test('目标修正期间的新输入和取消信号隔离旧译文', async () =>
   assert.equal(states.at(-1).result.text, '新的译文');
   assert.equal(states.filter(state => state.status === 'success').length, 1);
 });
+
+test('手动原文语言优先于服务检测，自动目标和中英词典均按手动选择执行', async () => {
+  const calls = [], lookups = [], states = [];
+  const controller = new TranslationController(state => states.push(state), async request => {
+    calls.push([request.from, request.to]);
+    return { text: 'Tokyo', detected: 'ja' };
+  }, async request => { lookups.push(request.from); return { status: 'empty', candidates: [] }; });
+  await controller.run({ provider: 'microsoft', text: '東京', ...resolveDirection('東京', 'zh'), mode: 'term', automaticTarget: true });
+  assert.deepEqual(calls, [['zh', 'en']]);
+  assert.deepEqual(lookups, ['zh']);
+  assert.equal(states.at(-1).result.detected, 'zh');
+  assert.equal(states.at(-1).result.target, 'en');
+  await controller.run({ provider: 'microsoft', text: '東京', ...resolveDirection('東京', 'ja'), mode: 'term', automaticTarget: true });
+  assert.deepEqual(calls, [['zh', 'en'], ['ja', 'zh']]);
+  assert.deepEqual(lookups, ['zh'], '切换日语后不能复用中英词典');
+  assert.equal(states.at(-1).result.detected, 'ja');
+});
+
+test('所有模型服务将手动源语言写入实际 SDK 请求，包括专用翻译模型', async () => {
+  for (const provider of ['deepseek', 'kimi', 'zhipu', 'gemini', 'siliconflow']) {
+    await translate({ provider, config, text: 'Bonjour le monde.', from: 'fr', to: 'zh' }, async (_url, options) => {
+      const messages = JSON.parse(options.body).messages;
+      assert.match(messages[0].content, /The source language is French\./);
+      assert(!messages[0].content.includes('Detect the source language automatically.'));
+      return json({ choices: [{ finish_reason: 'stop', message: { content: '你好，世界。' } }] });
+    });
+  }
+});
